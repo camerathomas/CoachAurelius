@@ -563,7 +563,25 @@ def toon_parameters():
             naar_incheck()
             st.rerun()
 
+def toon_incheck():
+    from incheck_vragen import kies_random_vragen
 
+    # Kies eenmalig 3 vragen
+    if not st.session_state.get("incheck_vragen"):
+        st.session_state.incheck_vragen = kies_random_vragen()
+        st.session_state.incheck_stap = 0
+
+    vragen = st.session_state.incheck_vragen
+    stap = st.session_state.incheck_stap
+    totaal = len(vragen)
+
+    st.title("👋 Welkom")
+    st.caption("Even een paar vragen voordat we beginnen.")
+
+    st.progress(
+        stap / totaal,
+        text=f"Vraag {stap + 1} van {totaal}" if stap < totaal else "Klaar",
+    )
     # ============================================================
     # Vraag tonen
     # ============================================================
