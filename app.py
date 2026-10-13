@@ -146,6 +146,12 @@ def initialiseer_state():
     if "wendingen_geweest" not in st.session_state:
         st.session_state.wendingen_geweest = []
 
+    if "evaluatie_rondes" not in st.session_state:
+        st.session_state.evaluatie_rondes = None
+    if "evaluatie_afsluiter" not in st.session_state:
+        st.session_state.evaluatie_afsluiter = None
+    if "evaluatie_afgerond" not in st.session_state:
+        st.session_state.evaluatie_afgerond = False
 # ============================================================
 # De overgangen
 # ============================================================
@@ -205,6 +211,9 @@ def eindig_sessie():
     st.session_state.evaluatie = {}
     st.session_state.evaluatie_stap = 0
     st.session_state.wendingen_geweest = []
+    st.session_state.evaluatie_rondes = None
+    st.session_state.evaluatie_afsluiter = None
+    st.session_state.evaluatie_afgerond = False    
     naar_geen_sessie()
 
 
@@ -1093,6 +1102,7 @@ def toon_archief():
 
     with col1:
         if st.button("📁 Ja, archiveer", type="primary", use_container_width=True):
+            _archiveer_sessie()
             eindig_sessie()
             st.rerun()
 
@@ -1101,6 +1111,57 @@ def toon_archief():
             eindig_sessie()
             st.rerun()
 
+
+def _archiveer_sessie():
+    """Slaat de sessie op in de database."""
+    profiel = st.session_state.profiel
+    gebruiker_id = st.session_state.gebruiker_id
+    geschiedenis = st.session_state.geschiedenis
+    incheck = st.session_state.incheck
+    pantheon = st.session_state.pantheon
+    duur = st.session_state.sessie_duur
+
+    # Bepaal een thema
+    thema = "onbekend"
+    for b in geschiedenis:
+        if b["naam"] == "Jij":
+            woorden = b["tekst"].split()
+            for w in woorden:
+                schoon = w.strip(".,!?;:").lower()
+                if len(schoon) > 3:
+                    thema = schoon.capitalize()
+                    break
+            break
+
+    # Sla de sessie op, inclusief de evaluatie
+    try:
+        bewaar_sessie(
+            gebruiker_id=gebruiker_id,
+            thema=thema,
+            incheck=incheck,
+            gesprek=geschiedenis,
+            rondes=st.session_state.get("evaluatie_rondes") or {},
+            afsluiter=st.session_state.get("evaluatie_afsluiter") or {},
+            duur_minuten=duur,
+            pantheon=pantheon,
+        )
+    except Exception as e:
+        st.error(f"Fout bij archiveren: {e}")
+
+    # Werk het profiel bij
+    profiel["gesprekken_gehad"] = profiel.get("gesprekken_gehad", 0) + 1
+
+    huidig_level = profiel.get("level", 1)
+    if huidig_level < 15:
+        profiel["level"] = huidig_level + 1
+
+    profiel["sessie_afgerond"] = True
+    profiel["sessie_tijd"] = 0
+
+    try:
+        bewaar_profiel(profiel)
+    except Exception as e:
+        st.error(f"Fout bij opslaan profiel: {e}")
 
 def toon_betalen():
     st.title("💳 Betaling")
