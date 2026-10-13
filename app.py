@@ -136,6 +136,15 @@ def initialiseer_state():
     if "acceptatie_gedaan" not in st.session_state:
         st.session_state.acceptatie_gedaan = False
 
+    # Model
+    if "model_naam" not in st.session_state:
+        st.session_state.model_naam = "gemini-3.5-flash-lite"
+    if "provider_key" not in st.session_state:
+        st.session_state.provider_key = "gemini"
+
+    # Wendingen
+    if "wendingen_geweest" not in st.session_state:
+        st.session_state.wendingen_geweest = []
 
 # ============================================================
 # De overgangen
