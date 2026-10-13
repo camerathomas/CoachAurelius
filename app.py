@@ -204,6 +204,7 @@ def eindig_sessie():
     st.session_state.is_proefsessie = False
     st.session_state.evaluatie = {}
     st.session_state.evaluatie_stap = 0
+    st.session_state.wendingen_geweest = []
     naar_geen_sessie()
 
 
