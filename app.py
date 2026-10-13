@@ -862,7 +862,7 @@ def toon_afsluiting():
 
         with st.spinner(f"{filosoof['naam']} rondt af..."):
             antwoord = chat(
-                model=st.session_state.get("model_naam", "gemini-2.5-flash-lite"),
+                model=st.session_state.get("model_naam", "gemini-3.1-flash-lite"),
                 messages=[{"role": "user", "content": afsluit_prompt}],
                 system_prompt=system_prompt,
                 provider=st.session_state.get("provider_key", "gemini"),
