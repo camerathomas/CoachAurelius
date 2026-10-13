@@ -69,6 +69,7 @@ api_key = st.secrets["connections"]["aurelius"]["GEMINI_API_KEY"]
 # ============================================================
 STATEN = [
     "inloggen",
+    "welkom",
     "geen_sessie",
     "parameters",
     "incheck",
@@ -78,7 +79,6 @@ STATEN = [
     "archief",
     "betalen",
 ]
-
 
 # ============================================================
 # De sessie-state
@@ -140,8 +140,15 @@ def initialiseer_state():
 # ============================================================
 # De overgangen
 # ============================================================
+# ============================================================
+# De overgangen
+# ============================================================
 def naar_inloggen():
     st.session_state.staat = "inloggen"
+
+
+def naar_welkom():
+    st.session_state.staat = "welkom"
 
 
 def naar_geen_sessie():
@@ -221,6 +228,7 @@ def toon_inloggen():
     st.title("🏛️ Aurelius")
     st.caption("Een filosofische coach, geïnspireerd door Marcus Aurelius.")
     st.markdown("---")
+
     st.markdown("### 👋 Welkom")
     st.markdown(
         "Vul je naam in om te beginnen. "
@@ -231,22 +239,69 @@ def toon_inloggen():
     naam = st.text_input("Jouw naam", value="")
 
     if st.button("Verder", type="primary"):
-        if naam.strip():
-            st.session_state.gebruiker_id = naam.strip()
+        if not naam.strip():
+            st.warning("Vul een naam in.")
+            return
+
+        st.session_state.gebruiker_id = naam.strip()
+
+        with st.spinner("Profiel laden..."):
             profiel = laad_profiel(naam.strip())
 
-            if profiel.get("_is_fallback"):
-                st.error(
-                    "⚠️ **Je profiel kon niet worden geladen.**\n\n"
-                    "Probeer het later opnieuw."
-                )
-                st.stop()
+        if profiel.get("_is_fallback"):
+            st.error(
+                "⚠️ **Je profiel kon niet worden geladen.**\n\n"
+                "Dit kan komen door een database-storing of een tijdelijk probleem. "
+                "Probeer de pagina te verversen. Als het probleem blijft, "
+                "probeer het dan later opnieuw."
+            )
+            st.stop()
 
-            st.session_state.profiel = profiel
-            herstel_staat()
+        st.session_state.profiel = profiel
+
+        # Nieuwe gebruiker? Toon het welkomstscherm.
+        if not profiel.get("welkom_geweest", False):
+            naar_welkom()
             st.rerun()
-        else:
-            st.warning("Vul een naam in.")
+            return
+
+        # Bestaande gebruiker: herstel de staat.
+        herstel_staat()
+        st.rerun()
+
+
+def toon_welkom():
+    st.title("🏛️ Welkom bij Aurelius")
+    st.markdown("---")
+
+    st.markdown("**Marcus Aurelius:**")
+    st.markdown(
+        "Ik ben Marcus Aurelius. Ik was keizer van Rome, en ik schreef "
+        "elke dag aan mezelf — over wat ik wel en niet in de hand had, "
+        "over wat ik kon veranderen en wat ik moest laten.\n\n"
+        "Deze app is geen therapeut, geen adviseur, geen antwoordenmachine. "
+        "Het is een plek om te denken. Met filosofen die je uitnodigen om "
+        "zelf te kijken, zelf te vragen, zelf te kiezen.\n\n"
+        "Elke sessie nodigen we een pantheon van filosofen uit. Ze komen "
+        "uit verschillende tradities, en elk kijkt op een andere manier "
+        "naar wat je meebrengt. Je hoeft ze niet te kennen. Je hoeft het "
+        "niet eens te zijn. Je hoeft alleen maar te luisteren, en te "
+        "antwoorden.\n\n"
+        "Ik raad je aan om alle filosofen eens te proberen. Niet omdat ze "
+        "allemaal gelijk hebben, maar omdat elke stem je iets laat zien "
+        "dat je alleen niet zo snel zou zien.\n\n"
+        "Begin rustig. Er is geen goed of fout gesprek. Er is alleen wat "
+        "je opmerkt, en wat je ermee doet.\n\n"
+        "Welkom."
+    )
+
+    st.markdown("---")
+
+    if st.button("Verder", type="primary"):
+        st.session_state.profiel["welkom_geweest"] = True
+        bewaar_profiel(st.session_state.profiel)
+        naar_geen_sessie()
+        st.rerun()
 
 
 def toon_geen_sessie():
@@ -389,7 +444,6 @@ def toon_betalen():
         naar_geen_sessie()
         st.rerun()
 
-
 # ============================================================
 # De router
 # ============================================================
@@ -398,6 +452,8 @@ def toon_juiste_scherm():
 
     if staat == "inloggen":
         toon_inloggen()
+    elif staat == "welkom":
+        toon_welkom()
     elif staat == "geen_sessie":
         toon_geen_sessie()
     elif staat == "parameters":
@@ -418,7 +474,6 @@ def toon_juiste_scherm():
         st.error(f"Onbekende staat: {staat}")
         naar_inloggen()
         st.rerun()
-
 
 # ============================================================
 # De sidebar
