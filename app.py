@@ -563,46 +563,6 @@ def toon_parameters():
             naar_incheck()
             st.rerun()
 
-    # ============================================================
-    # Duur
-    # ============================================================
-    st.markdown("### Duur")
-    duur = st.radio(
-        "Duur",
-        ["Flitsgesprek (5 min)", "Kort gesprek (10 min)",
-         "Standaard (20 min)", "Diep (30 min)"],
-        label_visibility="collapsed",
-        key="duur_keuze",
-    )
-
-    st.markdown("---")
-
-    # ============================================================
-    # Gespreksvorm
-    # ============================================================
-    st.markdown("### Gespreksvorm")
-
-    from gespreksvormen import GESPREKSVORMEN, beschikbare_vormen
-
-    vormen = beschikbare_vormen(profiel)
-
-    if len(vormen) == 1:
-        st.caption(f"_(alleen '{GESPREKSVORMEN[vormen[0]]['naam']}' beschikbaar op level {level})_")
-
-    vorm_labels = {
-        naam: f"{GESPREKSVORMEN[naam]['icoon']} {GESPREKSVORMEN[naam]['naam']}"
-        for naam in vormen
-    }
-
-    vorm_keuze = st.radio(
-        "Gespreksvorm",
-        vormen,
-        format_func=lambda x: vorm_labels.get(x, x),
-        label_visibility="collapsed",
-        key="vorm_keuze",
-    )
-
-    st.markdown("---")
 
     # ============================================================
     # Pantheon
