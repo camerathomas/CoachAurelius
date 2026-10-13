@@ -828,14 +828,117 @@ def toon_gesprek():
 
 
 def toon_afsluiting():
+    from coach import bouw_coach_prompt, chat
+    from filosofen import FILOSOFEN
+    from incheck_vragen import kies_inzicht_vragen
+    from datetime import datetime
+
+    profiel = st.session_state.profiel
+    pantheon = st.session_state.pantheon
+    voorzitter = st.session_state.voorzitter
+
     st.title("🕊️ Afsluiting")
-    st.caption("_(nog niet beschikbaar in deze versie)_")
+    st.markdown("---")
+
+    # ============================================================
+    # Stap 1: de filosoof rondt af
+    # ============================================================
+    if not st.session_state.get("afsluiting_gedaan"):
+        filosoof_naam = voorzitter or "marcus_aurelius"
+        filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
+
+        afsluit_prompt = (
+            "Het gesprek is voorbij. Rond het af met een korte, "
+            "concluderende gedachte. Geen afscheid, maar een laatste "
+            "overweging. Maximaal 3 zinnen."
+        )
+
+        system_prompt = bouw_coach_prompt(
+            filosoof=filosoof,
+            profiel=profiel,
+            fase="afsluiten",
+            incheck=st.session_state.incheck,
+        )
+
+        with st.spinner(f"{filosoof['naam']} rondt af..."):
+            antwoord = chat(
+                model=st.session_state.get("model_naam", "gemini-2.5-flash-lite"),
+                messages=[{"role": "user", "content": afsluit_prompt}],
+                system_prompt=system_prompt,
+                provider=st.session_state.get("provider_key", "gemini"),
+            )
+
+        st.session_state.geschiedenis.append({
+            "naam": filosoof["naam"],
+            "tekst": antwoord,
+            "icoon": filosoof["emoji"],
+            "tijd": datetime.now().strftime("%H:%M"),
+        })
+
+        try:
+            bewaar_bericht(st.session_state.gebruiker_id, filosoof["naam"], "assistant", antwoord)
+        except Exception:
+            pass
+
+        st.session_state.afsluiting_gedaan = True
+        st.rerun()
+
+    # ============================================================
+    # Toon de afsluiting
+    # ============================================================
+    for b in st.session_state.geschiedenis[-3:]:
+        if b["naam"] != "Jij":
+            with st.chat_message(b["naam"], avatar=b.get("icoon", "🏛️")):
+                st.markdown(b["tekst"])
 
     st.markdown("---")
 
-    if st.button("Naar eindevaluatie"):
-        naar_eindevaluatie()
-        st.rerun()
+    # ============================================================
+    # Stap 2: de inzichtvragen
+    # ============================================================
+    if not st.session_state.get("inzicht_vragen"):
+        st.session_state.inzicht_vragen = kies_inzicht_vragen()
+        st.session_state.inzicht_stap = 0
+
+    vragen = st.session_state.inzicht_vragen
+    stap = st.session_state.inzicht_stap
+    totaal = len(vragen)
+
+    st.markdown("### 💡 Inzicht")
+    st.caption("Even stilstaan. Wat neem je mee?")
+
+    st.progress(
+        stap / totaal,
+        text=f"Vraag {stap + 1} van {totaal}" if stap < totaal else "Klaar",
+    )
+
+    if stap < totaal:
+        vraag = vragen[stap]
+        st.markdown(f"**{vraag['vraag']}**")
+
+        antwoord = st.text_area(
+            "Antwoord",
+            placeholder=vraag.get("placeholder", ""),
+            label_visibility="collapsed",
+            key=f"inzicht_{vraag['sleutel']}",
+        )
+
+        if st.button("Volgende ➡️", type="primary"):
+            if antwoord.strip():
+                st.session_state.setdefault("inzicht", {})[vraag["sleutel"]] = antwoord.strip()
+                st.session_state.inzicht_stap += 1
+                st.rerun()
+            else:
+                st.warning("Vul iets in.")
+
+    else:
+        st.markdown("### ✅ Klaar")
+        st.markdown("Je inzichten zijn opgeslagen.")
+        st.markdown("---")
+
+        if st.button("Naar het eindgesprek", type="primary"):
+            naar_eindevaluatie()
+            st.rerun()
 
 
 def toon_eindevaluatie():
