@@ -343,3 +343,83 @@ def alle_vragen():
 def aantal_vragen():
     """Geeft het totaal aantal vragen terug."""
     return len(TEKST_VRAGEN) + len(SLIDER_VRAGEN) + len(KEUZE_VRAGEN)
+
+# ============================================================
+# Inzichtvragen (voor de afsluiting)
+# ============================================================
+
+INZICHT_VRAGEN = [
+    {
+        "sleutel": "belangrijkste",
+        "categorie": "terugblik",
+        "vraag": "Wat was het belangrijkste inzicht van dit gesprek?",
+        "placeholder": "Bijvoorbeeld: een zin die bleef hangen, een beeld...",
+    },
+    {
+        "sleutel": "verrassing",
+        "categorie": "terugblik",
+        "vraag": "Wat verraste je?",
+        "placeholder": "Bijvoorbeeld: een vraag, een andere kijk...",
+    },
+    {
+        "sleutel": "meenemen",
+        "categorie": "terugblik",
+        "vraag": "Wat neem je mee naar morgen?",
+        "placeholder": "Bijvoorbeeld: een gedachte, een voornemen...",
+    },
+    {
+        "sleutel": "raakte",
+        "categorie": "verdieping",
+        "vraag": "Wat raakte je het meest?",
+        "placeholder": "Bijvoorbeeld: een moment, een woord...",
+    },
+    {
+        "sleutel": "onderzoeken",
+        "categorie": "verdieping",
+        "vraag": "Wat wil je nog verder onderzoeken?",
+        "placeholder": "Bijvoorbeeld: een vraag, een thema...",
+    },
+    {
+        "sleutel": "blijft_hangen",
+        "categorie": "verdieping",
+        "vraag": "Welke vraag blijft hangen?",
+        "placeholder": "Bijvoorbeeld: een vraag die je niet kunt beantwoorden...",
+    },
+    {
+        "sleutel": "anders_doen",
+        "categorie": "actie",
+        "vraag": "Wat ga je anders doen?",
+        "placeholder": "Bijvoorbeeld: een gewoonte, een keuze...",
+    },
+    {
+        "sleutel": "volgende_stap",
+        "categorie": "actie",
+        "vraag": "Wat is je volgende stap?",
+        "placeholder": "Bijvoorbeeld: iets kleins, iets groots...",
+    },
+    {
+        "sleutel": "onthouden",
+        "categorie": "actie",
+        "vraag": "Wat wil je onthouden?",
+        "placeholder": "Bijvoorbeeld: een zin, een beeld...",
+    },
+    {
+        "sleutel": "dankbaar",
+        "categorie": "terugblik",
+        "vraag": "Waar ben je dankbaar voor in dit gesprek?",
+        "placeholder": "Bijvoorbeeld: een moment, een filosoof...",
+    },
+]
+
+
+def kies_inzicht_vragen():
+    """Kiest 3 random inzichtvragen: 1 terugblik, 1 verdieping, 1 actie."""
+    terugblik = [v for v in INZICHT_VRAGEN if v["categorie"] == "terugblik"]
+    verdieping = [v for v in INZICHT_VRAGEN if v["categorie"] == "verdieping"]
+    actie = [v for v in INZICHT_VRAGEN if v["categorie"] == "actie"]
+
+    return [
+        random.choice(terugblik),
+        random.choice(verdieping),
+        random.choice(actie),
+    ]
