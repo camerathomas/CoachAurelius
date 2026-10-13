@@ -1,0 +1,263 @@
+"""
+De coach-logica: prompts bouwen, filosofen kiezen, en modellen aanroepen.
+Ondersteunt Ollama (lokaal) en Gemini (online).
+"""
+
+import os
+import time
+import requests
+
+# ============================================================
+# Configuratie
+# ============================================================
+OLLAMA_URL = "http://localhost:11434/api/chat"
+
+
+def _laad_gemini_key():
+    """Laadt de Gemini API-sleutel uit Streamlit secrets of omgeving.
+
+    Zoekt op drie plekken:
+    1. Onder [connections.aurelius] (nieuwe locatie)
+    2. Op de root van secrets (oude locatie)
+    3. In omgevingsvariabelen
+    """
+    try:
+        import streamlit as st
+
+        try:
+            return st.secrets["connections"]["aurelius"]["GEMINI_API_KEY"]
+        except (KeyError, Exception):
+            pass
+
+        try:
+            return st.secrets["GEMINI_API_KEY"]
+        except (KeyError, Exception):
+            pass
+    except Exception:
+        pass
+
+    return os.environ.get("GEMINI_API_KEY", "")
+
+
+# ============================================================
+# Ollama
+# ============================================================
+def chat_ollama(model, messages, system_prompt=None, temperature=0.8, timeout=240):
+    """Stuurt een chatverzoek naar Ollama."""
+    msgs = []
+    if system_prompt:
+        msgs.append({"role": "system", "content": system_prompt})
+    msgs.extend(messages)
+
+    payload = {
+        "model": model,
+        "messages": msgs,
+        "stream": False,
+        "options": {"temperature": temperature},
+        "think": False,
+    }
+
+    try:
+        r = requests.post(OLLAMA_URL, json=payload, timeout=timeout)
+        r.raise_for_status()
+        return r.json()["message"]["content"]
+    except requests.exceptions.ReadTimeout:
+        return "⚠️ Het model deed er te lang over. Probeer het opnieuw."
+    except requests.exceptions.ConnectionError:
+        return "⚠️ Geen verbinding met Ollama. Draait `ollama serve`?"
+    except Exception as e:
+        return f"⚠️ Fout: {e}"
+
+
+# ============================================================
+# Gemini
+# ============================================================
+def chat_gemini(model, messages, system_prompt=None, temperature=0.8, retries=4):
+    """
+    Stuurt een chatverzoek naar Gemini, met retry bij 500 en 503.
+    Wacht steeds langer tussen de pogingen.
+    """
+    api_key = _laad_gemini_key()
+    if not api_key:
+        return "⚠️ Geen Gemini API-sleutel gevonden."
+
+    laatste_fout = None
+
+    for poging in range(retries):
+        try:
+            from google import genai
+            from google.genai import types
+
+            client = genai.Client(api_key=api_key)
+
+            contents = []
+            for m in messages:
+                rol = "user" if m["role"] == "user" else "model"
+                contents.append(
+                    types.Content(role=rol, parts=[types.Part(text=m["content"])])
+                )
+
+            config = types.GenerateContentConfig(
+                temperature=temperature,
+                system_instruction=system_prompt,
+            )
+
+            response = client.models.generate_content(
+                model=model,
+                contents=contents,
+                config=config,
+            )
+
+            return response.text
+
+        except Exception as e:
+            laatste_fout = e
+            fout = str(e)
+
+            # 500, 503 en interne fouten: opnieuw proberen
+            if ("500" in fout or "503" in fout or "INTERNAL" in fout
+                    or "overloaded" in fout.lower()):
+                if poging < retries - 1:
+                    # Exponentiële wachttijd: 2, 4, 8 seconden
+                    time.sleep(2 ** (poging + 1))
+                    continue
+
+            # Andere fouten: meteen terugkeren
+            return f"⚠️ Gemini fout: {e}"
+
+    # Alle pogingen mislukt
+    return f"⚠️ Gemini fout: {laatste_fout}"
+
+
+# ============================================================
+# Algemene chat-functie
+# ============================================================
+def chat(model, messages, system_prompt=None, temperature=0.8, provider="ollama"):
+    """Kiest tussen Ollama en Gemini op basis van de provider."""
+    if provider == "gemini":
+        return chat_gemini(model, messages, system_prompt, temperature)
+    return chat_ollama(model, messages, system_prompt, temperature)
+
+
+# ============================================================
+# Prompt bouwen
+# ============================================================
+def bouw_coach_prompt(filosoof, profiel, modus, fase=None, vragen=None):
+    """Bouwt de system prompt voor de coach."""
+    naam = filosoof.get("naam", "de filosoof")
+    stem = filosoof.get("prompt", f"Je bent {naam}.")
+    stroming = filosoof.get("stroming", "")
+    stijl = filosoof.get("stijl", [])
+    themas = filosoof.get("themas", [])
+
+    # --- Stem ---
+    stem_blok = f"[DE STEM DIE JE NU SPREEKT]\n{stem}"
+
+    # --- Stroming ---
+    stroming_blok = ""
+    if stroming:
+        stroming_blok = (
+            f"[STROMING]\n"
+            f"Je komt uit de traditie van: {stroming}.\n"
+            f"Maar je bent {naam}, geen andere filosoof uit die traditie."
+        )
+
+    # --- Stijl ---
+    stijl_blok = ""
+    if stijl:
+        regels = "\n".join(
+            f"- {w.capitalize()}: {u}" for w, u in stijl
+        )
+        stijl_blok = (
+            f"[STIJL — DIT IS BELANGRIJK]\n"
+            f"{regels}\n\n"
+            f"Als je deze stijl niet volgt, dan ben je niet {naam}."
+        )
+
+    # --- Inhoud ---
+    inhoud_blok = ""
+    if themas:
+        inhoud_blok = (
+            f"[INHOUD]\n"
+            f"Je spreekt graag over: {', '.join(themas)}."
+        )
+
+    # --- Basis ---
+    basis_blok = (
+        "[BASIS]\n"
+        "Je bent een filosofische gesprekspartner. Je luistert meer dan je spreekt. "
+        "Je oordeelt niet. Je geeft geen advies. Je vleit niet. "
+        "Geen 'wat een fascinerende visie'. Geen superlatieven."
+    )
+
+    # --- Context ---
+    incheck = profiel.get("laatste_incheck", {})
+    doel = incheck.get("doel", "een goed gesprek")
+
+    context_blok = (
+        f"[CONTEXT]\n"
+        f"Modus: {modus}\n"
+        f"Doel van de gebruiker: {doel}\n"
+        f"Thema's: {', '.join(profiel.get('themas', [])) or 'onbekend'}"
+    )
+
+    # --- Fase ---
+    fase_blok = ""
+    if fase:
+        fase_blok = f"\n\n[FASE]\nJe zit nu in de fase: {fase}."
+        if vragen:
+            fase_blok += (
+                "\nHier zijn vragen die bij deze fase passen:\n"
+                + "\n".join(f"- {v}" for v in vragen)
+                + "\n\nGebruik deze vragen als richtlijn, maar pas ze aan op wat de gebruiker zegt."
+            )
+
+    # --- Doel ---
+    doel_blok = (
+        f"\n\n[DOEL]\n"
+        f"De gebruiker wil: {doel}\n"
+        f"Houd dit doel in gedachten. Kom er af en toe op terug, "
+        f"maar niet vaker dan elke 3 minuten."
+    )
+
+    # --- Afsluiting ---
+    if fase in ["integreren", "afsluiten"]:
+        fase_blok += (
+            "\n\n[AFSLUITING]\n"
+            "De tijd is bijna op. Rond het gesprek af met een "
+            "concluderende gedachte, geen afscheid. De andere filosofen "
+            "worden uitgenodigd hun beschouwing te geven."
+        )
+
+    # --- Alles samenvoegen ---
+    blokken = [
+        stem_blok,
+        stroming_blok,
+        stijl_blok,
+        inhoud_blok,
+        basis_blok,
+        context_blok,
+    ]
+    
+    tekst = "\n\n".join(b for b in blokken if b)
+    tekst += fase_blok + doel_blok
+
+    return tekst
+
+
+# ============================================================
+# Filosoof kiezen
+# ============================================================
+def kies_filosoof(profiel, pantheon, gebruikers_input):
+    """Kiest een filosoof op basis van het profiel en de input."""
+    from filosofen import FILOSOFEN
+
+    invoer = gebruikers_input.lower()
+
+    for naam in pantheon:
+        filosoof = FILOSOFEN[naam]
+        for thema in filosoof.get("themas", []):
+            if thema in invoer:
+                return naam
+
+    return pantheon[0] if pantheon else "aurelius"
