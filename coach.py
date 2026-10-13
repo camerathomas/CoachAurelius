@@ -261,3 +261,90 @@ def kies_filosoof(profiel, pantheon, gebruikers_input):
                 return naam
 
     return pantheon[0] if pantheon else "aurelius"
+
+def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None):
+    """Bouwt de system prompt voor de coach."""
+    naam = filosoof.get("naam", "de filosoof")
+    stem = filosoof.get("prompt", f"Je bent {naam}.")
+    stroming = filosoof.get("stroming", "")
+    stijl = filosoof.get("stijl", [])
+    themas = filosoof.get("themas", [])
+
+    # --- Stem ---
+    stem_blok = f"[DE STEM DIE JE NU SPREEKT]\n{stem}"
+
+    # --- Stroming ---
+    stroming_blok = ""
+    if stroming:
+        stroming_blok = (
+            f"[STROMING]\n"
+            f"Je komt uit de traditie van: {stroming}.\n"
+            f"Maar je bent {naam}, geen andere filosoof uit die traditie."
+        )
+
+    # --- Stijl ---
+    stijl_blok = ""
+    if stijl:
+        regels = "\n".join(f"- {w.capitalize()}: {u}" for w, u in stijl)
+        stijl_blok = (
+            f"[STIJL — DIT IS BELANGRIJK]\n"
+            f"{regels}\n\n"
+            f"Als je deze stijl niet volgt, dan ben je niet {naam}."
+        )
+
+    # --- Inhoud ---
+    inhoud_blok = ""
+    if themas:
+        inhoud_blok = f"[INHOUD]\nJe spreekt graag over: {', '.join(themas)}."
+
+    # --- Basis ---
+    basis_blok = (
+        "[BASIS]\n"
+        "Je bent een filosofische gesprekspartner. Je luistert meer dan je spreekt. "
+        "Je oordeelt niet. Je geeft geen advies. Je vleit niet. "
+        "Geen 'wat een fascinerende visie'. Geen superlatieven."
+    )
+
+    # --- Incheck ---
+    incheck_blok = ""
+    if incheck:
+        regels = "\n".join(f"- {k}: {v}" for k, v in incheck.items())
+        incheck_blok = (
+            f"[INCHECK]\n"
+            f"De gebruiker heeft het volgende ingevuld:\n{regels}\n\n"
+            f"Verwijs hier af en toe naar. Niet elke beurt. Maar wel een paar keer."
+        )
+
+    # --- Fase ---
+    fase_blok = ""
+    if fase:
+        fase_blok = f"[FASE]\nJe zit nu in de fase: {fase}."
+
+    # --- Wending ---
+    wending_blok = ""
+    if wending:
+        wending_blok = (
+            f"\n\n[WENDING: {wending['naam'].upper()}]\n"
+            f"{wending['instructie']}\n\n"
+            f"Negeer je standaard coach-instructies voor deze ene beurt. "
+            f"Doe alleen wat hierboven staat."
+        )
+
+    # --- Alles samenvoegen ---
+    blokken = [stem_blok, stroming_blok, stijl_blok, inhoud_blok, basis_blok, incheck_blok, fase_blok]
+    tekst = "\n\n".join(b for b in blokken if b)
+    tekst += wending_blok
+
+    return tekst
+
+
+def bouw_eerste_vraag_prompt(incheck):
+    """Bouwt de prompt voor de eerste vraag."""
+    regels = "\n".join(f"- {k}: {v}" for k, v in incheck.items())
+    return (
+        f"De gebruiker heeft net de incheck ingevuld:\n{regels}\n\n"
+        f"Jouw taak: stel nu ÉÉN openingsvraag aan de gebruiker. "
+        f"Geen herhaling van de incheck, geen samenvatting. "
+        f"Gewoon één vraag die voortkomt uit wat de gebruiker heeft gezegd. "
+        f"Kort, direct, uitnodigend."
+    )
