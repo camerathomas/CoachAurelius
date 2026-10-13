@@ -166,3 +166,29 @@ def beschikbare_vormen(profiel, heeft_eerdere_sessie=False):
         naam for naam in GESPREKSVORMEN
         if is_beschikbaar(naam, profiel, heeft_eerdere_sessie)
     ]
+
+def beschikbare_vormen(profiel):
+    """
+    Geeft de gespreksvormen die de gebruiker mag kiezen.
+    - Gold: alles
+    - Sessie/basic: alleen de vormen van de levels die zijn behaald
+    """
+    level = profiel.get("level", 1)
+    tier = profiel.get("tier", "sessie")
+
+    if tier == "gold":
+        return list(GESPREKSVORMEN.keys())
+
+    # Voeg tijdelijk een 'level' toe aan elke vorm
+    # (in afwachting van de definitieve versie)
+    LEVEL_PER_VORM = {
+        "themagesprek": 1,
+        "tweegesprek": 2,
+        "grote_dialoog": 3,
+        "groot_pantheon": 4,
+    }
+
+    return [
+        naam for naam, lvl in LEVEL_PER_VORM.items()
+        if lvl <= level and naam in GESPREKSVORMEN
+    ]
