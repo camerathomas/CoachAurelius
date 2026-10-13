@@ -140,9 +140,6 @@ def initialiseer_state():
 # ============================================================
 # De overgangen
 # ============================================================
-# ============================================================
-# De overgangen
-# ============================================================
 def naar_inloggen():
     st.session_state.staat = "inloggen"
 
@@ -236,9 +233,11 @@ def toon_inloggen():
         "Als je al eerder bent geweest, vul dan dezelfde naam in."
     )
 
-    naam = st.text_input("Jouw naam", value="")
+    with st.form("inloggen_form"):
+        naam = st.text_input("Jouw naam", value="")
+        verzonden = st.form_submit_button("Verder", type="primary")
 
-    if st.button("Verder", type="primary"):
+    if verzonden:
         if not naam.strip():
             st.warning("Vul een naam in.")
             return
@@ -268,7 +267,6 @@ def toon_inloggen():
         # Bestaande gebruiker: herstel de staat.
         herstel_staat()
         st.rerun()
-
 
 def toon_welkom():
     st.title("🏛️ Welkom bij Aurelius")
