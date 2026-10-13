@@ -305,16 +305,65 @@ def toon_welkom():
 def toon_geen_sessie():
     profiel = st.session_state.profiel
     level = profiel.get("level", 1)
+    tier = profiel.get("tier", "sessie")
 
     st.title("🏛️ Aurelius")
     st.caption(f"Welkom terug, {st.session_state.gebruiker_id}.")
     st.markdown(f"### 🎯 Level {level}")
+    st.caption(f"Tier: {tier}")
 
     st.markdown("---")
 
+    # Check of de gebruiker nog mag
+    if tier == "sessie":
+        gesprekken_gehad = profiel.get("gesprekken_gehad", 0)
+        sessies_gekocht = profiel.get("sessies_gekocht", 1)
+        if gesprekken_gehad >= sessies_gekocht:
+            _toon_sessie_op()
+            return
+
+    # Gewone knoppen
     if st.button("🚀 Nieuwe sessie", type="primary", use_container_width=True):
         naar_parameters()
         st.rerun()
+
+    if tier == "sessie":
+        if st.button("⭐ Abonnement nemen", use_container_width=True):
+            naar_betalen()
+            st.rerun()
+    else:
+        if st.button("👑 Upgrade naar Gold", use_container_width=True):
+            naar_betalen()
+            st.rerun()
+
+    if st.button("📊 Dashboard", use_container_width=True):
+        st.session_state.toon_dashboard = True
+        st.rerun()
+
+
+def _toon_sessie_op():
+    """Toont het scherm als de sessie op is."""
+    st.markdown("## 🕊️ Je sessie is gebruikt")
+    st.markdown(
+        "Je hebt je sessie al gebruikt. Om verder te gaan, kun je "
+        "een nieuwe sessie kopen, of een abonnement nemen."
+    )
+
+    st.markdown("### Wat wil je doen?")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("🛒 Nog een sessie kopen", use_container_width=True):
+            naar_betalen()
+            st.rerun()
+
+    with col2:
+        if st.button("⭐ Basic abonnement", use_container_width=True):
+            naar_betalen()
+            st.rerun()
+
+    st.markdown("---")
 
     if st.button("📊 Dashboard", use_container_width=True):
         st.session_state.toon_dashboard = True
