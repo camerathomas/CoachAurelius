@@ -565,62 +565,6 @@ def toon_parameters():
 
 
     # ============================================================
-    # Knoppen
-    # ============================================================
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("← Terug", use_container_width=True):
-            naar_geen_sessie()
-            st.rerun()
-
-    with col2:
-        if st.button("Start gesprek", type="primary", use_container_width=True):
-            # Sla de duur op
-            duur_map = {
-                "Flitsgesprek (5 min)": 5,
-                "Kort gesprek (10 min)": 10,
-                "Standaard (20 min)": 20,
-                "Diep (30 min)": 30,
-            }
-            st.session_state.sessie_duur = duur_map.get(duur, 10)
-
-            # Sla de gespreksvorm op
-            st.session_state.gespreksvorm = vorm_keuze
-
-            # Sla het pantheon op
-            if pantheon_keuze == "eigen":
-                st.session_state.pantheon = [voorzitter] + gekozen
-                st.session_state.voorzitter = voorzitter
-            else:
-                start_pantheon = PANTHEON_PER_LEVEL.get(level, PANTHEON_PER_LEVEL.get(1, []))
-                st.session_state.pantheon = start_pantheon
-                st.session_state.voorzitter = start_pantheon[0] if start_pantheon else None
-
-            naar_incheck()
-            st.rerun()
-
-def toon_incheck():
-    from incheck_vragen import kies_random_vragen
-
-    # Kies eenmalig 3 vragen
-    if not st.session_state.get("incheck_vragen"):
-        st.session_state.incheck_vragen = kies_random_vragen()
-        st.session_state.incheck_stap = 0
-
-    vragen = st.session_state.incheck_vragen
-    stap = st.session_state.incheck_stap
-    totaal = len(vragen)
-
-    st.title("👋 Welkom")
-    st.caption("Even een paar vragen voordat we beginnen.")
-
-    st.progress(
-        stap / totaal,
-        text=f"Vraag {stap + 1} van {totaal}" if stap < totaal else "Klaar",
-    )
-
-    # ============================================================
     # Vraag tonen
     # ============================================================
     if stap < totaal:
