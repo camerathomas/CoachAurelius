@@ -371,31 +371,115 @@ def _toon_sessie_op():
 
 
 def toon_parameters():
+    profiel = st.session_state.profiel
+    tier = profiel.get("tier", "sessie")
+    level = profiel.get("level", 1)
+
     st.title("🕐 Parameters voor een nieuw gesprek")
     st.caption("Kies hoe lang het gesprek mag duren, en met wie je wilt spreken.")
 
     st.markdown("---")
 
+    # ============================================================
+    # Duur
+    # ============================================================
     st.markdown("### Duur")
     duur = st.radio(
         "Duur",
         ["Flitsgesprek (5 min)", "Kort gesprek (10 min)",
          "Standaard (20 min)", "Diep (30 min)"],
         label_visibility="collapsed",
+        key="duur_keuze",
     )
 
     st.markdown("---")
 
+    # ============================================================
+    # Gespreksvorm
+    # ============================================================
     st.markdown("### Gespreksvorm")
-    st.markdown("_(nog niet beschikbaar in deze versie)_")
+
+    from gespreksvormen import GESPREKSVORMEN, beschikbare_vormen
+
+    vormen = beschikbare_vormen(profiel)
+
+    if len(vormen) == 1:
+        st.caption(f"_(alleen '{GESPREKSVORMEN[vormen[0]]['naam']}' beschikbaar op level {level})_")
+
+    vorm_labels = {
+        naam: f"{GESPREKSVORMEN[naam]['icoon']} {GESPREKSVORMEN[naam]['naam']}"
+        for naam in vormen
+    }
+
+    vorm_keuze = st.radio(
+        "Gespreksvorm",
+        vormen,
+        format_func=lambda x: vorm_labels.get(x, x),
+        label_visibility="collapsed",
+        key="vorm_keuze",
+    )
 
     st.markdown("---")
 
+    # ============================================================
+    # Pantheon
+    # ============================================================
     st.markdown("### Pantheon")
-    st.markdown("_(nog niet beschikbaar in deze versie)_")
+
+    from tiers import heeft_toegang, beschikbare_filosofen
+    from filosofen import FILOSOFEN, PANTHEON_PER_LEVEL
+
+    mag_eigen_pantheon = heeft_toegang(tier, level, "eigen_pantheon")
+
+    if mag_eigen_pantheon:
+        pantheon_keuze = st.radio(
+            "Pantheon",
+            ["standaard", "eigen"],
+            format_func=lambda x: (
+                "Standaard pantheon van dit level"
+                if x == "standaard"
+                else "Mijn eigen pantheon"
+            ),
+            label_visibility="collapsed",
+            key="pantheon_keuze",
+        )
+    else:
+        pantheon_keuze = "standaard"
+        st.caption("_(eigen pantheon beschikbaar vanaf level 2)_")
+
+    # Als de gebruiker een eigen pantheon wil
+    if pantheon_keuze == "eigen":
+        opties = beschikbare_filosofen(tier, level)
+
+        if not opties:
+            st.warning("Je hebt nog geen filosofen vrijgespeeld.")
+        else:
+            st.markdown("**Kies een voorzitter:**")
+            voorzitter = st.selectbox(
+                "Voorzitter",
+                opties,
+                format_func=lambda x: f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}" if x in FILOSOFEN else x,
+                label_visibility="collapsed",
+                key="voorzitter_keuze",
+            )
+
+            st.markdown("**Kies 4 filosofen:**")
+            gekozen = []
+            for i in range(4):
+                keuze = st.selectbox(
+                    f"Filosoof {i + 1}",
+                    opties,
+                    format_func=lambda x: f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}" if x in FILOSOFEN else x,
+                    label_visibility="collapsed",
+                    key=f"eigen_filosoof_{i}",
+                )
+                gekozen.append(keuze)
 
     st.markdown("---")
 
+    # ============================================================
+    # Knoppen
+    # ============================================================
     col1, col2 = st.columns(2)
 
     with col1:
@@ -405,6 +489,7 @@ def toon_parameters():
 
     with col2:
         if st.button("Start gesprek", type="primary", use_container_width=True):
+            # Sla de duur op
             duur_map = {
                 "Flitsgesprek (5 min)": 5,
                 "Kort gesprek (10 min)": 10,
@@ -412,9 +497,21 @@ def toon_parameters():
                 "Diep (30 min)": 30,
             }
             st.session_state.sessie_duur = duur_map.get(duur, 10)
+
+            # Sla de gespreksvorm op
+            st.session_state.gespreksvorm = vorm_keuze
+
+            # Sla het pantheon op
+            if pantheon_keuze == "eigen":
+                st.session_state.pantheon = [voorzitter] + gekozen
+                st.session_state.voorzitter = voorzitter
+            else:
+                start_pantheon = PANTHEON_PER_LEVEL.get(level, PANTHEON_PER_LEVEL.get(1, []))
+                st.session_state.pantheon = start_pantheon
+                st.session_state.voorzitter = start_pantheon[0] if start_pantheon else None
+
             naar_incheck()
             st.rerun()
-
 
 def toon_incheck():
     st.title("👋 Welkom")
