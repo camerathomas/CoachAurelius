@@ -610,14 +610,211 @@ def toon_incheck():
 
 
 def toon_gesprek():
+    from coach import bouw_coach_prompt, chat
+    from filosofen import FILOSOFEN
+    from wendingen import kies_random_wending, moet_wending_komen
+    from datetime import datetime
+    import time
+
+    profiel = st.session_state.profiel
+    sessie_duur = st.session_state.sessie_duur
+    pantheon = st.session_state.pantheon
+    voorzitter = st.session_state.voorzitter
+    gespreksvorm = st.session_state.gespreksvorm
+
+    if not pantheon:
+        start_pantheon = profiel.get("eigen_pantheon", [])
+        if not start_pantheon:
+            from filosofen import PANTHEON_PER_LEVEL
+            level = profiel.get("level", 1)
+            start_pantheon = PANTHEON_PER_LEVEL.get(level, PANTHEON_PER_LEVEL.get(1, []))
+        st.session_state.pantheon = start_pantheon
+        pantheon = start_pantheon
+
+    if not voorzitter:
+        st.session_state.voorzitter = pantheon[0] if pantheon else "marcus_aurelius"
+        voorzitter = st.session_state.voorzitter
+
+    # Start de timer als die nog niet loopt
+    if not st.session_state.sessie_start:
+        st.session_state.sessie_start = time.time()
+        st.session_state.sessie_tijd = 0
+
+    # Update de sessietijd
+    nu = time.time()
+    laatste = profiel.get("laatste_bericht", nu)
+    verschil = nu - laatste
+    if verschil < 90:
+        st.session_state.sessie_tijd += verschil
+    else:
+        st.session_state.sessie_tijd += 30
+    profiel["laatste_bericht"] = nu
+
+    minuten = st.session_state.sessie_tijd / 60
+    percentage = minuten / sessie_duur if sessie_duur > 0 else 1
+
+    # Bepaal de fase
+    if percentage < 0.10:
+        fase = "opening"
+    elif percentage < 0.30:
+        fase = "verkennen"
+    elif percentage < 0.60:
+        fase = "verdiepen"
+    elif percentage < 0.80:
+        fase = "verbreden"
+    elif percentage < 0.92:
+        fase = "integreren"
+    else:
+        fase = "afsluiten"
+
+    # Toon de statusbalk
     st.title("🕐 Gesprek")
-    st.caption("_(nog niet beschikbaar in deze versie)_")
+    col1, col2, col3 = st.columns([2, 2, 1])
+    with col1:
+        st.markdown(f"**🕐 {minuten:.1f}** van **{sessie_duur}** min")
+    with col2:
+        st.markdown(f"**📍 Fase:** {fase.capitalize()}")
+    with col3:
+        resterend = max(0, sessie_duur - minuten)
+        st.markdown(f"⏳ **{resterend:.1f}** min")
 
     st.markdown("---")
 
-    if st.button("Naar afsluiting"):
-        naar_afsluiting()
+    # Toon de geschiedenis
+    gesprek_container = st.container()
+    with gesprek_container:
+        for b in st.session_state.geschiedenis:
+            with st.chat_message(b["naam"], avatar=b.get("icoon", "🏛️")):
+                st.markdown(f"**{b['naam']}**")
+                st.markdown(b["tekst"])
+
+    # Eerste beurt: de coach opent
+    if not st.session_state.geschiedenis:
+        filosoof_naam = voorzitter or "marcus_aurelius"
+        filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
+
+        from coach import bouw_eerste_vraag_prompt
+
+        eerste_vraag_prompt = bouw_eerste_vraag_prompt(st.session_state.incheck)
+
+        system_prompt = bouw_coach_prompt(
+            filosoof=filosoof,
+            profiel=profiel,
+            fase="opening",
+            incheck=st.session_state.incheck,
+        )
+
+        with st.spinner(f"{filosoof['naam']} denkt na..."):
+            antwoord = chat(
+                model=st.session_state.get("model_naam", "gemini-3.5-flash-lite"),
+                messages=[{"role": "user", "content": eerste_vraag_prompt}],
+                system_prompt=system_prompt,
+                provider=st.session_state.get("provider_key", "gemini"),
+            )
+
+        st.session_state.geschiedenis.append({
+            "naam": filosoof["naam"],
+            "tekst": antwoord,
+            "icoon": filosoof["emoji"],
+            "tijd": datetime.now().strftime("%H:%M"),
+        })
+
+        try:
+            bewaar_bericht(st.session_state.gebruiker_id, filosoof["naam"], "assistant", antwoord)
+        except Exception:
+            pass
+
         st.rerun()
+
+    # Invoer van de gebruiker
+    gebruiker_input = st.chat_input("Waar wil je het over hebben?")
+
+    if gebruiker_input:
+        tijd = datetime.now().strftime("%H:%M")
+        st.session_state.geschiedenis.append({
+            "naam": "Jij",
+            "tekst": gebruiker_input,
+            "icoon": "🧑",
+            "tijd": tijd,
+        })
+        try:
+            bewaar_bericht(st.session_state.gebruiker_id, "Jij", "user", gebruiker_input)
+        except Exception:
+            pass
+
+        # Kies een filosoof
+        from coach import kies_filosoof
+
+        if pantheon and voorzitter:
+            filosoof_naam = kies_filosoof(profiel, pantheon, gebruiker_input)
+        else:
+            filosoof_naam = "marcus_aurelius"
+
+        filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
+
+        # Wending?
+        wending = None
+        drempel = moet_wending_komen(
+            minuten, sessie_duur,
+            profiel.get("wendingen_geweest", []),
+        )
+        if drempel is not None:
+            wending = kies_random_wending()
+            profiel.setdefault("wendingen_geweest", []).append(drempel)
+
+        # Bouw de prompt
+        system_prompt = bouw_coach_prompt(
+            filosoof=filosoof,
+            profiel=profiel,
+            fase=fase,
+            incheck=st.session_state.incheck,
+            wending=wending,
+        )
+
+        # Bouw de context
+        context_msgs = st.session_state.geschiedenis[-12:]
+        messages = []
+        for b in context_msgs[:-1]:
+            rol = "assistant" if b["naam"] != "Jij" else "user"
+            messages.append({"role": rol, "content": b["tekst"]})
+        messages.append({"role": "user", "content": gebruiker_input})
+
+        with st.spinner(f"{filosoof['naam']} denkt na..."):
+            antwoord = chat(
+                model=st.session_state.get("model_naam", "gemini-3.5-flash-lite"),
+                messages=messages,
+                system_prompt=system_prompt,
+                provider=st.session_state.get("provider_key", "gemini"),
+            )
+
+        st.session_state.geschiedenis.append({
+            "naam": filosoof["naam"],
+            "tekst": antwoord,
+            "icoon": filosoof["emoji"],
+            "tijd": datetime.now().strftime("%H:%M"),
+        })
+        try:
+            bewaar_bericht(st.session_state.gebruiker_id, filosoof["naam"], "assistant", antwoord)
+        except Exception:
+            pass
+
+        # Sla het profiel op
+        try:
+            bewaar_profiel(profiel)
+        except Exception:
+            pass
+
+        st.rerun()
+
+    # Check of de sessie voorbij is
+    if minuten >= sessie_duur:
+        st.markdown("---")
+        st.markdown("### De tijd is om")
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("🕊️ Afronden", use_container_width=True, type="primary"):
+                naar_afsluiting()
+                st.rerun()
 
 
 def toon_afsluiting():
