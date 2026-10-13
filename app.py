@@ -112,7 +112,7 @@ def initialiseer_state():
     if "voorzitter" not in st.session_state:
         st.session_state.voorzitter = None
     if "gespreksvorm" not in st.session_state:
-        st.session_state.gespreksvorm = "themagesprek"
+        st.session_state.gespreksvorm = "coach_sessie"
     if "sessie_duur" not in st.session_state:
         st.session_state.sessie_duur = 10
     if "sessie_start" not in st.session_state:
@@ -188,7 +188,7 @@ def eindig_sessie():
     st.session_state.incheck_stap = 0
     st.session_state.pantheon = []
     st.session_state.voorzitter = None
-    st.session_state.gespreksvorm = "themagesprek"
+    st.session_state.gespreksvorm = "coach_sessie"
     st.session_state.sessie_duur = 10
     st.session_state.sessie_start = 0
     st.session_state.sessie_tijd = 0
