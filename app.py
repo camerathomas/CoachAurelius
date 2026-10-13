@@ -942,14 +942,145 @@ def toon_afsluiting():
 
 
 def toon_eindevaluatie():
+    from evaluatie import (
+        haal_reacties_op,
+        bouw_context,
+        bepaal_meest_gesproken,
+        verzamel_alle_reacties,
+        bereken_leestijd,
+        EVALUATIE_RONDE_1,
+        EVALUATIE_RONDE_2,
+        EVALUATIE_AFSLUITER,
+    )
+    from filosofen import FILOSOFEN
+    import time
+
+    profiel = st.session_state.profiel
+    geschiedenis = st.session_state.geschiedenis
+    pantheon = st.session_state.pantheon
+    voorzitter = st.session_state.voorzitter
+
     st.title("🕊️ Eindgesprek")
-    st.caption("_(nog niet beschikbaar in deze versie)_")
+    st.caption("De filosofen kijken terug op wat er is gezegd.")
 
     st.markdown("---")
 
-    if st.button("Naar archief"):
-        naar_archief()
-        st.rerun()
+    # ============================================================
+    # Stap 1: de rondes ophalen
+    # ============================================================
+    if not st.session_state.get("evaluatie_rondes"):
+        with st.spinner("De filosofen denken na..."):
+            try:
+                context = bouw_context(profiel, geschiedenis, pantheon)
+
+                # Voeg de voorzitter toe aan de context
+                if voorzitter and voorzitter in FILOSOFEN:
+                    context += (
+                        f"\n\n--- VOORZITTER ---\n"
+                        f"De voorzitter van deze sessie is "
+                        f"{FILOSOFEN[voorzitter]['naam']}. "
+                        f"Laat de voorzitter NIET meedoen in ronde 1 en ronde 2. "
+                        f"De voorzitter komt alleen terug in de afsluiter."
+                    )
+
+                # Ronde 1
+                data1 = haal_reacties_op(
+                    st.session_state.get("model_naam", "gemini-2.5-flash-lite"),
+                    st.session_state.get("provider_key", "gemini"),
+                    EVALUATIE_RONDE_1,
+                    context,
+                )
+                rondes = {"ronde_1": (data1 or {}).get("reacties", [])}
+
+                # Ronde 2
+                context2 = context + "\n\n--- RONDE 1 ---\n"
+                for r in rondes["ronde_1"]:
+                    context2 += f"{r['naam']}: {r['tekst']}\n\n"
+
+                data2 = haal_reacties_op(
+                    st.session_state.get("model_naam", "gemini-2.5-flash-lite"),
+                    st.session_state.get("provider_key", "gemini"),
+                    EVALUATIE_RONDE_2,
+                    context2,
+                )
+                rondes["ronde_2"] = (data2 or {}).get("reacties", [])
+
+                st.session_state.evaluatie_rondes = rondes
+
+            except Exception as e:
+                st.error(f"Fout bij het ophalen van de evaluatie: {e}")
+
+    # ============================================================
+    # Stap 2: de afsluiter ophalen
+    # ============================================================
+    if (st.session_state.get("evaluatie_rondes") is not None
+            and not st.session_state.get("evaluatie_afsluiter")):
+
+        with st.spinner("De afsluiting wordt voorbereid..."):
+            try:
+                # Bepaal wie de afsluiter doet
+                if voorzitter and voorzitter in FILOSOFEN:
+                    meest = FILOSOFEN[voorzitter]["naam"]
+                else:
+                    meest = bepaal_meest_gesproken(geschiedenis) or "Socrates"
+
+                context_afsluiter = bouw_context(profiel, geschiedenis, pantheon)
+                context_afsluiter += f"\n\n--- AFSLUITING DOOR ---\n{meest}\n\n"
+
+                for ronde_naam, reacties in st.session_state.evaluatie_rondes.items():
+                    context_afsluiter += f"\n--- {ronde_naam.upper()} ---\n"
+                    for r in reacties:
+                        context_afsluiter += f"{r['naam']}: {r['tekst']}\n\n"
+
+                data_afsluiter = haal_reacties_op(
+                    st.session_state.get("model_naam", "gemini-2.5-flash-lite"),
+                    st.session_state.get("provider_key", "gemini"),
+                    EVALUATIE_AFSLUITER,
+                    context_afsluiter,
+                )
+                st.session_state.evaluatie_afsluiter = (
+                    data_afsluiter or {}
+                ).get("afsluiter")
+
+            except Exception as e:
+                st.error(f"Fout bij de afsluiter: {e}")
+
+    # ============================================================
+    # Stap 3: de reacties tonen
+    # ============================================================
+    if st.session_state.get("evaluatie_rondes") is not None:
+        alle_reacties = verzamel_alle_reacties(
+            st.session_state.evaluatie_rondes,
+            st.session_state.get("evaluatie_afsluiter"),
+        )
+
+        stap = st.session_state.get("evaluatie_stap", 0)
+
+        for i, (ronde_label, r) in enumerate(alle_reacties):
+            if i > stap:
+                break
+            with st.chat_message(r.get("naam", "?"), avatar=r.get("emoji", "🏛️")):
+                st.markdown(f"**{r.get('naam', '?')}** · _{ronde_label}_")
+                st.markdown(r.get("tekst", ""))
+
+        if stap < len(alle_reacties) - 1:
+            volgende = alle_reacties[stap + 1][1]
+            wachttijd = bereken_leestijd(volgende.get("tekst", ""))
+            time.sleep(wachttijd)
+            st.session_state.evaluatie_stap = stap + 1
+            st.rerun()
+
+        else:
+            st.session_state.evaluatie_afgerond = True
+
+    # ============================================================
+    # Stap 4: naar het archief
+    # ============================================================
+    if st.session_state.get("evaluatie_afgerond"):
+        st.markdown("---")
+        if st.button("Naar het archief", type="primary"):
+            naar_archief()
+            st.rerun()
 
 
 def toon_archief():
