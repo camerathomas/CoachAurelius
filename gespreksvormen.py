@@ -1,28 +1,54 @@
 """
 Gespreksvormen voor Aurelius.
+
 Elke gespreksvorm bepaalt de rol van de gebruiker en de rol van de
 filosofen. Verder blijft alles hetzelfde: pantheon-principe, wendingen,
 eindgesprek.
+
+Vrijspelen:
+- Coach-sessie is altijd beschikbaar (level 1)
+- De andere vormen worden per level vrijgespeeld
+- Gold heeft alles vanaf het begin
 """
 
 
+# ============================================================
+# De gespreksvormen
+# ============================================================
+
 GESPREKSVORMEN = {
-    "themagesprek": {
-        "naam": "Themagesprek",
-        "beschrijving": "De filosofen reageren op wat jij inbrengt.",
+    "coach_sessie": {
+        "naam": "Coach-sessie",
+        "beschrijving": "Een gewoon gesprek met het pantheon.",
         "icoon": "🏛️",
+        "level": 1,
         "filosofen": "pantheon",
         "gebruiker_rol": "deelnemer",
         "prompt_toevoeging": (
-            "Dit is een themagesprek. De gebruiker is het middelpunt. "
+            "Dit is een coach-sessie. De gebruiker is het middelpunt. "
             "Reageer op wat de gebruiker zegt, ga dieper, onderzoek. "
             "Stel vragen die voortkomen uit wat de gebruiker inbrengt."
+        ),
+    },
+    "tweegesprek": {
+        "naam": "Tweegesprek",
+        "beschrijving": "Jij en één filosoof. Diepgaand.",
+        "icoon": "🤝",
+        "level": 2,
+        "filosofen": "één",
+        "gebruiker_rol": "deelnemer",
+        "prompt_toevoeging": (
+            "Dit is een tweegesprek. Jij en de gebruiker, één op één. "
+            "Er zijn geen andere filosofen. Ga diep, neem de tijd, "
+            "onderzoek wat de gebruiker inbrengt grondig. "
+            "Stel vragen die voortkomen uit wat de gebruiker zegt."
         ),
     },
     "grote_dialoog": {
         "naam": "Grote dialoog",
         "beschrijving": "De filosofen praten met elkaar. Jij kunt bijsturen.",
         "icoon": "🎭",
+        "level": 3,
         "filosofen": "pantheon",
         "gebruiker_rol": "gastheer",
         "prompt_toevoeging": (
@@ -34,36 +60,11 @@ GESPREKSVORMEN = {
             "en ga daarna weer met de andere filosofen in gesprek."
         ),
     },
-    "tweegesprek": {
-        "naam": "Tweegesprek",
-        "beschrijving": "Jij en één filosoof. Diepgaand.",
-        "icoon": "🤝",
-        "filosofen": "één",
-        "gebruiker_rol": "deelnemer",
-        "prompt_toevoeging": (
-            "Dit is een tweegesprek. Jij en de gebruiker, één op één. "
-            "Er zijn geen andere filosofen. Ga diep, neem de tijd, "
-            "onderzoek wat de gebruiker inbrengt grondig. "
-            "Stel vragen die voortkomen uit wat de gebruiker zegt."
-        ),
-    },
-    "vervolggesprek": {
-        "naam": "Vervolggesprek",
-        "beschrijving": "Bouwt voort op een eerdere sessie.",
-        "icoon": "🔄",
-        "filosofen": "pantheon",
-        "gebruiker_rol": "deelnemer",
-        "prompt_toevoeging": (
-            "Dit is een vervolggesprek. De gebruiker bouwt voort op een "
-            "eerdere sessie. Je hebt de context van die sessie gekregen. "
-            "Verwijs waar zinvol naar wat er eerder gezegd is, en "
-            "onderzoek wat er sindsdien veranderd is."
-        ),
-    },
     "groot_pantheon": {
         "naam": "Groot Pantheon",
         "beschrijving": "Alle filosofen. Wie het beste past, krijgt de beurt.",
         "icoon": "🌌",
+        "level": 4,
         "filosofen": "alles",
         "gebruiker_rol": "deelnemer",
         "prompt_toevoeging": (
@@ -74,8 +75,61 @@ GESPREKSVORMEN = {
             "Je hoeft niet te reageren als je niets toe te voegen hebt."
         ),
     },
+    "doorgaan_archief": {
+        "naam": "Doorgaan met een gearchiveerd gesprek",
+        "beschrijving": "Bouwt voort op een eerdere sessie.",
+        "icoon": "🔄",
+        "level": 5,
+        "filosofen": "pantheon",
+        "gebruiker_rol": "deelnemer",
+        "prompt_toevoeging": (
+            "Dit is een vervolggesprek. De gebruiker bouwt voort op een "
+            "eerdere sessie. Je hebt de context van die sessie gekregen. "
+            "Verwijs waar zinvol naar wat er eerder gezegd is, en "
+            "onderzoek wat er sindsdien veranderd is."
+        ),
+    },
 }
 
+
+# ============================================================
+# Vrijspelen
+# ============================================================
+
+def beschikbare_vormen(profiel):
+    """
+    Geeft de gespreksvormen die de gebruiker mag kiezen.
+
+    - Gold: alles
+    - Sessie en basic: alleen de vormen van de levels die zijn behaald
+    """
+    level = profiel.get("level", 1)
+    tier = profiel.get("tier", "sessie")
+
+    if tier == "gold":
+        return list(GESPREKSVORMEN.keys())
+
+    return [
+        naam for naam, vorm in GESPREKSVORMEN.items()
+        if vorm.get("level", 1) <= level
+    ]
+
+
+def is_beschikbaar(vorm_naam, profiel, heeft_eerdere_sessie=False):
+    """
+    Bepaalt of deze gespreksvorm beschikbaar is voor deze gebruiker.
+    - Vervolggesprek: alleen als er een eerdere sessie is.
+    - De andere: op basis van level.
+    """
+    if vorm_naam == "doorgaan_archief":
+        return heeft_eerdere_sessie and vorm_naam in beschikbare_vormen(profiel)
+
+    return vorm_naam in beschikbare_vormen(profiel)
+
+
+# ============================================================
+# Filosofen kiezen
+# ============================================================
 
 def kies_filosofen(vorm_naam, pantheon, voorzitter=None):
     """
@@ -99,6 +153,10 @@ def kies_filosofen(vorm_naam, pantheon, voorzitter=None):
 
     return pantheon
 
+
+# ============================================================
+# Prompts
+# ============================================================
 
 def bouw_vorm_prompt(vorm_naam, context=None):
     """
@@ -147,48 +205,3 @@ def bouw_vervolg_context(sessie):
         )
 
     return "\n".join(onderdelen)
-
-
-def is_beschikbaar(vorm_naam, profiel, heeft_eerdere_sessie=False):
-    """
-    Bepaalt of deze gespreksvorm beschikbaar is voor deze gebruiker.
-    - Vervolggesprek: alleen als er een eerdere sessie is.
-    - De andere: altijd beschikbaar.
-    """
-    if vorm_naam == "vervolggesprek":
-        return heeft_eerdere_sessie
-    return vorm_naam in GESPREKSVORMEN
-
-
-def beschikbare_vormen(profiel, heeft_eerdere_sessie=False):
-    """Geeft een lijst van beschikbare gespreksvormen."""
-    return [
-        naam for naam in GESPREKSVORMEN
-        if is_beschikbaar(naam, profiel, heeft_eerdere_sessie)
-    ]
-
-def beschikbare_vormen(profiel):
-    """
-    Geeft de gespreksvormen die de gebruiker mag kiezen.
-    - Gold: alles
-    - Sessie/basic: alleen de vormen van de levels die zijn behaald
-    """
-    level = profiel.get("level", 1)
-    tier = profiel.get("tier", "sessie")
-
-    if tier == "gold":
-        return list(GESPREKSVORMEN.keys())
-
-    # Voeg tijdelijk een 'level' toe aan elke vorm
-    # (in afwachting van de definitieve versie)
-    LEVEL_PER_VORM = {
-        "themagesprek": 1,
-        "tweegesprek": 2,
-        "grote_dialoog": 3,
-        "groot_pantheon": 4,
-    }
-
-    return [
-        naam for naam, lvl in LEVEL_PER_VORM.items()
-        if lvl <= level and naam in GESPREKSVORMEN
-    ]
