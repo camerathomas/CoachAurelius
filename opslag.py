@@ -50,7 +50,7 @@ def initialiseer():
         ("welkom_geweest", "INTEGER DEFAULT 0"),
         ("gesprekken_gehad", "INTEGER DEFAULT 0"),
         ("sessies_gekocht", "INTEGER DEFAULT 1"),
-        ("gespreksvorm", "TEXT DEFAULT 'themagesprek'"),
+        ("gespreksvorm", "TEXT DEFAULT 'coach_sessie'"),
     ]
 
     for kolom_naam, kolom_def in extra_kolommen:
@@ -139,7 +139,7 @@ def bewaar_profiel(profiel):
         1 if profiel.get("welkom_geweest", False) else 0,
         profiel.get("gesprekken_gehad", 0),
         profiel.get("sessies_gekocht", 1),
-        profiel.get("gespreksvorm", "themagesprek"),
+        profiel.get("gespreksvorm", "coach_sessie"),
     ))
     conn.commit()
     conn.close()
@@ -201,7 +201,7 @@ def laad_profiel(gebruiker_id):
                     int(rij[22]) if len(rij) > 22 and rij[22] else 1
                 ),
                 "gespreksvorm": (
-                    rij[23] if len(rij) > 23 and rij[23] else "themagesprek"
+                    rij[23] if len(rij) > 23 and rij[23] else "coach_sessie"
                 ),
             }
 
@@ -233,7 +233,7 @@ def laad_profiel(gebruiker_id):
             "welkom_geweest": False,
             "gesprekken_gehad": 0,
             "sessies_gekocht": 1,
-            "gespreksvorm": "themagesprek",
+            "gespreksvorm": "coach_sessie",
         }
 
         # Sla het direct op, zodat het bestaat bij de volgende keer.
