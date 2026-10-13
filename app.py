@@ -565,62 +565,6 @@ def toon_parameters():
 
 
     # ============================================================
-    # Pantheon
-    # ============================================================
-    st.markdown("### Pantheon")
-
-    from tiers import heeft_toegang, beschikbare_filosofen
-    from filosofen import FILOSOFEN, PANTHEON_PER_LEVEL
-
-    mag_eigen_pantheon = heeft_toegang(tier, level, "eigen_pantheon")
-
-    if mag_eigen_pantheon:
-        pantheon_keuze = st.radio(
-            "Pantheon",
-            ["standaard", "eigen"],
-            format_func=lambda x: (
-                "Standaard pantheon van dit level"
-                if x == "standaard"
-                else "Mijn eigen pantheon"
-            ),
-            label_visibility="collapsed",
-            key="pantheon_keuze",
-        )
-    else:
-        pantheon_keuze = "standaard"
-        st.caption("_(eigen pantheon beschikbaar vanaf level 2)_")
-
-    # Als de gebruiker een eigen pantheon wil
-    if pantheon_keuze == "eigen":
-        opties = beschikbare_filosofen(tier, level)
-
-        if not opties:
-            st.warning("Je hebt nog geen filosofen vrijgespeeld.")
-        else:
-            st.markdown("**Kies een voorzitter:**")
-            voorzitter = st.selectbox(
-                "Voorzitter",
-                opties,
-                format_func=lambda x: f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}" if x in FILOSOFEN else x,
-                label_visibility="collapsed",
-                key="voorzitter_keuze",
-            )
-
-            st.markdown("**Kies 4 filosofen:**")
-            gekozen = []
-            for i in range(4):
-                keuze = st.selectbox(
-                    f"Filosoof {i + 1}",
-                    opties,
-                    format_func=lambda x: f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}" if x in FILOSOFEN else x,
-                    label_visibility="collapsed",
-                    key=f"eigen_filosoof_{i}",
-                )
-                gekozen.append(keuze)
-
-    st.markdown("---")
-
-    # ============================================================
     # Knoppen
     # ============================================================
     col1, col2 = st.columns(2)
