@@ -34,7 +34,7 @@ GESPREKSVORMEN = {
         "naam": "Tweegesprek",
         "beschrijving": "Jij en één filosoof. Diepgaand.",
         "icoon": "🤝",
-        "level": 2,
+        "level": 16,
         "filosofen": "één",
         "gebruiker_rol": "deelnemer",
         "prompt_toevoeging": (
@@ -48,7 +48,7 @@ GESPREKSVORMEN = {
         "naam": "Grote dialoog",
         "beschrijving": "De filosofen praten met elkaar. Jij kunt bijsturen.",
         "icoon": "🎭",
-        "level": 3,
+        "level": 17,
         "filosofen": "pantheon",
         "gebruiker_rol": "gastheer",
         "prompt_toevoeging": (
@@ -64,7 +64,7 @@ GESPREKSVORMEN = {
         "naam": "Groot Pantheon",
         "beschrijving": "Alle filosofen. Wie het beste past, krijgt de beurt.",
         "icoon": "🌌",
-        "level": 4,
+        "level": 18,
         "filosofen": "alles",
         "gebruiker_rol": "deelnemer",
         "prompt_toevoeging": (
@@ -79,7 +79,7 @@ GESPREKSVORMEN = {
         "naam": "Doorgaan met een gearchiveerd gesprek",
         "beschrijving": "Bouwt voort op een eerdere sessie.",
         "icoon": "🔄",
-        "level": 5,
+        "level": 19,
         "filosofen": "pantheon",
         "gebruiker_rol": "deelnemer",
         "prompt_toevoeging": (
@@ -101,7 +101,8 @@ def beschikbare_vormen(profiel):
     Geeft de gespreksvormen die de gebruiker mag kiezen.
 
     - Gold: alles
-    - Sessie en basic: alleen de vormen van de levels die zijn behaald
+    - Sessie en basic: alleen coach-sessie tot level 15,
+      daarna per level een nieuwe vorm
     """
     level = profiel.get("level", 1)
     tier = profiel.get("tier", "sessie")
