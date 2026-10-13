@@ -169,8 +169,6 @@ def _toon_favorieten(profiel):
 
     st.markdown("---")
 
-    _toon_eigen_pantheon(profiel, level, tier)
-
 
 def _toon_favoriet_filosoof(profiel, level, tier):
     """Toont de keuze voor de favoriete filosoof."""
