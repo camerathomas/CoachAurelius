@@ -5,77 +5,81 @@ Per sessie worden 3 vragen gekozen:
 - 1 tekstvraag
 - 1 slider-vraag
 - 1 keuzevraag
-
-De vragen zijn verdeeld over 10 categorieën.
 """
 
 import random
 
 
-# ============================================================
-# De vragen
-# ============================================================
-
 TEKST_VRAGEN = [
     {
         "sleutel": "openheid",
         "categorie": "openheid",
+        "type": "tekst",
         "vraag": "Wat speelt er vandaag?",
         "placeholder": "Vertel vrijuit — er is geen goed of fout antwoord.",
     },
     {
         "sleutel": "emotie",
         "categorie": "emotie",
+        "type": "tekst",
         "vraag": "Hoe gaat het met je?",
         "placeholder": "Bijvoorbeeld: druk, moe, rustig, onrustig...",
     },
     {
         "sleutel": "lichaam",
         "categorie": "lichaam",
+        "type": "tekst",
         "vraag": "Hoe zit je in je lichaam op dit moment?",
         "placeholder": "Bijvoorbeeld: gespannen, rustig, moe...",
     },
     {
         "sleutel": "relaties",
         "categorie": "relaties",
+        "type": "tekst",
         "vraag": "Met wie heb je op dit moment het meest te maken?",
         "placeholder": "Bijvoorbeeld: partner, collega, vriend, familie...",
     },
     {
         "sleutel": "werk",
         "categorie": "werk",
+        "type": "tekst",
         "vraag": "Wat houdt je op dit moment het meest bezig?",
         "placeholder": "Bijvoorbeeld: werk, studie, een project...",
     },
     {
         "sleutel": "toekomst",
         "categorie": "toekomst",
+        "type": "tekst",
         "vraag": "Waar hoop je naartoe te gaan?",
         "placeholder": "Bijvoorbeeld: een reis, een baan, een verandering...",
     },
     {
         "sleutel": "vragen",
         "categorie": "vragen",
+        "type": "tekst",
         "vraag": "Wat wil je graag vragen of onderzoeken?",
         "placeholder": "Bijvoorbeeld: een dilemma, een keuze, een twijfel...",
     },
     {
         "sleutel": "verrassing",
         "categorie": "openheid",
+        "type": "tekst",
         "vraag": "Wat verraste je de laatste tijd?",
-        "placeholder": "Bijvoorbeeld: iets onverwachts, iets moois, iets moeilijks...",
+        "placeholder": "Bijvoorbeeld: iets onverwachts, iets moois...",
     },
     {
         "sleutel": "dankbaarheid",
         "categorie": "emotie",
+        "type": "tekst",
         "vraag": "Waar ben je op dit moment dankbaar voor?",
-        "placeholder": "Bijvoorbeeld: een persoon, een moment, een klein ding...",
+        "placeholder": "Bijvoorbeeld: een persoon, een moment...",
     },
     {
         "sleutel": "weerstand",
         "categorie": "intentie",
+        "type": "tekst",
         "vraag": "Waar heb je weerstand tegen?",
-        "placeholder": "Bijvoorbeeld: een gesprek, een taak, een beslissing...",
+        "placeholder": "Bijvoorbeeld: een gesprek, een taak...",
     },
 ]
 
@@ -84,6 +88,7 @@ SLIDER_VRAGEN = [
     {
         "sleutel": "overzicht",
         "categorie": "overzicht",
+        "type": "slider",
         "vraag": "Heb je op dit moment overzicht over je leven?",
         "min": 1,
         "max": 10,
@@ -93,6 +98,7 @@ SLIDER_VRAGEN = [
     {
         "sleutel": "energie",
         "categorie": "lichaam",
+        "type": "slider",
         "vraag": "Hoeveel energie heb je op dit moment?",
         "min": 1,
         "max": 10,
@@ -102,6 +108,7 @@ SLIDER_VRAGEN = [
     {
         "sleutel": "rust",
         "categorie": "emotie",
+        "type": "slider",
         "vraag": "Hoe rustig voel je je op dit moment?",
         "min": 1,
         "max": 10,
@@ -111,6 +118,7 @@ SLIDER_VRAGEN = [
     {
         "sleutel": "verbinding",
         "categorie": "relaties",
+        "type": "slider",
         "vraag": "Hoe verbonden voel je je met de mensen om je heen?",
         "min": 1,
         "max": 10,
@@ -120,6 +128,7 @@ SLIDER_VRAGEN = [
     {
         "sleutel": "richting",
         "categorie": "toekomst",
+        "type": "slider",
         "vraag": "Hoe duidelijk is je richting op dit moment?",
         "min": 1,
         "max": 10,
@@ -129,6 +138,7 @@ SLIDER_VRAGEN = [
     {
         "sleutel": "druk",
         "categorie": "werk",
+        "type": "slider",
         "vraag": "Hoeveel druk ervaar je op dit moment?",
         "min": 1,
         "max": 10,
@@ -138,6 +148,7 @@ SLIDER_VRAGEN = [
     {
         "sleutel": "tevredenheid",
         "categorie": "emotie",
+        "type": "slider",
         "vraag": "Hoe tevreden ben je op dit moment met je leven?",
         "min": 1,
         "max": 10,
@@ -147,6 +158,7 @@ SLIDER_VRAGEN = [
     {
         "sleutel": "moed",
         "categorie": "intentie",
+        "type": "slider",
         "vraag": "Hoeveel moed voel je om iets aan te pakken?",
         "min": 1,
         "max": 10,
@@ -156,6 +168,7 @@ SLIDER_VRAGEN = [
     {
         "sleutel": "helderheid",
         "categorie": "overzicht",
+        "type": "slider",
         "vraag": "Hoe helder is je denken op dit moment?",
         "min": 1,
         "max": 10,
@@ -165,6 +178,7 @@ SLIDER_VRAGEN = [
     {
         "sleutel": "veerkracht",
         "categorie": "lichaam",
+        "type": "slider",
         "vraag": "Hoe veerkrachtig voel je je op dit moment?",
         "min": 1,
         "max": 10,
@@ -178,6 +192,7 @@ KEUZE_VRAGEN = [
     {
         "sleutel": "intentie",
         "categorie": "intentie",
+        "type": "keuze",
         "vraag": "Wat wil je vandaag?",
         "opties": [
             "Even praten",
@@ -190,6 +205,7 @@ KEUZE_VRAGEN = [
     {
         "sleutel": "modus",
         "categorie": "intentie",
+        "type": "keuze",
         "vraag": "Hoe wil je dat het gesprek verloopt?",
         "opties": [
             "Rustig en onderzoekend",
@@ -202,6 +218,7 @@ KEUZE_VRAGEN = [
     {
         "sleutel": "stemming",
         "categorie": "emotie",
+        "type": "keuze",
         "vraag": "Wat past het beste bij je stemming?",
         "opties": [
             "Blij",
@@ -215,6 +232,7 @@ KEUZE_VRAGEN = [
     {
         "sleutel": "thema",
         "categorie": "openheid",
+        "type": "keuze",
         "vraag": "Welk thema wil je vandaag aanraken?",
         "opties": [
             "Werk en ambitie",
@@ -228,6 +246,7 @@ KEUZE_VRAGEN = [
     {
         "sleutel": "tijd",
         "categorie": "toekomst",
+        "type": "keuze",
         "vraag": "Waar ligt je focus op dit moment?",
         "opties": [
             "Het verleden",
@@ -240,6 +259,7 @@ KEUZE_VRAGEN = [
     {
         "sleutel": "houding",
         "categorie": "intentie",
+        "type": "keuze",
         "vraag": "Hoe sta je tegenover het gesprek?",
         "opties": [
             "Open en nieuwsgierig",
@@ -252,6 +272,7 @@ KEUZE_VRAGEN = [
     {
         "sleutel": "behoefte",
         "categorie": "emotie",
+        "type": "keuze",
         "vraag": "Wat heb je op dit moment het meest nodig?",
         "opties": [
             "Rust",
@@ -265,6 +286,7 @@ KEUZE_VRAGEN = [
     {
         "sleutel": "relatie",
         "categorie": "relaties",
+        "type": "keuze",
         "vraag": "Over wie wil je het hebben?",
         "opties": [
             "Mijzelf",
@@ -278,6 +300,7 @@ KEUZE_VRAGEN = [
     {
         "sleutel": "werk_rol",
         "categorie": "werk",
+        "type": "keuze",
         "vraag": "Hoe sta je op dit moment in je werk of studie?",
         "opties": [
             "Ik zit er goed in",
@@ -290,6 +313,7 @@ KEUZE_VRAGEN = [
     {
         "sleutel": "lichaam_rol",
         "categorie": "lichaam",
+        "type": "keuze",
         "vraag": "Hoe ga je om met je lichaam?",
         "opties": [
             "Ik luister ernaar",
@@ -302,15 +326,8 @@ KEUZE_VRAGEN = [
 ]
 
 
-# ============================================================
-# De hulpfuncties
-# ============================================================
-
 def kies_random_vragen():
-    """
-    Kiest 3 random vragen: 1 tekst, 1 slider, 1 keuze.
-    Geeft een lijst terug van 3 dicts.
-    """
+    """Kiest 3 random vragen: 1 tekst, 1 slider, 1 keuze."""
     return [
         random.choice(TEKST_VRAGEN),
         random.choice(SLIDER_VRAGEN),
