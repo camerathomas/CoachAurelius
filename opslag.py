@@ -267,7 +267,7 @@ def laad_profiel(gebruiker_id):
         "welkom_geweest": False,
         "gesprekken_gehad": 0,
         "sessies_gekocht": 1,
-        "gespreksvorm": "themagesprek",
+        "gespreksvorm": "coach_sessie",
     }
 
 
