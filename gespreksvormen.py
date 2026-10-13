@@ -89,6 +89,23 @@ GESPREKSVORMEN = {
             "onderzoek wat er sindsdien veranderd is."
         ),
     },
+    "strenge_coach": {
+        "naam": "Strenge coach",
+        "beschrijving": "Directe, confronterende vragen. Bereid je voor.",
+        "icoon": "⚔️",
+        "level": 20,
+        "filosofen": "pantheon",
+        "gebruiker_rol": "deelnemer",
+        "prompt_toevoeging": (
+            "Dit is een strenge coach-sessie. De gebruiker wil tot het bot "
+            "gaan. Jouw taak is om niet te troosten, niet te verzachten, en "
+            "niet weg te kijken. Stel de vraag die de gebruiker het liefst "
+            "niet hoort. Vraag door als het antwoord vaag is. Wijs op "
+            "tegenstrijdigheden. Blijf respectvol, maar wees onverbiddelijk. "
+            "Geen 'wat fijn dat je dit deelt'. Geen superlatieven. Geen "
+            "troost. Alleen de vraag die ertoe doet."
+        ),
+    },    
 }
 
 
