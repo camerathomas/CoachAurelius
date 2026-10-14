@@ -244,7 +244,24 @@ def _toon_favoriet_filosoof(profiel, level, tier):
         st.success("Favoriete filosoof opgeslagen.")
         st.rerun()
 
+    # Toon het hele eigen pantheon
+    st.markdown("---")
+    st.markdown("#### Jouw eigen pantheon")
+    st.caption(
+        "Deze filosofen zitten in je eigen pantheon. "
+        "De favoriet staat vooraan."
+    )
 
+    pantheon = profiel.get("eigen_pantheon", [])
+    if not pantheon:
+        st.markdown("_Je hebt nog geen eigen pantheon._")
+    else:
+        for f in pantheon:
+            if f in FILOSOFEN:
+                emoji = FILOSOFEN[f]["emoji"]
+                naam = FILOSOFEN[f]["naam"]
+                marker = " ⭐" if f == profiel.get("favoriete_filosoof") else ""
+                st.markdown(f"- {emoji} **{naam}**{marker}")
 # ============================================================
 # Filosofen
 # ============================================================
