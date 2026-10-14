@@ -107,20 +107,21 @@ GESPREKSVORMEN = {
         ),
     },
 
-    "het_debat": {
-        "naam": "Het debat",
-        "beschrijving": "Twee filosofen tegenover elkaar. Jij bent rechter.",
-        "icoon": "⚖️",
+    "vragenvuur": {
+        "naam": "Vragenvuur",
+        "beschrijving": "Snel achter elkaar vragen. Je moet snel antwoorden.",
+        "icoon": "🔥",
         "level": 21,
-        "filosofen": "twee",
-        "gebruiker_rol": "rechter",
+        "filosofen": "één",
+        "gebruiker_rol": "deelnemer",
         "prompt_toevoeging": (
-            "Dit is een debat. Twee filosofen verdedigen tegenovergestelde "
-            "standpunten. De gebruiker is de rechter. Jouw taak: verdedig "
-            "jouw standpunt met kracht, reageer op de tegenstander, en "
-            "probeer de rechter te overtuigen. Blijf respectvol, maar "
-            "schuw de confrontatie niet. Aan het einde vraagt de rechter "
-            "wie hem het meest heeft overtuigd."
+            "Dit is een vragenvuur. Je stelt de gebruiker meerdere vragen "
+            "achter elkaar, snel, zonder ruimte om te lang na te denken. "
+            "Elke beurt stel je twee tot drie korte vragen. De gebruiker "
+            "antwoordt, en jij gaat direct door met nieuwe vragen. "
+            "Je bent niet confronterend, maar wel vasthoudend. "
+            "Aan het einde van het gesprek stel je één vraag die alles "
+            "samenvat: 'Wat is het echte antwoord?'"
         ),
     },
     "socratisch_gesprek": {
