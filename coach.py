@@ -156,7 +156,7 @@ def kies_filosoof(profiel, pantheon, gebruikers_input):
 
     return pantheon[0] if pantheon else "aurelius"
 
-def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None):
+def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None, is_voorzitter=False):
     """Bouwt de system prompt voor de coach."""
     naam = filosoof.get("naam", "de filosoof")
     stem = filosoof.get("prompt", f"Je bent {naam}.")
@@ -199,6 +199,30 @@ def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None):
         "Geen 'wat een fascinerende visie'. Geen superlatieven."
     )
 
+    # --- Lengte ---
+    if is_voorzitter:
+        limiet = 100
+        rol_uitleg = (
+            "Je bent de voorzitter van dit gesprek. Je mag iets meer zeggen "
+            "omdat je het gesprek leidt, maar nog steeds bondig."
+        )
+    else:
+        limiet = 60
+        rol_uitleg = (
+            "Je bent één van de filosofen in het pantheon. Je brengt één "
+            "gedachte, één vraag, één observatie."
+        )
+
+    lengte_blok = (
+        f"[LENGTE — STRIKT]\n"
+        f"{rol_uitleg}\n\n"
+        f"Antwoord in maximaal {limiet} woorden. Niet {limiet + 1}. "
+        f"Niet {limiet + 10}. Maximaal {limiet}.\n"
+        f"Eén gedachte per beurt. Geen opsommingen. Geen kopjes. "
+        f"Geen herhaling van wat de gebruiker al zei. "
+        f"Korter is beter dan langer."
+    )
+
     # --- Incheck ---
     incheck_blok = ""
     if incheck:
@@ -225,12 +249,20 @@ def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None):
         )
 
     # --- Alles samenvoegen ---
-    blokken = [stem_blok, stroming_blok, stijl_blok, inhoud_blok, basis_blok, incheck_blok, fase_blok]
+    blokken = [
+        stem_blok,
+        stroming_blok,
+        stijl_blok,
+        inhoud_blok,
+        basis_blok,
+        lengte_blok,
+        incheck_blok,
+        fase_blok,
+    ]
     tekst = "\n\n".join(b for b in blokken if b)
     tekst += wending_blok
 
     return tekst
-
 
 def bouw_eerste_vraag_prompt(incheck):
     """Bouwt de prompt voor de eerste vraag."""
