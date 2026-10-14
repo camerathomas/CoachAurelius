@@ -1182,7 +1182,7 @@ def _archiveer_sessie():
     profiel["gesprekken_gehad"] = profiel.get("gesprekken_gehad", 0) + 1
 
     huidig_level = profiel.get("level", 1)
-    if huidig_level < 15:
+    if huidig_level < 25:
         profiel["level"] = huidig_level + 1
 
     profiel["sessie_afgerond"] = True
