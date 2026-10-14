@@ -371,56 +371,5 @@ def _toon_pantheons():
         st.markdown(logica)
 
         st.markdown("---")
-    # ============================================================
-    # Index
-    # ============================================================
-    index_html = '<div id="index"><h2>Index</h2><ul>'
-    for f in opties_gesorteerd:
-        if f in FILOSOFEN and f in BIOGRAFIEEN:
-            naam = FILOSOFEN[f]["naam"]
-            index_html += f'<li><a href="#{f}">{naam}</a></li>'
-    index_html += "</ul></div>"
 
-    st.markdown(index_html, unsafe_allow_html=True)
 
-    st.markdown("---")
-
-    # ============================================================
-    # Biografieën
-    # ============================================================
-    for f in opties_gesorteerd:
-        if f not in FILOSOFEN or f not in BIOGRAFIEEN:
-            continue
-
-        bio = BIOGRAFIEEN[f]
-        emoji = FILOSOFEN[f]["emoji"]
-
-        # Anker voor deze filosoof
-        st.markdown(
-            f'<h2 id="{f}">{emoji} {bio["naam"]}</h2>',
-            unsafe_allow_html=True,
-        )
-        st.caption(f"_{bio['leefde']}_")
-        st.markdown(f"**Stroming:** {bio['stroming']}")
-
-        st.markdown("**Bekende boeken:**")
-        for boek in bio["boeken"]:
-            st.markdown(f"- {boek}")
-
-        st.markdown("**Bekende uitspraken:**")
-        for uitspraak in bio["uitspraken"]:
-            st.markdown(f"> *{uitspraak}*")
-
-        st.markdown("**Visie:**")
-        st.markdown(bio["visie"])
-
-        # Terug naar index
-        st.markdown(
-            '<a href="#index">↑ Terug naar index</a>',
-            unsafe_allow_html=True,
-        )
-
-        st.markdown("---")
-
-        st.markdown("### Visie")
-        st.markdown(bio["visie"])
