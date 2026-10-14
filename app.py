@@ -227,7 +227,8 @@ def eindig_sessie():
     st.session_state.evaluatie_afgerond = False
     st.session_state.inzicht = {}
     st.session_state.inzicht_vragen = []
-    st.session_state.inzicht_stap = 0    
+    st.session_state.inzicht_stap = 0
+    st.session_state.filosoof_teller = {}    
     naar_geen_sessie()
 
 
