@@ -240,7 +240,7 @@ def _toon_favoriet_filosoof(profiel, level, tier):
 def _toon_filosofen(profiel):
     """Toont de filosofen-info."""
     from filosofen import FILOSOFEN
-    from biografieen import BIOGRAFIEEN
+    from filosofen_biografieen import BIOGRAFIEEN
     from tiers import beschikbare_filosofen
 
     st.markdown("### Filosofen")
