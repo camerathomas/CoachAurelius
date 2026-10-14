@@ -238,12 +238,53 @@ def _toon_favoriet_filosoof(profiel, level, tier):
 # Filosofen
 # ============================================================
 def _toon_filosofen(profiel):
+    """Toont de filosofen-info."""
+    from filosofen import (
+        FILOSOFEN,
+        PANTHEON_PER_LEVEL,
+        PANTHEON_LOGICA,
+    )
+    from filosofen_biografieen import BIOGRAFIEEN
+    from tiers import beschikbare_filosofen
+
+    st.markdown("### Filosofen")
+
+    # ============================================================
+    # Keuze: alle filosofen of pantheons
+    # ============================================================
+    keuze = st.radio(
+        "Wat wil je zien?",
+        ["alle_filosofen", "pantheons"],
+        format_func=lambda x: (
+            "📚 Alle filosofen"
+            if x == "alle_filosofen"
+            else "🎭 Pantheons per level"
+        ),
+        label_visibility="collapsed",
+        key="filosofen_keuze",
+    )
+
+    st.markdown("---")
+
+    # ============================================================
+    # Alle filosofen
+    # ============================================================
+    if keuze == "alle_filosofen":
+        _toon_alle_filosofen(profiel)
+
+    # ============================================================
+    # Pantheons per level
+    # ============================================================
+    else:
+        _toon_pantheons()
+
+
+def _toon_alle_filosofen(profiel):
     """Toont alle filosofen met een index en interne links."""
     from filosofen import FILOSOFEN
     from filosofen_biografieen import BIOGRAFIEEN
     from tiers import beschikbare_filosofen
 
-    st.markdown("### Filosofen")
     st.caption("Klik op een naam om naar de biografie te springen.")
 
     tier = profiel.get("tier", "sessie")
@@ -257,6 +298,82 @@ def _toon_filosofen(profiel):
         opties,
         key=lambda x: FILOSOFEN.get(x, {}).get("naam", x),
     )
+
+    # ============================================================
+    # Index
+    # ============================================================
+    index_html = '<div id="index"><h3>Index</h3><ul>'
+    for f in opties_gesorteerd:
+        if f in FILOSOFEN and f in BIOGRAFIEEN:
+            naam = FILOSOFEN[f]["naam"]
+            index_html += f'<li><a href="#{f}">{naam}</a></li>'
+    index_html += "</ul></div>"
+
+    st.markdown(index_html, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # ============================================================
+    # Biografieën
+    # ============================================================
+    for f in opties_gesorteerd:
+        if f not in FILOSOFEN or f not in BIOGRAFIEEN:
+            continue
+
+        bio = BIOGRAFIEEN[f]
+        emoji = FILOSOFEN[f]["emoji"]
+
+        st.markdown(
+            f'<h3 id="{f}">{emoji} {bio["naam"]}</h3>',
+            unsafe_allow_html=True,
+        )
+        st.caption(f"_{bio['leefde']}_")
+        st.markdown(f"**Stroming:** {bio['stroming']}")
+
+        st.markdown("**Bekende boeken:**")
+        for boek in bio["boeken"]:
+            st.markdown(f"- {boek}")
+
+        st.markdown("**Bekende uitspraken:**")
+        for uitspraak in bio["uitspraken"]:
+            st.markdown(f"> *{uitspraak}*")
+
+        st.markdown("**Visie:**")
+        st.markdown(bio["visie"])
+
+        st.markdown(
+            '<a href="#index">↑ Terug naar index</a>',
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("---")
+
+
+def _toon_pantheons():
+    """Toont alle 15 pantheons met hun logica."""
+    from filosofen import FILOSOFEN, PANTHEON_PER_LEVEL, PANTHEON_LOGICA
+
+    st.caption("Elk level heeft een eigen pantheon van vijf filosofen.")
+
+    for level in sorted(PANTHEON_PER_LEVEL.keys()):
+        pantheon = PANTHEON_PER_LEVEL[level]
+        logica = PANTHEON_LOGICA.get(level, "Geen uitleg beschikbaar.")
+
+        # Kop
+        st.markdown(f"### Level {level}")
+
+        # Filosofen
+        namen = []
+        for f in pantheon:
+            if f in FILOSOFEN:
+                namen.append(f"{FILOSOFEN[f]['emoji']} {FILOSOFEN[f]['naam']}")
+        st.markdown("**Pantheon:** " + ", ".join(namen))
+
+        # Logica
+        st.markdown("**Logica:**")
+        st.markdown(logica)
+
+        st.markdown("---")
 
     # ============================================================
     # Index
