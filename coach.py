@@ -158,46 +158,28 @@ def kies_filosoof(profiel, pantheon, gebruikers_input):
 
 def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter, teller):
     """
-    Kiest een filosoof met een 40/60-verdeling:
-    - 40% van de beurten: de voorzitter
-    - 60% van de beurten: het pantheon (de 4 deelnemers)
-
-    Binnen het pantheon:
-    - eerst: de filosoof wiens thema past
-    - anders: de filosoof die het minst gesproken heeft
-
-    'teller' is een dict: {naam: aantal_keer_gesproken}
+    Kiest een filosoof op basis van een 60/10-verdeling.
+    De voorzitter krijgt 60% van de beurten, de rest elk 10%.
     """
-    from filosofen import FILOSOFEN
-    import random
+    if not pantheon:
+        return "marcus_aurelius"
 
-    invoer = gebruikers_input.lower()
-    deelnemers = [f for f in pantheon if f != voorzitter]
+    totaal = sum(teller.values()) + 1
 
-    # 40%: de voorzitter
-    if voorzitter and random.random() < 0.40:
-        teller[voorzitter] = teller.get(voorzitter, 0) + 1
-        return voorzitter
+    doel = {}
+    for f in pantheon:
+        if f == voorzitter:
+            doel[f] = 0.6
+        else:
+            doel[f] = 0.4 / max(1, len(pantheon) - 1)
 
-    # 60%: het pantheon
-    # Eerst: de filosoof wiens thema past
-    for naam in deelnemers:
-        filosoof = FILOSOFEN.get(naam)
-        if not filosoof:
-            continue
-        for thema in filosoof.get("themas", []):
-            if thema in invoer:
-                teller[naam] = teller.get(naam, 0) + 1
-                return naam
+    tekort = {}
+    for f in pantheon:
+        huidig = teller.get(f, 0) / totaal
+        tekort[f] = doel[f] - huidig
 
-    # Anders: de filosoof die het minst gesproken heeft
-    if deelnemers:
-        minst = min(deelnemers, key=lambda n: teller.get(n, 0))
-        teller[minst] = teller.get(minst, 0) + 1
-        return minst
-
-    return voorzitter or "marcus_aurelius"
-
+    return max(tekort, key=tekort.get)
+    
 def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None, is_voorzitter=False):
     """Bouwt de system prompt voor de coach."""
     naam = filosoof.get("naam", "de filosoof")
