@@ -156,6 +156,44 @@ def kies_filosoof(profiel, pantheon, gebruikers_input):
 
     return pantheon[0] if pantheon else "aurelius"
 
+def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter, teller):
+    """
+    Kiest een filosoof met een 60/10-verdeling:
+    - 10% van de beurten: de voorzitter
+    - 60% van de beurten: de filosoof wiens thema past
+    - de rest: de filosoof die het minst gesproken heeft
+
+    'teller' is een dict: {naam: aantal_keer_gesproken}
+    """
+    from filosofen import FILOSOFEN
+    import random
+
+    invoer = gebruikers_input.lower()
+    deelnemers = [f for f in pantheon if f != voorzitter]
+
+    # 10%: de voorzitter
+    if voorzitter and random.random() < 0.10:
+        teller[voorzitter] = teller.get(voorzitter, 0) + 1
+        return voorzitter
+
+    # 60%: de filosoof wiens thema past
+    for naam in deelnemers:
+        filosoof = FILOSOFEN.get(naam)
+        if not filosoof:
+            continue
+        for thema in filosoof.get("themas", []):
+            if thema in invoer:
+                teller[naam] = teller.get(naam, 0) + 1
+                return naam
+
+    # 30%: de filosoof die het minst gesproken heeft
+    if deelnemers:
+        minst = min(deelnemers, key=lambda n: teller.get(n, 0))
+        teller[minst] = teller.get(minst, 0) + 1
+        return minst
+
+    return voorzitter or "marcus_aurelius"
+
 def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None, is_voorzitter=False):
     """Bouwt de system prompt voor de coach."""
     naam = filosoof.get("naam", "de filosoof")
