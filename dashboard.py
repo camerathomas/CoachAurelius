@@ -90,6 +90,18 @@ def _toon_archief(gebruiker_id, profiel):
                     tekst = bericht.get("tekst", "")
                     st.markdown(f"**{naam}:** {tekst}")
 
+            # Inzichten
+            from opslag import laad_inzichten
+            inzichten = laad_inzichten(
+                gebruiker_id=gebruiker_id,
+                sessie_id=sessie.get("id"),
+            )
+            if inzichten:
+                st.markdown("### 💡 Inzichten")
+                for inzicht in inzichten:
+                    st.markdown(f"**{inzicht['vraag']}**")
+                    st.markdown(f"_{inzicht['antwoord']}_")
+
             # Rondes
             rondes = sessie.get("rondes", {})
             if rondes:
@@ -131,7 +143,6 @@ def _toon_archief(gebruiker_id, profiel):
                     )
                 except Exception as e:
                     st.caption(f"PDF kon niet worden gemaakt: {e}")
-
 
 # ============================================================
 # Voortgang
