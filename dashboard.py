@@ -239,12 +239,8 @@ def _toon_favoriet_filosoof(profiel, level, tier):
 # ============================================================
 def _toon_filosofen(profiel):
     """Toont de filosofen-info."""
-    from filosofen import (
-        FILOSOFEN,
-        PANTHEON_PER_LEVEL,
-        PANTHEON_LOGICA,
-    )
-    from filosofen_biografieen import BIOGRAFIEEN
+    from filosofen import FILOSOFEN, PANTHEON_PER_LEVEL
+    from filosofen_biografieen import BIOGRAFIEEN, PANTHEON_LOGICA
     from tiers import beschikbare_filosofen
 
     st.markdown("### Filosofen")
@@ -351,7 +347,8 @@ def _toon_alle_filosofen(profiel):
 
 def _toon_pantheons():
     """Toont alle 15 pantheons met hun logica."""
-    from filosofen import FILOSOFEN, PANTHEON_PER_LEVEL, PANTHEON_LOGICA
+    from filosofen import FILOSOFEN, PANTHEON_PER_LEVEL
+    from filosofen_biografieen import PANTHEON_LOGICA
 
     st.caption("Elk level heeft een eigen pantheon van vijf filosofen.")
 
@@ -374,7 +371,6 @@ def _toon_pantheons():
         st.markdown(logica)
 
         st.markdown("---")
-
     # ============================================================
     # Index
     # ============================================================
