@@ -765,11 +765,14 @@ def toon_gesprek():
 
         eerste_vraag_prompt = bouw_eerste_vraag_prompt(st.session_state.incheck)
 
+        is_voorzitter = (filosoof_naam == voorzitter)
+
         system_prompt = bouw_coach_prompt(
             filosoof=filosoof,
             profiel=profiel,
             fase="opening",
             incheck=st.session_state.incheck,
+            is_voorzitter=is_voorzitter,
         )
 
         with st.spinner(f"{filosoof['naam']} denkt na..."):
