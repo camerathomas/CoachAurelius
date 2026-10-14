@@ -238,13 +238,13 @@ def _toon_favoriet_filosoof(profiel, level, tier):
 # Filosofen
 # ============================================================
 def _toon_filosofen(profiel):
-    """Toont de filosofen-info."""
+    """Toont alle filosofen met een index en interne links."""
     from filosofen import FILOSOFEN
     from filosofen_biografieen import BIOGRAFIEEN
     from tiers import beschikbare_filosofen
 
     st.markdown("### Filosofen")
-    st.caption("Kies een filosoof om meer te lezen.")
+    st.caption("Klik op een naam om naar de biografie te springen.")
 
     tier = profiel.get("tier", "sessie")
     level = profiel.get("level", 1)
@@ -258,34 +258,56 @@ def _toon_filosofen(profiel):
         key=lambda x: FILOSOFEN.get(x, {}).get("naam", x),
     )
 
-    # Dropdown
-    keuze = st.selectbox(
-        "Kies een filosoof",
-        opties_gesorteerd,
-        format_func=lambda x: (
-            f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}"
-            if x in FILOSOFEN else x
-        ),
-        key="filosoof_keuze",
-    )
+    # ============================================================
+    # Index
+    # ============================================================
+    index_html = '<div id="index"><h2>Index</h2><ul>'
+    for f in opties_gesorteerd:
+        if f in FILOSOFEN and f in BIOGRAFIEEN:
+            naam = FILOSOFEN[f]["naam"]
+            index_html += f'<li><a href="#{f}">{naam}</a></li>'
+    index_html += "</ul></div>"
 
-    # Toon de biografie
-    if keuze and keuze in BIOGRAFIEEN:
-        bio = BIOGRAFIEEN[keuze]
+    st.markdown(index_html, unsafe_allow_html=True)
 
-        st.markdown("---")
-        st.markdown(f"## {FILOSOFEN[keuze]['emoji']} {bio['naam']}")
+    st.markdown("---")
+
+    # ============================================================
+    # Biografieën
+    # ============================================================
+    for f in opties_gesorteerd:
+        if f not in FILOSOFEN or f not in BIOGRAFIEEN:
+            continue
+
+        bio = BIOGRAFIEEN[f]
+        emoji = FILOSOFEN[f]["emoji"]
+
+        # Anker voor deze filosoof
+        st.markdown(
+            f'<h2 id="{f}">{emoji} {bio["naam"]}</h2>',
+            unsafe_allow_html=True,
+        )
         st.caption(f"_{bio['leefde']}_")
-
         st.markdown(f"**Stroming:** {bio['stroming']}")
 
-        st.markdown("### Bekende boeken")
+        st.markdown("**Bekende boeken:**")
         for boek in bio["boeken"]:
             st.markdown(f"- {boek}")
 
-        st.markdown("### Bekende uitspraken")
+        st.markdown("**Bekende uitspraken:**")
         for uitspraak in bio["uitspraken"]:
             st.markdown(f"> *{uitspraak}*")
+
+        st.markdown("**Visie:**")
+        st.markdown(bio["visie"])
+
+        # Terug naar index
+        st.markdown(
+            '<a href="#index">↑ Terug naar index</a>',
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("---")
 
         st.markdown("### Visie")
         st.markdown(bio["visie"])
