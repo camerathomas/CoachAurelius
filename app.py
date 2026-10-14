@@ -221,7 +221,10 @@ def eindig_sessie():
     st.session_state.wendingen_geweest = []
     st.session_state.evaluatie_rondes = None
     st.session_state.evaluatie_afsluiter = None
-    st.session_state.evaluatie_afgerond = False    
+    st.session_state.evaluatie_afgerond = False
+    st.session_state.inzicht = {}
+    st.session_state.inzicht_vragen = []
+    st.session_state.inzicht_stap = 0    
     naar_geen_sessie()
 
 
