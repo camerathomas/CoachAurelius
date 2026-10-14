@@ -105,6 +105,88 @@ GESPREKSVORMEN = {
             "Geen 'wat fijn dat je dit deelt'. Geen superlatieven. Geen "
             "troost. Alleen de vraag die ertoe doet."
         ),
+    },
+
+    "het_debat": {
+        "naam": "Het debat",
+        "beschrijving": "Twee filosofen tegenover elkaar. Jij bent rechter.",
+        "icoon": "⚖️",
+        "level": 21,
+        "filosofen": "twee",
+        "gebruiker_rol": "rechter",
+        "prompt_toevoeging": (
+            "Dit is een debat. Twee filosofen verdedigen tegenovergestelde "
+            "standpunten. De gebruiker is de rechter. Jouw taak: verdedig "
+            "jouw standpunt met kracht, reageer op de tegenstander, en "
+            "probeer de rechter te overtuigen. Blijf respectvol, maar "
+            "schuw de confrontatie niet. Aan het einde vraagt de rechter "
+            "wie hem het meest heeft overtuigd."
+        ),
+    },
+    "socratisch_gesprek": {
+        "naam": "Socratisch gesprek",
+        "beschrijving": "Alleen vragen. Geen antwoorden. Jij moet zelf denken.",
+        "icoon": "❓",
+        "level": 22,
+        "filosofen": "één",
+        "gebruiker_rol": "deelnemer",
+        "prompt_toevoeging": (
+            "Dit is een socratisch gesprek. Je stelt ALLEEN vragen. "
+            "Je geeft geen antwoorden, geen advies, geen mening. "
+            "Je stelt één vraag per beurt. Als de gebruiker iets beweert, "
+            "vraag je door: 'Wat bedoel je precies?' of 'Hoe weet je dat?' "
+            "of 'Is dat altijd zo?' Je doel is om de gebruiker zelf te "
+            "laten nadenken, niet om hem iets te leren."
+        ),
+    },
+    "de_biecht": {
+        "naam": "De biecht",
+        "beschrijving": "Je vertelt iets persoonlijks. De filosoof luistert zonder oordeel.",
+        "icoon": "🕯️",
+        "level": 23,
+        "filosofen": "één",
+        "gebruiker_rol": "biechteling",
+        "prompt_toevoeging": (
+            "Dit is een biecht. De gebruiker vertelt iets persoonlijks, "
+            "iets waar hij zich misschien voor schaamt of dat hij moeilijk "
+            "vindt om te delen. Jouw taak: luister zonder oordeel. "
+            "Vraag door, maar wees zacht. Geef geen absoluties en geen "
+            "advies. Help de gebruiker om het zelf onder ogen te zien. "
+            "Aan het einde geef je een korte, milde overweging mee."
+        ),
+    },
+    "het_dilemma": {
+        "naam": "Het dilemma",
+        "beschrijving": "Een moreel dilemma. Jij moet kiezen.",
+        "icoon": "🔀",
+        "level": 24,
+        "filosofen": "pantheon",
+        "gebruiker_rol": "deelnemer",
+        "prompt_toevoeging": (
+            "Dit is een dilemma. Je presenteert de gebruiker een moreel "
+            "dilemma: een keuze tussen twee kwaden, waarbij geen van beide "
+            "opties goed is. De gebruiker moet kiezen. Jouw taak: vraag "
+            "door naar de redenen, confronteer met de consequenties, en "
+            "laat zien welke waarden in het spel zijn. Je geeft geen "
+            "antwoord; je helpt de gebruiker zijn eigen keuze te begrijpen."
+        ),
+    },
+    "de_droom": {
+        "naam": "De droom",
+        "beschrijving": "Je vertelt een droom. De filosoof interpreteert hem.",
+        "icoon": "🌙",
+        "level": 25,
+        "filosofen": "één",
+        "gebruiker_rol": "dromer",
+        "prompt_toevoeging": (
+            "Dit is een droomgesprek. De gebruiker vertelt een droom. "
+            "Jouw taak: vraag naar de details, de beelden, de gevoelens. "
+            "Interpreteer de droom voorzichtig, als een verhaal met "
+            "symbolen. Verwijs naar mythen, filosofie of literatuur waar "
+            "dat past. Je geeft geen psychologische diagnose; je opent "
+            "mogelijke betekenissen. Aan het einde vraag je wat de droom "
+            "voor de gebruiker zelf zou kunnen betekenen."
+        ),
     },    
 }
 
