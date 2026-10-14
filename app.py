@@ -1143,7 +1143,7 @@ def toon_archief():
 
 
 def _archiveer_sessie():
-    """Slaat de sessie op in de database."""
+    """Slaat de sessie op in de database, inclusief de inzichten."""
     profiel = st.session_state.profiel
     gebruiker_id = st.session_state.gebruiker_id
     geschiedenis = st.session_state.geschiedenis
@@ -1163,9 +1163,10 @@ def _archiveer_sessie():
                     break
             break
 
-    # Sla de sessie op, inclusief de evaluatie
+    # Sla de sessie op
+    sessie_id = None
     try:
-        bewaar_sessie(
+        sessie_id = bewaar_sessie(
             gebruiker_id=gebruiker_id,
             thema=thema,
             incheck=incheck,
@@ -1177,6 +1178,28 @@ def _archiveer_sessie():
         )
     except Exception as e:
         st.error(f"Fout bij archiveren: {e}")
+
+    # Sla de inzichten op, gekoppeld aan de sessie
+    inzicht = st.session_state.get("inzicht", {})
+    if inzicht and sessie_id:
+        for sleutel, antwoord in inzicht.items():
+            try:
+                # Zoek de bijbehorende vraag
+                vraag_tekst = sleutel
+                for v in st.session_state.get("inzicht_vragen", []):
+                    if v.get("sleutel") == sleutel:
+                        vraag_tekst = v.get("vraag", sleutel)
+                        break
+
+                bewaar_inzicht(
+                    gebruiker_id=gebruiker_id,
+                    sessie_id=sessie_id,
+                    sleutel=sleutel,
+                    vraag=vraag_tekst,
+                    antwoord=antwoord,
+                )
+            except Exception as e:
+                st.error(f"Fout bij opslaan inzicht: {e}")
 
     # Werk het profiel bij
     profiel["gesprekken_gehad"] = profiel.get("gesprekken_gehad", 0) + 1
