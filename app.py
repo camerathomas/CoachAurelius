@@ -727,8 +727,16 @@ def toon_gesprek():
     else:
         fase = "afsluiten"
 
-    # Toon de statusbalk
-    st.title("🕐 Gesprek")
+    # Toon de titel en de statusbalk
+    from gespreksvormen import GESPREKSVORMEN
+    vorm_info = GESPREKSVORMEN.get(gespreksvorm, {})
+    vorm_naam = vorm_info.get("naam", "Gesprek")
+    vorm_icoon = vorm_info.get("icoon", "🕐")
+
+    st.title(f"{vorm_icoon} {vorm_naam}")
+    if vorm_info.get("beschrijving"):
+        st.caption(vorm_info["beschrijving"])
+
     col1, col2, col3 = st.columns([2, 2, 1])
     with col1:
         st.markdown(f"**🕐 {minuten:.1f}** van **{sessie_duur}** min")
