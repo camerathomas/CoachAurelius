@@ -158,10 +158,13 @@ def kies_filosoof(profiel, pantheon, gebruikers_input):
 
 def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter, teller):
     """
-    Kiest een filosoof met een 60/10-verdeling:
-    - 10% van de beurten: de voorzitter
-    - 60% van de beurten: de filosoof wiens thema past
-    - de rest: de filosoof die het minst gesproken heeft
+    Kiest een filosoof met een 40/60-verdeling:
+    - 40% van de beurten: de voorzitter
+    - 60% van de beurten: het pantheon (de 4 deelnemers)
+
+    Binnen het pantheon:
+    - eerst: de filosoof wiens thema past
+    - anders: de filosoof die het minst gesproken heeft
 
     'teller' is een dict: {naam: aantal_keer_gesproken}
     """
@@ -171,12 +174,13 @@ def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter,
     invoer = gebruikers_input.lower()
     deelnemers = [f for f in pantheon if f != voorzitter]
 
-    # 10%: de voorzitter
-    if voorzitter and random.random() < 0.10:
+    # 40%: de voorzitter
+    if voorzitter and random.random() < 0.40:
         teller[voorzitter] = teller.get(voorzitter, 0) + 1
         return voorzitter
 
-    # 60%: de filosoof wiens thema past
+    # 60%: het pantheon
+    # Eerst: de filosoof wiens thema past
     for naam in deelnemers:
         filosoof = FILOSOFEN.get(naam)
         if not filosoof:
@@ -186,7 +190,7 @@ def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter,
                 teller[naam] = teller.get(naam, 0) + 1
                 return naam
 
-    # 30%: de filosoof die het minst gesproken heeft
+    # Anders: de filosoof die het minst gesproken heeft
     if deelnemers:
         minst = min(deelnemers, key=lambda n: teller.get(n, 0))
         teller[minst] = teller.get(minst, 0) + 1
