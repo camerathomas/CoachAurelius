@@ -922,6 +922,7 @@ def toon_afsluiting():
             profiel=profiel,
             fase="afsluiten",
             incheck=st.session_state.incheck,
+            is_voorzitter=True,
         )
 
         with st.spinner(f"{filosoof['naam']} rondt af..."):
