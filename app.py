@@ -160,6 +160,9 @@ def initialiseer_state():
         st.session_state.inzicht = {}
     if "inzicht_stap" not in st.session_state:
         st.session_state.inzicht_stap = 0
+
+    if "filosoof_teller" not in st.session_state:
+        st.session_state.filosoof_teller = {}
 # ============================================================
 # De overgangen
 # ============================================================
