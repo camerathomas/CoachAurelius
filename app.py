@@ -53,6 +53,7 @@ from opslag import (
     initialiseer, laad_profiel, bewaar_profiel,
     bewaar_bericht, laad_gesprek, wis_gesprek,
     bewaar_sessie, laad_sessies, laad_sessie,
+    bewaar_inzicht, laad_inzichten, wis_alles,
 )
 
 try:
