@@ -152,6 +152,13 @@ def initialiseer_state():
         st.session_state.evaluatie_afsluiter = None
     if "evaluatie_afgerond" not in st.session_state:
         st.session_state.evaluatie_afgerond = False
+
+    if "inzicht_vragen" not in st.session_state:
+        st.session_state.inzicht_vragen = []
+    if "inzicht" not in st.session_state:
+        st.session_state.inzicht = {}
+    if "inzicht_stap" not in st.session_state:
+        st.session_state.inzicht_stap = 0
 # ============================================================
 # De overgangen
 # ============================================================
