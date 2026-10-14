@@ -1289,9 +1289,15 @@ def toon_sidebar():
 
     if st.sidebar.button("🗑️ Wis alle gesprekken"):
         try:
-            wis_gesprek(st.session_state.gebruiker_id)
+            wis_alles(st.session_state.gebruiker_id)
             st.session_state.geschiedenis = []
-            st.sidebar.success("Gewist.")
+            st.session_state.incheck = {}
+            st.session_state.inzicht = {}
+            st.session_state.inzicht_vragen = []
+            st.session_state.evaluatie_rondes = None
+            st.session_state.evaluatie_afsluiter = None
+            st.session_state.evaluatie_afgerond = False
+            st.sidebar.success("Alles is gewist.")
             st.rerun()
         except Exception as e:
             st.sidebar.error(f"Fout: {e}")
