@@ -834,12 +834,15 @@ def toon_gesprek():
             profiel.setdefault("wendingen_geweest", []).append(drempel)
 
         # Bouw de prompt
+        is_voorzitter = (filosoof_naam == voorzitter)
+
         system_prompt = bouw_coach_prompt(
             filosoof=filosoof,
             profiel=profiel,
             fase=fase,
             incheck=st.session_state.incheck,
             wending=wending,
+            is_voorzitter=is_voorzitter,
         )
 
         # Bouw de context
