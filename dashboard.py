@@ -1,6 +1,6 @@
 """
 Dashboard voor Aurelius.
-Toont het archief, de voortgang en de favorieten.
+Toont het archief, de voortgang, de favorieten en de filosofen.
 """
 
 import streamlit as st
@@ -14,8 +14,8 @@ def toon_dashboard(gebruiker_id, profiel):
     st.title("🏛️ Jouw dashboard")
     st.caption(f"Welkom terug, {gebruiker_id}.")
 
-    tab1, tab2, tab3 = st.tabs(
-        ["Archief", "Voortgang", "Favorieten"]
+    tab1, tab2, tab3, tab4 = st.tabs(
+        ["Archief", "Voortgang", "Favorieten", "Filosofen"]
     )
 
     with tab1:
@@ -26,6 +26,9 @@ def toon_dashboard(gebruiker_id, profiel):
 
     with tab3:
         _toon_favorieten(profiel)
+
+    with tab4:
+        _toon_filosofen(profiel)
 
 
 # ============================================================
@@ -229,3 +232,60 @@ def _toon_favoriet_filosoof(profiel, level, tier):
         bewaar_profiel(profiel)
         st.success("Favoriete filosoof opgeslagen.")
         st.rerun()
+
+
+# ============================================================
+# Filosofen
+# ============================================================
+def _toon_filosofen(profiel):
+    """Toont de filosofen-info."""
+    from filosofen import FILOSOFEN
+    from biografieen import BIOGRAFIEEN
+    from tiers import beschikbare_filosofen
+
+    st.markdown("### Filosofen")
+    st.caption("Kies een filosoof om meer te lezen.")
+
+    tier = profiel.get("tier", "sessie")
+    level = profiel.get("level", 1)
+
+    # Welke filosofen zijn beschikbaar?
+    opties = beschikbare_filosofen(tier, level)
+
+    # Sorteer op naam
+    opties_gesorteerd = sorted(
+        opties,
+        key=lambda x: FILOSOFEN.get(x, {}).get("naam", x),
+    )
+
+    # Dropdown
+    keuze = st.selectbox(
+        "Kies een filosoof",
+        opties_gesorteerd,
+        format_func=lambda x: (
+            f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}"
+            if x in FILOSOFEN else x
+        ),
+        key="filosoof_keuze",
+    )
+
+    # Toon de biografie
+    if keuze and keuze in BIOGRAFIEEN:
+        bio = BIOGRAFIEEN[keuze]
+
+        st.markdown("---")
+        st.markdown(f"## {FILOSOFEN[keuze]['emoji']} {bio['naam']}")
+        st.caption(f"_{bio['leefde']}_")
+
+        st.markdown(f"**Stroming:** {bio['stroming']}")
+
+        st.markdown("### Bekende boeken")
+        for boek in bio["boeken"]:
+            st.markdown(f"- {boek}")
+
+        st.markdown("### Bekende uitspraken")
+        for uitspraak in bio["uitspraken"]:
+            st.markdown(f"> *{uitspraak}*")
+
+        st.markdown("### Visie")
+        st.markdown(bio["visie"])
