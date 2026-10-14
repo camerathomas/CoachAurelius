@@ -818,10 +818,16 @@ def toon_gesprek():
             pass
 
         # Kies een filosoof
-        from coach import kies_filosoof
+        from coach import kies_filosoof_met_verdeling
 
         if pantheon and voorzitter:
-            filosoof_naam = kies_filosoof(profiel, pantheon, gebruiker_input)
+            filosoof_naam = kies_filosoof_met_verdeling(
+                profiel,
+                pantheon,
+                gebruiker_input,
+                voorzitter,
+                st.session_state.filosoof_teller,
+            )
         else:
             filosoof_naam = "marcus_aurelius"
 
