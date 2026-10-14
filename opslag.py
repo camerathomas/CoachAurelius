@@ -88,6 +88,18 @@ def initialiseer():
         )
     """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS inzichten (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            gebruiker_id TEXT,
+            sessie_id INTEGER,
+            sleutel TEXT,
+            vraag TEXT,
+            antwoord TEXT,
+            tijd TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
     conn.commit()
     conn.close()
 
@@ -317,7 +329,8 @@ def wis_gesprek(gebruiker_id):
 
 def bewaar_sessie(gebruiker_id, thema, incheck, gesprek, rondes, afsluiter,
                   duur_minuten, pantheon):
-    """Slaat een volledige sessie op in het archief."""
+    """Slaat een volledige sessie op in het archief.
+    Geeft het sessie-id terug."""
     conn = _krijg_verbinding()
     cursor = conn.cursor()
 
@@ -337,8 +350,10 @@ def bewaar_sessie(gebruiker_id, thema, incheck, gesprek, rondes, afsluiter,
         json.dumps(pantheon, ensure_ascii=False),
     ))
 
+    sessie_id = cursor.lastrowid
     conn.commit()
     conn.close()
+    return sessie_id
 
 
 def laad_sessies(gebruiker_id, limiet=20):
@@ -426,5 +441,81 @@ def wis_alle_sessies(gebruiker_id):
     conn = _krijg_verbinding()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM sessies WHERE gebruiker_id = ?", (gebruiker_id,))
+    conn.commit()
+    conn.close()
+
+
+def bewaar_inzicht(gebruiker_id, sessie_id, sleutel, vraag, antwoord):
+    """Slaat één inzicht op."""
+    conn = _krijg_verbinding()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO inzichten
+        (gebruiker_id, sessie_id, sleutel, vraag, antwoord)
+        VALUES (?, ?, ?, ?, ?)
+    """, (gebruiker_id, sessie_id, sleutel, vraag, antwoord))
+
+    conn.commit()
+    conn.close()
+
+
+def laad_inzichten(gebruiker_id, sessie_id=None, limiet=50):
+    """Laadt de inzichten van een gebruiker, of van één sessie."""
+    try:
+        conn = _krijg_verbinding()
+        cursor = conn.cursor()
+
+        if sessie_id is not None:
+            cursor.execute("""
+                SELECT id, sessie_id, sleutel, vraag, antwoord, tijd
+                FROM inzichten
+                WHERE gebruiker_id = ? AND sessie_id = ?
+                ORDER BY tijd ASC
+                LIMIT ?
+            """, (gebruiker_id, sessie_id, limiet))
+        else:
+            cursor.execute("""
+                SELECT id, sessie_id, sleutel, vraag, antwoord, tijd
+                FROM inzichten
+                WHERE gebruiker_id = ?
+                ORDER BY tijd DESC
+                LIMIT ?
+            """, (gebruiker_id, limiet))
+
+        rijen = cursor.fetchall()
+        conn.close()
+
+        return [
+            {
+                "id": r[0],
+                "sessie_id": r[1],
+                "sleutel": r[2],
+                "vraag": r[3],
+                "antwoord": r[4],
+                "tijd": r[5],
+            }
+            for r in rijen
+        ]
+    except Exception:
+        return []
+
+
+def wis_inzichten(gebruiker_id):
+    """Verwijdert alle inzichten van een gebruiker."""
+    conn = _krijg_verbinding()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM inzichten WHERE gebruiker_id = ?", (gebruiker_id,))
+    conn.commit()
+    conn.close()
+
+
+def wis_alles(gebruiker_id):
+    """Verwijdert alle berichten, sessies en inzichten van een gebruiker."""
+    conn = _krijg_verbinding()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM berichten WHERE gebruiker_id = ?", (gebruiker_id,))
+    cursor.execute("DELETE FROM sessies WHERE gebruiker_id = ?", (gebruiker_id,))
+    cursor.execute("DELETE FROM inzichten WHERE gebruiker_id = ?", (gebruiker_id,))
     conn.commit()
     conn.close()
