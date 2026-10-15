@@ -106,7 +106,6 @@ GESPREKSVORMEN = {
             "troost. Alleen de vraag die ertoe doet."
         ),
     },
-
     "vragenvuur": {
         "naam": "Vragenvuur",
         "beschrijving": "Snel achter elkaar vragen. Je moet snel antwoorden.",
@@ -129,7 +128,7 @@ GESPREKSVORMEN = {
         "beschrijving": "Alleen vragen. Geen antwoorden. Jij moet zelf denken.",
         "icoon": "❓",
         "level": 22,
-        "filosofen": "één",
+        "filosofen": "pantheon",
         "gebruiker_rol": "deelnemer",
         "prompt_toevoeging": (
             "Dit is een socratisch gesprek. Je stelt ALLEEN vragen. "
@@ -145,7 +144,7 @@ GESPREKSVORMEN = {
         "beschrijving": "Je vertelt iets persoonlijks. De filosoof luistert zonder oordeel.",
         "icoon": "🕯️",
         "level": 23,
-        "filosofen": "één",
+        "filosofen": "pantheon",
         "gebruiker_rol": "biechteling",
         "prompt_toevoeging": (
             "Dit is een biecht. De gebruiker vertelt iets persoonlijks, "
@@ -177,7 +176,7 @@ GESPREKSVORMEN = {
         "beschrijving": "Je vertelt een droom. De filosoof interpreteert hem.",
         "icoon": "🌙",
         "level": 25,
-        "filosofen": "één",
+        "filosofen": "pantheon",
         "gebruiker_rol": "dromer",
         "prompt_toevoeging": (
             "Dit is een droomgesprek. De gebruiker vertelt een droom. "
@@ -188,7 +187,7 @@ GESPREKSVORMEN = {
             "mogelijke betekenissen. Aan het einde vraag je wat de droom "
             "voor de gebruiker zelf zou kunnen betekenen."
         ),
-    },    
+    },
 }
 
 
