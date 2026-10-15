@@ -828,8 +828,20 @@ def toon_gesprek():
 
         st.rerun()
 
-    # Invoer van de gebruiker
-    gebruiker_input = st.chat_input("Waar wil je het over hebben?")
+    # Invoer van de gebruiker — alleen als de laatste beurt van een filosoof was
+    laatste_bericht = (
+        st.session_state.geschiedenis[-1]
+        if st.session_state.geschiedenis
+        else None
+    )
+    laatste_is_filosoof = (
+        laatste_bericht is not None
+        and laatste_bericht.get("naam") != "Jij"
+    )
+
+    gebruiker_input = None
+    if laatste_is_filosoof:
+        gebruiker_input = st.chat_input("Waar wil je het over hebben?")
 
     if gebruiker_input:
         tijd = datetime.now().strftime("%H:%M")
