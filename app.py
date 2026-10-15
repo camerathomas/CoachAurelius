@@ -751,7 +751,10 @@ def toon_gesprek():
     # Toon voorzitter en pantheon
     from filosofen import FILOSOFEN, PANTHEON_NAMEN
     level = profiel.get("level", 1)
-    pantheon_naam = PANTHEON_NAMEN.get(level, "Pantheon")
+    if profiel.get("gebruik_eigen_pantheon", False):
+        pantheon_naam = "Mijn eigen pantheon"
+    else:
+        pantheon_naam = PANTHEON_NAMEN.get(level, "Pantheon")
 
     voorzitter_naam = FILOSOFEN[voorzitter]["naam"] if voorzitter in FILOSOFEN else "?"
     pantheon_namen = ", ".join(
