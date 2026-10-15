@@ -1684,6 +1684,21 @@ PANTHEON_PER_LEVEL = {
     13: ["thomas_kuhn", "einstein", "de_bono", "mill", "tumarkin"],
     14: ["hermes_trismegistos", "valentinus", "ficino", "bruno", "luther"],
     15: ["roodkapje", "pinocchio", "sneeuwwitje", "doornroosje", "zeven_dwergen"],
+    16: ["socrates", "plato", "aristoteles", "hypatia", "marcus_aurelius"],
+    17: ["boeddha", "confucius", "lao_tze", "zhuangzi", "nagarjuna"],
+    18: ["hadewijch", "hildegard_van_bingen", "meister_eckhart", "teresa_van_avila", "johannes_van_het_kruis"],
+    19: ["avicenna", "al_ghazali", "ibn_arabi", "ibn_khaldun", "rumi"],
+    20: ["dogen", "zhu_xi", "wang_yangming", "erasmus", "ficino"],
+    21: ["descartes", "spinoza", "leibniz", "pascal", "christina_van_zweden"],
+    22: ["kant", "hegel", "schopenhauer", "nietzsche", "luther"],
+    23: ["kierkegaard", "sartre", "camus", "simone_de_beauvoir", "simone_weil"],
+    24: ["wittgenstein", "russell", "popper", "feyerabend", "bruno"],
+    25: ["francis_bacon", "thomas_kuhn", "einstein", "de_bono", "foucault"],
+    26: ["marx", "hannah_arendt", "gandhi", "mill", "derrida"],
+    27: ["hermes_trismegistos", "valentinus", "jakob_bohme", "heidegger", "thomas_aquinas"],
+    28: ["christine_de_pizan", "mary_wollstonecraft", "belle_van_zuylen", "iris_murdoch", "tumarkin"],
+    29: ["roodkapje", "pinocchio", "sneeuwwitje", "doornroosje", "zeven_dwergen"],
+    30: ["maria_montessori", "willem_van_ockham", "david_hume", "voltaire", "rousseau"],    
 }
 
 # ============================================================
