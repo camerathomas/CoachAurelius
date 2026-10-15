@@ -492,10 +492,23 @@ def toon_parameters():
             voorzitter = None
             gekozen = []
         else:
+            # Lees de vorige keuze uit het profiel
+            vorige_pantheon = profiel.get("eigen_pantheon", [])
+            vorige_voorzitter = vorige_pantheon[0] if vorige_pantheon else None
+            vorige_filosofen = vorige_pantheon[1:5] if len(vorige_pantheon) > 1 else []
+
             st.markdown("**Kies een voorzitter:**")
+
+            # Index voor de voorzitter-selectbox
+            if vorige_voorzitter and vorige_voorzitter in opties:
+                index_voorzitter = opties.index(vorige_voorzitter)
+            else:
+                index_voorzitter = 0
+
             voorzitter = st.selectbox(
                 "Voorzitter",
                 opties,
+                index=index_voorzitter,
                 format_func=lambda x: (
                     f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}"
                     if x in FILOSOFEN else x
@@ -512,9 +525,17 @@ def toon_parameters():
                     f for f in opties if f != voorzitter
                 ]
 
+                # Index voor deze filosoof-selectbox
+                vorige_keuze = vorige_filosofen[i] if i < len(vorige_filosofen) else None
+                if vorige_keuze and vorige_keuze in opties_zonder_voorzitter:
+                    index_filosoof = opties_zonder_voorzitter.index(vorige_keuze)
+                else:
+                    index_filosoof = 0
+
                 keuze = st.selectbox(
                     f"Filosoof {i + 1}",
                     opties_zonder_voorzitter,
+                    index=index_filosoof,
                     format_func=lambda x: (
                         f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}"
                         if x in FILOSOFEN else x
