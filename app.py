@@ -474,7 +474,22 @@ def toon_parameters():
 
     mag_eigen_pantheon = heeft_toegang(tier, level, "eigen_pantheon")
 
-    if mag_eigen_pantheon:
+    # Random pantheon is beschikbaar vanaf level 16
+    mag_random = level >= 16
+
+    if mag_eigen_pantheon and mag_random:
+        pantheon_keuze = st.radio(
+            "Pantheon",
+            ["standaard", "random", "eigen"],
+            format_func=lambda x: {
+                "standaard": "Standaard pantheon van dit level",
+                "random": "🎲 Random pantheon (5 willekeurige filosofen)",
+                "eigen": "Mijn eigen pantheon",
+            }.get(x, x),
+            label_visibility="collapsed",
+            key="pantheon_keuze",
+        )
+    elif mag_eigen_pantheon:
         pantheon_keuze = st.radio(
             "Pantheon",
             ["standaard", "eigen"],
@@ -486,9 +501,20 @@ def toon_parameters():
             label_visibility="collapsed",
             key="pantheon_keuze",
         )
+    elif mag_random:
+        pantheon_keuze = st.radio(
+            "Pantheon",
+            ["standaard", "random"],
+            format_func=lambda x: {
+                "standaard": "Standaard pantheon van dit level",
+                "random": "🎲 Random pantheon (5 willekeurige filosofen)",
+            }.get(x, x),
+            label_visibility="collapsed",
+            key="pantheon_keuze",
+        )
     else:
         pantheon_keuze = "standaard"
-        st.caption("_(eigen pantheon beschikbaar vanaf level 2)_")
+        st.caption("_(eigen pantheon beschikbaar vanaf level 2, random pantheon vanaf level 16)_")
 
     # ============================================================
     # Eigen pantheon: voorzitter + 4 filosofen
