@@ -622,6 +622,16 @@ def toon_parameters():
             if pantheon_keuze == "eigen":
                 st.session_state.pantheon = [voorzitter] + gekozen
                 st.session_state.voorzitter = voorzitter
+                profiel["gebruik_eigen_pantheon"] = True
+                profiel["gebruik_random_pantheon"] = False
+            elif pantheon_keuze == "random":
+                import random
+                alle_filosofen = list(FILOSOFEN.keys())
+                random_pantheon = random.sample(alle_filosofen, 5)
+                st.session_state.pantheon = random_pantheon
+                st.session_state.voorzitter = random_pantheon[0]
+                profiel["gebruik_eigen_pantheon"] = False
+                profiel["gebruik_random_pantheon"] = True
             else:
                 start_pantheon = PANTHEON_PER_LEVEL.get(
                     level, PANTHEON_PER_LEVEL.get(1, [])
@@ -630,6 +640,8 @@ def toon_parameters():
                 st.session_state.voorzitter = (
                     start_pantheon[0] if start_pantheon else None
                 )
+                profiel["gebruik_eigen_pantheon"] = False
+                profiel["gebruik_random_pantheon"] = False
 
             naar_incheck()
             st.rerun()
