@@ -791,6 +791,8 @@ def toon_gesprek():
     level = profiel.get("level", 1)
     if profiel.get("gebruik_eigen_pantheon", False):
         pantheon_naam = "Mijn eigen pantheon"
+    elif profiel.get("gebruik_random_pantheon", False):
+        pantheon_naam = "Random pantheon"
     else:
         pantheon_naam = PANTHEON_NAMEN.get(level, "Pantheon")
 
