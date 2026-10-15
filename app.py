@@ -677,7 +677,6 @@ def toon_incheck():
         naar_gesprek()
         st.rerun()
 
-
 def toon_gesprek():
     from coach import bouw_coach_prompt, chat
     from filosofen import FILOSOFEN
@@ -847,6 +846,24 @@ def toon_gesprek():
             profiel.setdefault("wendingen_geweest", []).append(drempel)
             st.session_state.huidige_wending_label = wending["naam"]
 
+        # Overgangsmoment? (halverwege het gesprek, eenmalig)
+        overgangsmoment = False
+        if not st.session_state.get("overgangsmoment_geweest", False):
+            if minuten >= (sessie_duur / 2):
+                overgangsmoment = True
+                st.session_state.overgangsmoment_geweest = True
+                wending = {
+                    "naam": "Overgang",
+                    "instructie": (
+                        "We zijn halverwege het gesprek. Jouw taak in deze beurt:\n"
+                        "1. Vat in 2-3 zinnen samen wat er tot nu toe besproken is, "
+                        "in jouw eigen woorden.\n"
+                        "2. Breng een nieuw perspectief in dat nog niet aan bod kwam.\n"
+                        "3. Eindig met één nieuwe vraag die het gesprek verder opent.\n"
+                        "Doe dit in één doorlopend bericht, geen kopjes, geen opsomming."
+                    ),
+                }
+
         # Kies een filosoof
         from gespreksvormen import GESPREKSVORMEN
         vorm_info = GESPREKSVORMEN.get(gespreksvorm, {})
@@ -855,6 +872,16 @@ def toon_gesprek():
         if filosofen_type == "één":
             # Alleen de voorzitter doet mee
             filosoof_naam = voorzitter or "marcus_aurelius"
+        elif overgangsmoment:
+            # Het overgangsmoment gaat naar de filosoof die het minst aan de beurt was
+            deelnemers = [f for f in pantheon if f != voorzitter]
+            if deelnemers:
+                filosoof_naam = min(
+                    deelnemers,
+                    key=lambda f: st.session_state.filosoof_teller.get(f, 0),
+                )
+            else:
+                filosoof_naam = voorzitter or "marcus_aurelius"
         elif wending is not None and voorzitter:
             filosoof_naam = voorzitter
         elif pantheon and voorzitter:
@@ -903,6 +930,10 @@ def toon_gesprek():
         wending_label = st.session_state.get("huidige_wending_label")
         st.session_state.huidige_wending_label = None
 
+        # Bij een overgangsmoment tonen we geen label
+        if overgangsmoment:
+            wending_label = None
+
         st.session_state.geschiedenis.append({
             "naam": filosoof["naam"],
             "tekst": antwoord,
@@ -932,7 +963,6 @@ def toon_gesprek():
             if st.button("🕊️ Afronden", use_container_width=True, type="primary"):
                 naar_afsluiting()
                 st.rerun()
-
 
 def toon_afsluiting():
     from coach import bouw_coach_prompt, chat
