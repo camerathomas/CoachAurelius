@@ -844,6 +844,16 @@ def toon_gesprek():
         except Exception:
             pass
 
+        # Wending?
+        wending = None
+        drempel = moet_wending_komen(
+            minuten, sessie_duur,
+            profiel.get("wendingen_geweest", []),
+        )
+        if drempel is not None:
+            wending = kies_random_wending()
+            profiel.setdefault("wendingen_geweest", []).append(drempel)
+
         # Kies een filosoof
         from gespreksvormen import GESPREKSVORMEN
         vorm_info = GESPREKSVORMEN.get(gespreksvorm, {})
@@ -867,16 +877,7 @@ def toon_gesprek():
             filosoof_naam = "marcus_aurelius"
 
         filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
-
-        # Wending?
-        wending = None
-        drempel = moet_wending_komen(
-            minuten, sessie_duur,
-            profiel.get("wendingen_geweest", []),
-        )
-        if drempel is not None:
-            wending = kies_random_wending()
-            profiel.setdefault("wendingen_geweest", []).append(drempel)
+  
 
         # Bouw de prompt
         is_voorzitter = (filosoof_naam == voorzitter)
