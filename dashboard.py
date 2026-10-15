@@ -14,8 +14,8 @@ def toon_dashboard(gebruiker_id, profiel):
     st.title("🏛️ Jouw dashboard")
     st.caption(f"Welkom terug, {gebruiker_id}.")
 
-    tab1, tab2, tab3, tab4 = st.tabs(
-        ["Voortgang", "Archief", "Favorieten", "Filosofen"]
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(
+        ["Voortgang", "Archief", "Favorieten", "Filosofen", "Help"]
     )
 
     with tab1:
@@ -29,6 +29,9 @@ def toon_dashboard(gebruiker_id, profiel):
 
     with tab4:
         _toon_filosofen(profiel)
+
+    with tab5:
+        _toon_help()
 
 
 # ============================================================
