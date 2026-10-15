@@ -158,27 +158,36 @@ def kies_filosoof(profiel, pantheon, gebruikers_input):
 
 def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter, teller):
     """
-    Kiest een filosoof op basis van een 60/10-verdeling.
-    De voorzitter krijgt 60% van de beurten, de rest elk 10%.
+    Kiest een filosoof voor een gewone beurt.
+    De voorzitter doet alleen de inleiding, de wendingen en de afsluiting.
+    De andere filosofen reageren op basis van thema-match.
     """
     if not pantheon:
         return "marcus_aurelius"
 
-    totaal = sum(teller.values()) + 1
+    # De voorzitter doet niet mee aan gewone beurten.
+    deelnemers = [f for f in pantheon if f != voorzitter]
 
-    doel = {}
-    for f in pantheon:
-        if f == voorzitter:
-            doel[f] = 0.6
-        else:
-            doel[f] = 0.4 / max(1, len(pantheon) - 1)
+    if not deelnemers:
+        return voorzitter or "marcus_aurelius"
 
-    tekort = {}
-    for f in pantheon:
-        huidig = teller.get(f, 0) / totaal
-        tekort[f] = doel[f] - huidig
+    invoer = gebruikers_input.lower()
 
-    return max(tekort, key=tekort.get)
+    # 1. Zoek een filosoof wiens thema past bij wat de gebruiker zegt.
+    from filosofen import FILOSOFEN
+    for naam in deelnemers:
+        filosoof = FILOSOFEN.get(naam)
+        if not filosoof:
+            continue
+        for thema in filosoof.get("themas", []):
+            if thema in invoer:
+                teller[naam] = teller.get(naam, 0) + 1
+                return naam
+
+    # 2. Anders: de filosoof die het minst gesproken heeft.
+    minst = min(deelnemers, key=lambda f: teller.get(f, 0))
+    teller[minst] = teller.get(minst, 0) + 1
+    return minst
     
 def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None, is_voorzitter=False):
     """Bouwt de system prompt voor de coach."""
