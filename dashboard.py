@@ -403,4 +403,37 @@ def _toon_pantheons():
 
         st.markdown("---")
 
+# ============================================================
+# Help
+# ============================================================
+def _toon_help():
+    """Toont de Help-tab met uitleg, FAQ, privacy en voorwaarden."""
+    st.markdown("### Help")
 
+    keuze = st.radio(
+        "Wat wil je lezen?",
+        ["uitleg", "faq", "privacy", "voorwaarden"],
+        format_func=lambda x: {
+            "uitleg": "📖 Uitleg",
+            "faq": "❓ Veelgestelde vragen",
+            "privacy": "🔒 Privacyverklaring",
+            "voorwaarden": "📋 Algemene voorwaarden",
+        }.get(x, x),
+        label_visibility="collapsed",
+        key="help_keuze",
+    )
+
+    st.markdown("---")
+
+    if keuze == "uitleg":
+        from uitleg import toon_uitleg
+        toon_uitleg()
+    elif keuze == "faq":
+        from faq import toon_faq
+        toon_faq()
+    elif keuze == "privacy":
+        from privacy import toon_privacy
+        toon_privacy()
+    elif keuze == "voorwaarden":
+        from voorwaarden import toon_voorwaarden
+        toon_voorwaarden()
