@@ -748,6 +748,20 @@ def toon_gesprek():
     if vorm_info.get("beschrijving"):
         st.caption(vorm_info["beschrijving"])
 
+    # Toon voorzitter en pantheon
+    from filosofen import FILOSOFEN, PANTHEON_NAMEN
+    level = profiel.get("level", 1)
+    pantheon_naam = PANTHEON_NAMEN.get(level, "Pantheon")
+
+    voorzitter_naam = FILOSOFEN[voorzitter]["naam"] if voorzitter in FILOSOFEN else "?"
+    pantheon_namen = ", ".join(
+        FILOSOFEN[f]["naam"] for f in pantheon if f in FILOSOFEN
+    )
+
+    st.caption(
+        f"**Voorzitter:** {voorzitter_naam} · "
+        f"**{pantheon_naam}:** {pantheon_namen}"
+    )    
     col1, col2, col3 = st.columns([2, 2, 1])
     with col1:
         st.markdown(f"**🕐 {minuten:.1f}** van **{sessie_duur}** min")
