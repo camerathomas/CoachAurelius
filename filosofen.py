@@ -1714,5 +1714,5 @@ def beschikbare_filosofen(level):
     """Geeft de filosofen die beschikbaar zijn voor dit level."""
     if level in PANTHEON_PER_LEVEL:
         return PANTHEON_PER_LEVEL[level]
-    # Level 16+: alle filosofen die de gebruiker heeft vrijgespeeld
+    # Level 31+: alle filosofen die de gebruiker heeft vrijgespeeld
     return [f for f in FILOSOFEN if FILOSOFEN[f]["level"] <= level]
