@@ -786,6 +786,8 @@ def toon_gesprek():
             with st.chat_message(b["naam"], avatar=b.get("icoon", "🏛️")):
                 st.markdown(f"**{b['naam']}**")
                 st.markdown(b["tekst"])
+                if b.get("wending"):
+                    st.caption(f"🔄 Wending: {b['wending']}")
 
     # Eerste beurt: de coach opent
     if not st.session_state.geschiedenis:
@@ -890,7 +892,6 @@ def toon_gesprek():
             filosoof_naam = "marcus_aurelius"
 
         filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
-  
 
         # Bouw de prompt
         is_voorzitter = (filosoof_naam == voorzitter)
@@ -920,11 +921,16 @@ def toon_gesprek():
                 provider=st.session_state.get("provider_key", "gemini"),
             )
 
+        # Haal de wending op (en zet hem op None)
+        wending_label = st.session_state.get("huidige_wending_label")
+        st.session_state.huidige_wending_label = None
+
         st.session_state.geschiedenis.append({
             "naam": filosoof["naam"],
             "tekst": antwoord,
             "icoon": filosoof["emoji"],
             "tijd": datetime.now().strftime("%H:%M"),
+            "wending": wending_label,
         })
         try:
             bewaar_bericht(st.session_state.gebruiker_id, filosoof["naam"], "assistant", antwoord)
