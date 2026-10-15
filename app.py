@@ -839,9 +839,17 @@ def toon_gesprek():
             pass
 
         # Kies een filosoof
-        from coach import kies_filosoof_met_verdeling
+        from gespreksvormen import GESPREKSVORMEN
+        vorm_info = GESPREKSVORMEN.get(gespreksvorm, {})
+        filosofen_type = vorm_info.get("filosofen", "pantheon")
 
-        if pantheon and voorzitter:
+        if filosofen_type == "één":
+            # Alleen de voorzitter doet mee
+            filosoof_naam = voorzitter or "marcus_aurelius"
+        elif wending is not None and voorzitter:
+            filosoof_naam = voorzitter
+        elif pantheon and voorzitter:
+            from coach import kies_filosoof_met_verdeling
             filosoof_naam = kies_filosoof_met_verdeling(
                 profiel,
                 pantheon,
