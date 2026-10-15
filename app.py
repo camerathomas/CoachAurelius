@@ -126,7 +126,9 @@ def initialiseer_state():
         st.session_state.evaluatie = {}
     if "evaluatie_stap" not in st.session_state:
         st.session_state.evaluatie_stap = 0
-
+    if "overgangsmoment_geweest" not in st.session_state:
+        st.session_state.overgangsmoment_geweest = False
+        
     # UI-state
     if "toon_dashboard" not in st.session_state:
         st.session_state.toon_dashboard = False
