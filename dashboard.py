@@ -15,23 +15,29 @@ def toon_dashboard(gebruiker_id, profiel):
     st.caption(f"Welkom terug, {gebruiker_id}.")
 
     tab1, tab2, tab3, tab4, tab5 = st.tabs(
-        ["Voortgang", "Archief", "Favorieten", "Filosofen", "Help"]
+        ["Voortgang", "Archief", "Favorieten", "Filosofen", "Help"],
+        on_change="rerun"
     )
 
     with tab1:
-        _toon_voortgang(profiel)
+        if tab1.open:
+            _toon_voortgang(profiel)
 
     with tab2:
-        _toon_archief(gebruiker_id, profiel)
+        if tab2.open:
+            _toon_archief(gebruiker_id, profiel)
 
     with tab3:
-        _toon_favorieten(profiel)
+        if tab3.open:
+            _toon_favorieten(profiel)
 
     with tab4:
-        _toon_filosofen(profiel)
+        if tab4.open:
+            _toon_filosofen(profiel)
 
     with tab5:
-        _toon_help()
+        if tab5.open:
+            _toon_help()
 
 
 # ============================================================
