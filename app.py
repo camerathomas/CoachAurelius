@@ -853,6 +853,7 @@ def toon_gesprek():
         if drempel is not None:
             wending = kies_random_wending()
             profiel.setdefault("wendingen_geweest", []).append(drempel)
+            st.session_state.huidige_wending_label = wending["naam"]
 
         # Kies een filosoof
         from gespreksvormen import GESPREKSVORMEN
