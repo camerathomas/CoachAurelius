@@ -350,66 +350,61 @@ def aantal_vragen():
 
 INZICHT_VRAGEN = [
     {
-        "sleutel": "belangrijkste",
-        "categorie": "terugblik",
-        "vraag": "Wat was het belangrijkste inzicht van dit gesprek?",
-        "placeholder": "Bijvoorbeeld: een zin die bleef hangen, een beeld...",
+        "sleutel": "moment",
+        "vraag": "Welk moment in dit gesprek raakte je het meest?",
+        "placeholder": "Bijvoorbeeld: een zin, een vraag, een stilte...",
+    },
+    {
+        "sleutel": "vraag",
+        "vraag": "Welke vraag bleef het langst bij je hangen?",
+        "placeholder": "Bijvoorbeeld: een vraag die je niet kon beantwoorden...",
+    },
+    {
+        "sleutel": "filosoof",
+        "vraag": "Wat zei een filosoof dat je nog niet eerder had bedacht?",
+        "placeholder": "Bijvoorbeeld: een perspectief, een beeld, een gedachte...",
+    },
+    {
+        "sleutel": "weerstand",
+        "vraag": "Waar had je weerstand tegen, en waarom?",
+        "placeholder": "Bijvoorbeeld: een vraag, een conclusie, een richting...",
     },
     {
         "sleutel": "verrassing",
-        "categorie": "terugblik",
-        "vraag": "Wat verraste je?",
-        "placeholder": "Bijvoorbeeld: een vraag, een andere kijk...",
+        "vraag": "Welk inzicht verraste je?",
+        "placeholder": "Bijvoorbeeld: iets dat je niet had verwacht...",
+    },
+    {
+        "sleutel": "terugkijken",
+        "vraag": "Wat zou je tegen jezelf zeggen aan het begin van dit gesprek?",
+        "placeholder": "Bijvoorbeeld: een raad, een waarschuwing, een geruststelling...",
     },
     {
         "sleutel": "meenemen",
-        "categorie": "terugblik",
-        "vraag": "Wat neem je mee naar morgen?",
-        "placeholder": "Bijvoorbeeld: een gedachte, een voornemen...",
+        "vraag": "Welke gedachte neem je mee de dag in?",
+        "placeholder": "Bijvoorbeeld: een zin, een beeld, een voornemen...",
     },
     {
-        "sleutel": "raakte",
-        "categorie": "verdieping",
-        "vraag": "Wat raakte je het meest?",
-        "placeholder": "Bijvoorbeeld: een moment, een woord...",
+        "sleutel": "zelfkennis",
+        "vraag": "Wat heb je vandaag over jezelf geleerd?",
+        "placeholder": "Bijvoorbeeld: een patroon, een verlangen, een angst...",
     },
     {
-        "sleutel": "onderzoeken",
-        "categorie": "verdieping",
-        "vraag": "Wat wil je nog verder onderzoeken?",
-        "placeholder": "Bijvoorbeeld: een vraag, een thema...",
+        "sleutel": "beeld",
+        "vraag": "Welk woord of beeld blijft terugkomen?",
+        "placeholder": "Bijvoorbeeld: een metafoor, een symbool, een gevoel...",
     },
     {
-        "sleutel": "blijft_hangen",
-        "categorie": "verdieping",
-        "vraag": "Welke vraag blijft hangen?",
-        "placeholder": "Bijvoorbeeld: een vraag die je niet kunt beantwoorden...",
-    },
-    {
-        "sleutel": "anders_doen",
-        "categorie": "actie",
-        "vraag": "Wat ga je anders doen?",
-        "placeholder": "Bijvoorbeeld: een gewoonte, een keuze...",
-    },
-    {
-        "sleutel": "volgende_stap",
-        "categorie": "actie",
-        "vraag": "Wat is je volgende stap?",
-        "placeholder": "Bijvoorbeeld: iets kleins, iets groots...",
-    },
-    {
-        "sleutel": "onthouden",
-        "categorie": "actie",
-        "vraag": "Wat wil je onthouden?",
-        "placeholder": "Bijvoorbeeld: een zin, een beeld...",
-    },
-    {
-        "sleutel": "dankbaar",
-        "categorie": "terugblik",
-        "vraag": "Waar ben je dankbaar voor in dit gesprek?",
-        "placeholder": "Bijvoorbeeld: een moment, een filosoof...",
+        "sleutel": "volgende_keer",
+        "vraag": "Wat zou je een volgende keer anders willen?",
+        "placeholder": "Bijvoorbeeld: een vraag, een onderwerp, een aanpak...",
     },
 ]
+
+
+def kies_inzicht_vraag():
+    """Kiest 1 random inzichtvraag."""
+    return random.choice(INZICHT_VRAGEN)
 
 
 def kies_inzicht_vragen():
