@@ -1604,6 +1604,41 @@ PANTHEON_PER_LEVEL = {
 # ============================================================
 STANDAARD_PANTHEON = ["socrates", "plato", "marcus_aurelius", "boeddha", "maria_montessori"]
 
+# ============================================================
+# Pantheon namen  per level
+# ============================================================
+PANTHEON_NAMEN = {
+    1: "De behapbare filosofen",
+    2: "De verdieping",
+    3: "De schuring",
+    4: "De schaduw",
+    5: "De vrijheid",
+    6: "De Oosterse verdieping",
+    7: "Non-conformisten",
+    8: "De modernen",
+    9: "De mystici",
+    10: "De wereld",
+    11: "De Verlichters",
+    12: "De Kritische Traditie",
+    13: "De Wetenschapsfilosofen",
+    14: "De Esoterici",
+    15: "De Sprookjes",
+    16: "Griekse meesters",
+    17: "Oosterse wijsheid",
+    18: "Christelijke mystici",
+    19: "Islamitische filosofen",
+    20: "Wereldse wijsheid",
+    21: "Verlichting",
+    22: "Duitse denkers",
+    23: "Existentialisten",
+    24: "Analytici",
+    25: "Wetenschapsfilosofen",
+    26: "Politieke filosofen",
+    27: "Esoterici",
+    28: "Non-conformisten",
+    29: "Sprookjes",
+    30: "Pedagogen",
+}
 
 # ============================================================
 # Beschikbare filosofen per level
@@ -1614,3 +1649,5 @@ def beschikbare_filosofen(level):
         return PANTHEON_PER_LEVEL[level]
     # Level 31+: alle filosofen die de gebruiker heeft vrijgespeeld
     return [f for f in FILOSOFEN if FILOSOFEN[f]["level"] <= level]
+
+
