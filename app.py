@@ -441,7 +441,13 @@ def toon_parameters():
         st.caption(f"_(alleen '{GESPREKSVORMEN[vormen[0]]['naam']}' beschikbaar op level {level})_")
 
     vorm_labels = {
-        naam: f"{GESPREKSVORMEN[naam]['icoon']} {GESPREKSVORMEN[naam]['naam']}"
+        naam: (
+            f"{GESPREKSVORMEN[naam]['icoon']} {GESPREKSVORMEN[naam]['naam']}"
+            + (
+                f" — {GESPREKSVORMEN[naam]['beschrijving']}"
+                if GESPREKSVORMEN[naam].get("beschrijving") else ""
+            )
+        )
         for naam in vormen
     }
 
