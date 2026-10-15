@@ -611,93 +611,71 @@ def toon_incheck():
     # Kies eenmalig 3 vragen
     if not st.session_state.get("incheck_vragen"):
         st.session_state.incheck_vragen = kies_random_vragen()
-        st.session_state.incheck_stap = 0
 
     vragen = st.session_state.incheck_vragen
-    stap = st.session_state.incheck_stap
-    totaal = len(vragen)
 
     st.title("👋 Welkom")
     st.caption("Even een paar vragen voordat we beginnen.")
 
-    st.progress(
-        stap / totaal,
-        text=f"Vraag {stap + 1} van {totaal}" if stap < totaal else "Klaar",
-    )
-    # ============================================================
-    # Vraag tonen
-    # ============================================================
-    if stap < totaal:
-        vraag = vragen[stap]
-        st.markdown(f"**{vraag['vraag']}**")
+    st.markdown("---")
 
-        if vraag["type"] == "tekst":
-            antwoord = st.text_input(
-                "Antwoord",
-                placeholder=vraag.get("placeholder", ""),
-                label_visibility="collapsed",
-                key=f"incheck_{vraag['sleutel']}",
-            )
-            if st.button("Volgende ➡️", type="primary"):
-                if antwoord.strip():
-                    st.session_state.incheck[vraag["sleutel"]] = antwoord.strip()
-                    st.session_state.incheck_stap += 1
-                    st.rerun()
-                else:
-                    st.warning("Vul iets in.")
+    with st.form("incheck_form"):
+        antwoorden = {}
 
-        elif vraag["type"] == "slider":
-            if vraag.get("toelichting"):
-                st.caption(vraag["toelichting"])
-            antwoord = st.slider(
-                "Score",
-                vraag["min"],
-                vraag["max"],
-                vraag["default"],
-                label_visibility="collapsed",
-                key=f"incheck_{vraag['sleutel']}",
-            )
-            if st.button("Volgende ➡️", type="primary"):
-                st.session_state.incheck[vraag["sleutel"]] = antwoord
-                st.session_state.incheck_stap += 1
-                st.rerun()
+        for vraag in vragen:
+            st.markdown(f"**{vraag['vraag']}**")
 
-        elif vraag["type"] == "keuze":
-            antwoord = st.radio(
-                "Keuze",
-                vraag["opties"],
-                label_visibility="collapsed",
-                key=f"incheck_{vraag['sleutel']}",
-            )
-            if st.button("Volgende ➡️", type="primary"):
-                st.session_state.incheck[vraag["sleutel"]] = antwoord
-                st.session_state.incheck_stap += 1
-                st.rerun()
+            if vraag["type"] == "tekst":
+                antwoord = st.text_input(
+                    "Antwoord",
+                    placeholder=vraag.get("placeholder", ""),
+                    label_visibility="collapsed",
+                    key=f"incheck_{vraag['sleutel']}",
+                )
+                antwoorden[vraag["sleutel"]] = antwoord.strip()
 
-        st.markdown("---")
+            elif vraag["type"] == "slider":
+                if vraag.get("toelichting"):
+                    st.caption(vraag["toelichting"])
+                antwoord = st.slider(
+                    "Score",
+                    vraag["min"],
+                    vraag["max"],
+                    vraag["default"],
+                    label_visibility="collapsed",
+                    key=f"incheck_{vraag['sleutel']}",
+                )
+                antwoorden[vraag["sleutel"]] = antwoord
 
-        if st.button("← Terug", key="incheck_terug"):
-            if stap > 0:
-                st.session_state.incheck_stap -= 1
-                st.rerun()
-            else:
-                naar_parameters()
-                st.rerun()
+            elif vraag["type"] == "keuze":
+                antwoord = st.radio(
+                    "Keuze",
+                    vraag["opties"],
+                    label_visibility="collapsed",
+                    key=f"incheck_{vraag['sleutel']}",
+                )
+                antwoorden[vraag["sleutel"]] = antwoord
 
-    # ============================================================
-    # Klaar
-    # ============================================================
-    else:
-        st.markdown("### ✅ Klaar")
-        st.markdown("Je antwoorden:")
-        for sleutel, waarde in st.session_state.incheck.items():
-            st.markdown(f"- **{sleutel}**: {waarde}")
+            st.markdown("---")
 
-        st.markdown("---")
+        verzonden = st.form_submit_button(
+            "🚀 Start gesprek",
+            type="primary",
+            use_container_width=True,
+        )
 
-        if st.button("🚀 Start gesprek", type="primary"):
-            naar_gesprek()
-            st.rerun()
+    if verzonden:
+        # Check of alle tekstvragen zijn ingevuld
+        for vraag in vragen:
+            if vraag["type"] == "tekst" and not antwoorden[vraag["sleutel"]]:
+                st.warning(f"Vul een antwoord in bij: {vraag['vraag']}")
+                return
+
+        # Sla de antwoorden op
+        st.session_state.incheck = antwoorden
+
+        naar_gesprek()
+        st.rerun()
 
 
 def toon_gesprek():
