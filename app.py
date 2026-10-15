@@ -230,7 +230,8 @@ def eindig_sessie():
     st.session_state.inzicht = {}
     st.session_state.inzicht_vragen = []
     st.session_state.inzicht_stap = 0
-    st.session_state.filosoof_teller = {}    
+    st.session_state.filosoof_teller = {}
+    st.session_state.overgangsmoment_geweest = False
     naar_geen_sessie()
 
 
