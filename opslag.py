@@ -51,6 +51,7 @@ def initialiseer():
         ("gesprekken_gehad", "INTEGER DEFAULT 0"),
         ("sessies_gekocht", "INTEGER DEFAULT 1"),
         ("gespreksvorm", "TEXT DEFAULT 'coach_sessie'"),
+        ("gebruik_random_pantheon", "INTEGER DEFAULT 0"),
     ]
 
     for kolom_naam, kolom_def in extra_kolommen:
