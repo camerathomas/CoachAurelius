@@ -750,6 +750,13 @@ def toon_incheck():
         # Sla de antwoorden op
         st.session_state.incheck = antwoorden
 
+        # Markeer de sessie als "lopend"
+        st.session_state.profiel["sessie_afgerond"] = False
+        try:
+            bewaar_profiel(st.session_state.profiel)
+        except Exception:
+            pass
+
         naar_gesprek()
         st.rerun()
 
