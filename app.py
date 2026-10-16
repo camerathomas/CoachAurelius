@@ -1351,7 +1351,10 @@ def toon_eindevaluatie():
         for i, (ronde_label, r) in enumerate(alle_reacties):
             if i > stap:
                 break
-            with st.chat_message(r.get("naam", "?"), avatar=r.get("emoji", "🏛️")):
+            avatar = r.get("emoji", "🏛️")
+            if avatar and ("/" in str(avatar) or "." in str(avatar)):
+                avatar = "🏛️"
+            with st.chat_message(r.get("naam", "?"), avatar=avatar):
                 st.markdown(f"**{r.get('naam', '?')}** · _{ronde_label}_")
                 st.markdown(r.get("tekst", ""))
 
