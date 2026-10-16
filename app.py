@@ -418,6 +418,31 @@ def toon_parameters():
     st.markdown("---")
 
     # ============================================================
+    # Hervat vorig gesprek
+    # ============================================================
+    from opslag import heeft_onafgemaakt_gesprek, laad_laatste_berichten
+
+    hervat = False
+    if heeft_onafgemaakt_gesprek(st.session_state.gebruiker_id):
+        hervat = st.checkbox(
+            "🔄 Hervat mijn vorige gesprek",
+            value=False,
+            help=(
+                "Je gaat verder waar je gebleven was. "
+                "De incheck en de geschiedenis worden hersteld. "
+                "Je kunt hieronder nieuwe instellingen kiezen."
+            ),
+        )
+
+        if hervat:
+            st.info(
+                "🔄 Je hervat je vorige gesprek. "
+                "De incheck en de geschiedenis zijn hersteld."
+            )
+
+        st.markdown("---")
+
+    # ============================================================
     # Duur
     # ============================================================
     st.markdown("### Duur")
