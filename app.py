@@ -914,7 +914,7 @@ def toon_gesprek():
         from coach import bouw_eerste_vraag_prompt
 
         # Als het een vervolggesprek is: laad de context
-        if gespreksvorm == "doorgaan_archief":
+        if st.session_state.get("vervolg_sessie_id"):
             from gespreksvormen import bouw_vervolg_context
             from opslag import laad_sessie
 
