@@ -91,8 +91,17 @@ opgeslagen op beveiligde servers.
 
 ## 9. Bewaartermijn
 
-Wij bewaren je gegevens zolang je een account hebt. Als je je account
-verwijdert, worden je gegevens verwijderd.
+Wij bewaren je gegevens zolang je een account hebt. 
+
+-Als je je account verwijdert, worden je gegevens verwijderd.
+
+-Lopende gesprekken worden bewaard zolang je ze kunt hervatten.
+
+-Proefsessies die 30 dagen niet zijn gebruikt, worden automatisch verwijderd.
+
+-Betaalde accounts die 90 dagen niet zijn gebruikt, worden automatisch verwijderd.
+
+-Je kunt je gegevens altijd zelf verwijderen via de knop "Wis alle gesprekken".
 
 ## 10. Wijzigingen
 
