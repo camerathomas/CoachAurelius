@@ -1480,7 +1480,8 @@ def toon_betalen():
 
     if st.button("Ik heb betaald", type="primary", use_container_width=True):
         st.session_state.profiel["betaald"] = True
-        st.session_state.profiel["tier"] = "gold"
+        st.session_state.profiel["tier"] = "basic"
+        st.session_state.profiel["gesprekken_gehad"] = 0
         bewaar_profiel(st.session_state.profiel)
         naar_geen_sessie()
         st.rerun()
