@@ -444,6 +444,36 @@ def toon_parameters():
         st.markdown("---")
 
     # ============================================================
+    # Doorgaan met een gearchiveerd gesprek
+    # ============================================================
+    from opslag import laad_sessies
+
+    sessies = laad_sessies(st.session_state.gebruiker_id, limiet=20)
+
+    archief_keuze = None
+    if sessies:
+        st.markdown("### 📂 Doorgaan met een gearchiveerd gesprek")
+        st.caption(
+            "Kies een eerder gesprek. Je nieuwe gesprek bouwt voort "
+            "op wat daar gezegd is."
+        )
+
+        keuze_opties = {s["id"]: s for s in sessies}
+
+        archief_keuze = st.selectbox(
+            "Kies een gesprek",
+            options=list(keuze_opties.keys()),
+            format_func=lambda sid: (
+                f"📁 {str(keuze_opties[sid]['datum'])[:10]} — "
+                f"{keuze_opties[sid]['thema']}"
+            ),
+            label_visibility="collapsed",
+            key="archief_keuze",
+        )
+
+        st.markdown("---")    
+    
+    # ============================================================
     # Duur
     # ============================================================
     st.markdown("### Duur")
