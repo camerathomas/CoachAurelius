@@ -1473,47 +1473,21 @@ def _archiveer_sessie():
         st.error(f"Fout bij opslaan profiel: {e}")
 
 def toon_betalen():
-    profiel = st.session_state.profiel
-
     st.title("💳 Betaling")
-    st.caption("_(testversie — geen echte betaling)_")
+    st.caption("_(testversie)_")
 
     st.markdown("---")
 
-    st.markdown("### Kies een optie")
+    if st.button("Ik heb betaald", type="primary", use_container_width=True):
+        st.session_state.profiel["betaald"] = True
+        st.session_state.profiel["tier"] = "gold"
+        bewaar_profiel(st.session_state.profiel)
+        naar_geen_sessie()
+        st.rerun()
 
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.markdown("**🛒 Losse sessie**")
-        st.caption("€2,50")
-        if st.button("Koop sessie", key="koop_sessie", use_container_width=True):
-            profiel["sessies_gekocht"] = profiel.get("sessies_gekocht", 1) + 1
-            bewaar_profiel(profiel)
-            st.success("Sessie gekocht.")
-            st.rerun()
-
-    with col2:
-        st.markdown("**⭐ Basic**")
-        st.caption("€5,00 per maand")
-        if st.button("Koop Basic", key="koop_basic", use_container_width=True):
-            profiel["tier"] = "basic"
-            profiel["gesprekken_gehad"] = 0
-            bewaar_profiel(profiel)
-            st.success("Basic geactiveerd.")
-            st.rerun()
-
-    with col3:
-        st.markdown("**👑 Gold**")
-        st.caption("€15,00 per maand")
-        if st.button("Koop Gold", key="koop_gold", use_container_width=True):
-            profiel["tier"] = "gold"
-            profiel["gesprekken_gehad"] = 0
-            bewaar_profiel(profiel)
-            st.success("Gold geactiveerd.")
-            st.rerun()
-
-    st.markdown("---")
+    if st.button("← Terug"):
+        naar_geen_sessie()
+        st.rerun()
 
     # ============================================================
     # Level-verhoging (voor testen)
