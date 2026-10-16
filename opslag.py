@@ -520,3 +520,79 @@ def wis_alles(gebruiker_id):
     cursor.execute("DELETE FROM inzichten WHERE gebruiker_id = ?", (gebruiker_id,))
     conn.commit()
     conn.close()
+
+def ruim_oude_sessies_op(gebruiker_id):
+    """
+    Verwijdert oude, onafgeronde sessies van een gebruiker.
+    - Proefsessies: na 30 dagen inactiviteit
+    - Betaalde accounts: na 90 dagen inactiviteit
+    """
+    import time
+    from datetime import datetime, timedelta
+
+    try:
+        conn = _krijg_verbinding()
+        cursor = conn.cursor()
+
+        # Haal het profiel op
+        cursor.execute(
+            "SELECT tier, betaald, laatste_bericht, bijgewerkt "
+            "FROM profielen WHERE gebruiker_id = ?",
+            (gebruiker_id,)
+        )
+        rij = cursor.fetchone()
+
+        if not rij:
+            conn.close()
+            return
+
+        tier = rij[0] if rij[0] else "sessie"
+        betaald = bool(rij[1]) if rij[1] else False
+        laatste_bericht = float(rij[2]) if rij[2] else 0
+        bijgewerkt = rij[3]
+
+        # Bepaal de bewaartermijn
+        if betaald and tier != "sessie":
+            bewaartermijn = 90  # dagen
+        else:
+            bewaartermijn = 30  # dagen
+
+        # Bepaal het moment van laatste activiteit
+        nu = time.time()
+        if laatste_bericht:
+            dagen_inactief = (nu - laatste_bericht) / 86400
+        else:
+            # Fallback: gebruik 'bijgewerkt'
+            if bijgewerkt:
+                try:
+                    laatste = datetime.fromisoformat(str(bijgewerkt))
+                    dagen_inactief = (datetime.now() - laatste).days
+                except Exception:
+                    dagen_inactief = 0
+            else:
+                dagen_inactief = 0
+
+        # Te oud? Verwijderen.
+        if dagen_inactief >= bewaartermijn:
+            cursor.execute(
+                "DELETE FROM berichten WHERE gebruiker_id = ?",
+                (gebruiker_id,)
+            )
+            cursor.execute(
+                "DELETE FROM sessies WHERE gebruiker_id = ?",
+                (gebruiker_id,)
+            )
+            cursor.execute(
+                "DELETE FROM inzichten WHERE gebruiker_id = ?",
+                (gebruiker_id,)
+            )
+            print(
+                f"OPGERUIMD: {gebruiker_id} was {dagen_inactief:.0f} dagen "
+                f"inactief (termijn: {bewaartermijn} dagen)"
+            )
+
+        conn.commit()
+        conn.close()
+
+    except Exception as e:
+        print(f"FOUT bij opruimen '{gebruiker_id}': {e}")
