@@ -1490,44 +1490,6 @@ def toon_betalen():
         naar_geen_sessie()
         st.rerun()
 
-    # ============================================================
-    # Level-verhoging (voor testen)
-    # ============================================================
-    st.markdown("### 🎯 Level verhogen (testen)")
-
-    huidig_level = profiel.get("level", 1)
-    st.caption(f"Huidig level: **{huidig_level}**")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("⬆️ +1 level", use_container_width=True):
-            profiel["level"] = min(30, huidig_level + 1)
-            bewaar_profiel(profiel)
-            st.success(f"Level verhoogd naar {profiel['level']}.")
-            st.rerun()
-
-    with col2:
-        nieuw_level = st.number_input(
-            "Ga naar level",
-            min_value=1,
-            max_value=30,
-            value=huidig_level,
-            step=1,
-            key="level_input",
-        )
-        if st.button(f"Ga naar level {nieuw_level}", use_container_width=True):
-            profiel["level"] = nieuw_level
-            bewaar_profiel(profiel)
-            st.success(f"Level ingesteld op {nieuw_level}.")
-            st.rerun()
-
-    st.markdown("---")
-
-    if st.button("← Terug"):
-        naar_geen_sessie()
-        st.rerun()
-
 # ============================================================
 # De router
 # ============================================================
