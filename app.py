@@ -1027,7 +1027,7 @@ def toon_gesprek():
 def toon_afsluiting():
     from coach import bouw_coach_prompt, chat
     from filosofen import FILOSOFEN
-    from incheck_vragen import kies_inzicht_vragen
+    from incheck_vragen import kies_inzicht_vraag
     from datetime import datetime
 
     profiel = st.session_state.profiel
