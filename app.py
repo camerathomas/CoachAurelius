@@ -668,7 +668,17 @@ def toon_parameters():
                 profiel["gebruik_eigen_pantheon"] = False
                 profiel["gebruik_random_pantheon"] = False
 
-            naar_incheck()
+            # Als hervatten: laad de geschiedenis en de incheck
+            if hervat:
+                st.session_state.geschiedenis = laad_laatste_berichten(
+                    st.session_state.gebruiker_id
+                )
+                st.session_state.incheck = profiel.get("laatste_incheck", {})
+                naar_gesprek()
+            else:
+                st.session_state.geschiedenis = []
+                naar_incheck()
+
             st.rerun()
 
 def toon_incheck():
