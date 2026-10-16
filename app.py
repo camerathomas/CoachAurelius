@@ -1354,7 +1354,7 @@ def toon_eindevaluatie():
             avatar = r.get("emoji", "🏛️")
             if avatar and ("/" in str(avatar) or "." in str(avatar)):
                 avatar = "🏛️"
-            with st.chat_message(r.get("naam", "?"), avatar=avatar):
+            with st.chat_message(r.get("naam", "?")):
                 st.markdown(f"**{r.get('naam', '?')}** · _{ronde_label}_")
                 st.markdown(r.get("tekst", ""))
 
