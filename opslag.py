@@ -171,6 +171,11 @@ def laad_profiel(gebruiker_id):
         conn.close()
 
         if rij:
+            try:
+                ruim_oude_sessies_op(gebruiker_id)
+            except Exception:
+                pass
+
             return {
                 "_is_fallback": False,
                 "gebruiker_id": rij[0],
