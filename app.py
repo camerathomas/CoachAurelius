@@ -251,8 +251,9 @@ def herstel_staat():
         naar_geen_sessie()
         return
 
-    # Als de sessie loopt: gesprek
-    naar_gesprek()
+    # Als de sessie loopt: parameters
+    # (zodat de gebruiker kan kiezen: hervatten of nieuw gesprek)
+    naar_parameters()
 
 
 # ============================================================
