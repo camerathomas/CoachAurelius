@@ -1192,7 +1192,7 @@ def toon_afsluiting():
     # ============================================================
     for b in st.session_state.geschiedenis[-3:]:
         if b["naam"] != "Jij":
-            with st.chat_message(b["naam"], avatar=b.get("icoon", "🏛️")):
+            with st.chat_message(b["naam"]):
                 st.markdown(b["tekst"])
 
     st.markdown("---")
