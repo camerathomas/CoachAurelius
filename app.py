@@ -1092,28 +1092,18 @@ def toon_afsluiting():
     st.markdown("---")
 
     # ============================================================
-    # Stap 2: de inzichtvragen
+    # Stap 2: de inzichtvraag
     # ============================================================
-    if not st.session_state.get("inzicht_vragen"):
-        st.session_state.inzicht_vragen = kies_inzicht_vragen()
-        st.session_state.inzicht_stap = 0
+    if not st.session_state.get("inzicht_vraag"):
+        st.session_state.inzicht_vraag = kies_inzicht_vraag()
 
-    vragen = st.session_state.inzicht_vragen
-    stap = st.session_state.inzicht_stap
-    totaal = len(vragen)
+    vraag = st.session_state.inzicht_vraag
 
     st.markdown("### 💡 Inzicht")
     st.caption("Even stilstaan. Wat neem je mee?")
 
-    st.progress(
-        stap / totaal,
-        text=f"Vraag {stap + 1} van {totaal}" if stap < totaal else "Klaar",
-    )
-
-    if stap < totaal:
-        vraag = vragen[stap]
+    with st.form("inzicht_form"):
         st.markdown(f"**{vraag['vraag']}**")
-
         antwoord = st.text_area(
             "Antwoord",
             placeholder=vraag.get("placeholder", ""),
@@ -1121,22 +1111,20 @@ def toon_afsluiting():
             key=f"inzicht_{vraag['sleutel']}",
         )
 
-        if st.button("Volgende ➡️", type="primary"):
-            if antwoord.strip():
-                st.session_state.setdefault("inzicht", {})[vraag["sleutel"]] = antwoord.strip()
-                st.session_state.inzicht_stap += 1
-                st.rerun()
-            else:
-                st.warning("Vul iets in.")
+        verzonden = st.form_submit_button(
+            "Naar het eindgesprek",
+            type="primary",
+            use_container_width=True,
+        )
 
-    else:
-        st.markdown("### ✅ Klaar")
-        st.markdown("Je inzichten zijn opgeslagen.")
-        st.markdown("---")
+    if verzonden:
+        if not antwoord.strip():
+            st.warning("Vul iets in.")
+            return
 
-        if st.button("Naar het eindgesprek", type="primary"):
-            naar_eindevaluatie()
-            st.rerun()
+        st.session_state.inzicht = {vraag["sleutel"]: antwoord.strip()}
+        naar_eindevaluatie()
+        st.rerun()
 
 
 def toon_eindevaluatie():
