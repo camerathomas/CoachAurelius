@@ -902,7 +902,7 @@ def toon_gesprek():
     gesprek_container = st.container()
     with gesprek_container:
         for b in st.session_state.geschiedenis:
-            with st.chat_message(b["naam"], avatar=b.get("icoon", "🏛️")):
+            with st.chat_message(b["naam"]):
                 st.markdown(f"**{b['naam']}**")
                 st.markdown(b["tekst"])
                 if b.get("wending"):
