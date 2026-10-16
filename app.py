@@ -931,10 +931,12 @@ def toon_gesprek():
                 f"Dit is een vervolggesprek. De gebruiker bouwt voort op een "
                 f"eerdere sessie.\n\n"
                 f"[CONTEXT VAN EERDERE SESSIE]\n{context}\n\n"
-                f"Jouw taak: stel nu ÉÉN openingsvraag die voortbouwt op wat er "
-                f"eerder gezegd is. Verwijs naar wat de gebruiker toen inbracht. "
-                f"Vraag wat er sindsdien veranderd is. "
-                f"Kort, direct, uitnodigend."
+                f"Jouw taak: OPEN het gesprek met een korte samenvatting. "
+                f"Vat in 2-3 zinnen samen wat er eerder is besproken, in jouw "
+                f"eigen woorden. Noem het thema, en noem één ding dat de "
+                f"gebruiker toen heeft gezegd. Eindig met één nieuwe vraag "
+                f"die voortbouwt op wat er eerder gezegd is. "
+                f"Kort, direct, uitnodigend. Geen opsomming, geen kopjes."
             )
         else:
             eerste_vraag_prompt = bouw_eerste_vraag_prompt(st.session_state.incheck)
