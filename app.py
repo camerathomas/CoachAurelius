@@ -1473,8 +1473,79 @@ def _archiveer_sessie():
         st.error(f"Fout bij opslaan profiel: {e}")
 
 def toon_betalen():
+    profiel = st.session_state.profiel
+
     st.title("💳 Betaling")
-    st.caption("_(nog niet beschikbaar in deze versie)_")
+    st.caption("_(testversie — geen echte betaling)_")
+
+    st.markdown("---")
+
+    st.markdown("### Kies een optie")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown("**🛒 Losse sessie**")
+        st.caption("€2,50")
+        if st.button("Koop sessie", key="koop_sessie", use_container_width=True):
+            profiel["sessies_gekocht"] = profiel.get("sessies_gekocht", 1) + 1
+            bewaar_profiel(profiel)
+            st.success("Sessie gekocht.")
+            st.rerun()
+
+    with col2:
+        st.markdown("**⭐ Basic**")
+        st.caption("€5,00 per maand")
+        if st.button("Koop Basic", key="koop_basic", use_container_width=True):
+            profiel["tier"] = "basic"
+            profiel["gesprekken_gehad"] = 0
+            bewaar_profiel(profiel)
+            st.success("Basic geactiveerd.")
+            st.rerun()
+
+    with col3:
+        st.markdown("**👑 Gold**")
+        st.caption("€15,00 per maand")
+        if st.button("Koop Gold", key="koop_gold", use_container_width=True):
+            profiel["tier"] = "gold"
+            profiel["gesprekken_gehad"] = 0
+            bewaar_profiel(profiel)
+            st.success("Gold geactiveerd.")
+            st.rerun()
+
+    st.markdown("---")
+
+    # ============================================================
+    # Level-verhoging (voor testen)
+    # ============================================================
+    st.markdown("### 🎯 Level verhogen (testen)")
+
+    huidig_level = profiel.get("level", 1)
+    st.caption(f"Huidig level: **{huidig_level}**")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("⬆️ +1 level", use_container_width=True):
+            profiel["level"] = min(30, huidig_level + 1)
+            bewaar_profiel(profiel)
+            st.success(f"Level verhoogd naar {profiel['level']}.")
+            st.rerun()
+
+    with col2:
+        nieuw_level = st.number_input(
+            "Ga naar level",
+            min_value=1,
+            max_value=30,
+            value=huidig_level,
+            step=1,
+            key="level_input",
+        )
+        if st.button(f"Ga naar level {nieuw_level}", use_container_width=True):
+            profiel["level"] = nieuw_level
+            bewaar_profiel(profiel)
+            st.success(f"Level ingesteld op {nieuw_level}.")
+            st.rerun()
 
     st.markdown("---")
 
