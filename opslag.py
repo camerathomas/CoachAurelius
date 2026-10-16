@@ -601,3 +601,52 @@ def ruim_oude_sessies_op(gebruiker_id):
 
     except Exception as e:
         print(f"FOUT bij opruimen '{gebruiker_id}': {e}")
+
+def heeft_onafgemaakt_gesprek(gebruiker_id):
+    """Checkt of er een onafgemaakt gesprek is."""
+    try:
+        conn = _krijg_verbinding()
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT sessie_afgerond FROM profielen WHERE gebruiker_id = ?",
+            (gebruiker_id,)
+        )
+        rij = cursor.fetchone()
+        conn.close()
+
+        if not rij:
+            return False
+
+        return not bool(rij[0]) if rij[0] is not None else False
+    except Exception:
+        return False
+
+
+def laad_laatste_berichten(gebruiker_id, limiet=50):
+    """Laadt de laatste N berichten van een gebruiker."""
+    try:
+        conn = _krijg_verbinding()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT filosoof, rol, tekst, tijd
+            FROM berichten
+            WHERE gebruiker_id = ?
+            ORDER BY tijd DESC
+            LIMIT ?
+        """, (gebruiker_id, limiet))
+
+        rijen = cursor.fetchall()
+        conn.close()
+
+        # Omkeren, zodat het oudste bericht eerst komt
+        return [
+            {
+                "naam": r[0] if r[1] == "assistant" else "Jij",
+                "tekst": r[2],
+                "tijd": str(r[3])[11:16] if r[3] else "",
+                "icoon": "🧑" if r[1] != "assistant" else "🏛️",
+            }
+            for r in reversed(rijen)
+        ]
+    except Exception:
+        return []
