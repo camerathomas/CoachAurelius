@@ -706,6 +706,13 @@ def toon_parameters():
                 )
                 st.session_state.incheck = profiel.get("laatste_incheck", {})
                 naar_gesprek()
+            elif archief_keuze:
+                # Doorgaan met een gearchiveerd gesprek
+                st.session_state.vervolg_sessie_id = archief_keuze
+                st.session_state.profiel["vervolg_sessie_id"] = archief_keuze
+                st.session_state.geschiedenis = []
+                st.session_state.incheck = {}
+                naar_gesprek()
             else:
                 st.session_state.geschiedenis = []
                 naar_incheck()
