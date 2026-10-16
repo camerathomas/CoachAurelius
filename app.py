@@ -232,6 +232,8 @@ def eindig_sessie():
     st.session_state.inzicht_stap = 0
     st.session_state.filosoof_teller = {}
     st.session_state.overgangsmoment_geweest = False
+    st.session_state.vervolg_sessie_id = None
+    st.session_state.profiel["vervolg_sessie_id"] = None    
     naar_geen_sessie()
 
 
