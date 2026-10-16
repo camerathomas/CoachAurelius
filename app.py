@@ -913,7 +913,29 @@ def toon_gesprek():
 
         from coach import bouw_eerste_vraag_prompt
 
-        eerste_vraag_prompt = bouw_eerste_vraag_prompt(st.session_state.incheck)
+        # Als het een vervolggesprek is: laad de context
+        if gespreksvorm == "doorgaan_archief":
+            from gespreksvormen import bouw_vervolg_context
+            from opslag import laad_sessie
+
+            sessie_id = st.session_state.get("vervolg_sessie_id")
+            vorige_sessie = (
+                laad_sessie(st.session_state.gebruiker_id, sessie_id)
+                if sessie_id else None
+            )
+            context = bouw_vervolg_context(vorige_sessie) if vorige_sessie else ""
+
+            eerste_vraag_prompt = (
+                f"Dit is een vervolggesprek. De gebruiker bouwt voort op een "
+                f"eerdere sessie.\n\n"
+                f"[CONTEXT VAN EERDERE SESSIE]\n{context}\n\n"
+                f"Jouw taak: stel nu ÉÉN openingsvraag die voortbouwt op wat er "
+                f"eerder gezegd is. Verwijs naar wat de gebruiker toen inbracht. "
+                f"Vraag wat er sindsdien veranderd is. "
+                f"Kort, direct, uitnodigend."
+            )
+        else:
+            eerste_vraag_prompt = bouw_eerste_vraag_prompt(st.session_state.incheck)
 
         is_voorzitter = (filosoof_naam == voorzitter)
 
