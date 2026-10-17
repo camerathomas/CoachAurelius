@@ -321,6 +321,7 @@ def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter,
         inhoud_blok,
         basis_blok,
         lengte_blok,
+        coach_stijl_blok,
         incheck_blok,
         fase_blok,
     ]
