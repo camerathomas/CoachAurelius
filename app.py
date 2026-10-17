@@ -473,8 +473,8 @@ def toon_parameters():
             key="archief_keuze",
         )
 
-        st.markdown("---")    
-    
+        st.markdown("---")
+
     # ============================================================
     # Duur
     # ============================================================
@@ -486,6 +486,29 @@ def toon_parameters():
         label_visibility="collapsed",
         key="duur_keuze",
     )
+
+    st.markdown("---")
+
+    # ============================================================
+    # Stijl: coach ←→ filosoof
+    # ============================================================
+    st.markdown("### Stijl")
+
+    stijl = st.slider(
+        "Van coach naar filosoof",
+        min_value=1,
+        max_value=5,
+        value=3,
+        help=(
+            "1 = zachte coach (troost, legt uit, geeft ruimte)\n"
+            "2 = coach (helpt, vertaalt, stelt vragen)\n"
+            "3 = gemengd (de filosoof is zichzelf)\n"
+            "4 = filosoof (duwt, vraagt door, confronteert voorzichtig)\n"
+            "5 = harde filosoof (confronteert, schuurt, laat niet los)"
+        ),
+    )
+
+    st.session_state.stijl = stijl
 
     st.markdown("---")
 
@@ -532,7 +555,6 @@ def toon_parameters():
 
     mag_eigen_pantheon = heeft_toegang(tier, level, "eigen_pantheon")
 
-    # Random pantheon is beschikbaar vanaf level 16
     mag_random = level >= 16
 
     if mag_eigen_pantheon and mag_random:
@@ -585,14 +607,12 @@ def toon_parameters():
             voorzitter = None
             gekozen = []
         else:
-            # Lees de vorige keuze uit het profiel
             vorige_pantheon = profiel.get("eigen_pantheon", [])
             vorige_voorzitter = vorige_pantheon[0] if vorige_pantheon else None
             vorige_filosofen = vorige_pantheon[1:5] if len(vorige_pantheon) > 1 else []
 
             st.markdown("**Kies een voorzitter:**")
 
-            # Index voor de voorzitter-selectbox
             if vorige_voorzitter and vorige_voorzitter in opties:
                 index_voorzitter = opties.index(vorige_voorzitter)
             else:
@@ -613,12 +633,10 @@ def toon_parameters():
             st.markdown("**Kies 4 filosofen:**")
             gekozen = []
             for i in range(4):
-                # Filter de voorzitter eruit, zodat die niet dubbel kan
                 opties_zonder_voorzitter = [
                     f for f in opties if f != voorzitter
                 ]
 
-                # Index voor deze filosoof-selectbox
                 vorige_keuze = vorige_filosofen[i] if i < len(vorige_filosofen) else None
                 if vorige_keuze and vorige_keuze in opties_zonder_voorzitter:
                     index_filosoof = opties_zonder_voorzitter.index(vorige_keuze)
@@ -638,12 +656,8 @@ def toon_parameters():
                 )
                 gekozen.append(keuze)
 
-            # ============================================================
-            # Knop: pantheon opslaan
-            # ============================================================
             st.markdown("---")
             if st.button("💾 Pantheon opslaan", type="primary", use_container_width=True):
-                # Sla het pantheon op in het profiel
                 profiel["eigen_pantheon"] = [voorzitter] + gekozen
                 profiel["favoriete_filosoof"] = voorzitter
                 bewaar_profiel(profiel)
@@ -664,7 +678,6 @@ def toon_parameters():
 
     with col2:
         if st.button("Start gesprek", type="primary", use_container_width=True):
-            # Sla de duur op
             duur_map = {
                 "Flitsgesprek (5 min)": 5,
                 "Kort gesprek (10 min)": 10,
@@ -673,10 +686,8 @@ def toon_parameters():
             }
             st.session_state.sessie_duur = duur_map.get(duur, 10)
 
-            # Sla de gespreksvorm op
             st.session_state.gespreksvorm = vorm_keuze
 
-            # Sla het pantheon op
             if pantheon_keuze == "eigen":
                 st.session_state.pantheon = [voorzitter] + gekozen
                 st.session_state.voorzitter = voorzitter
@@ -701,7 +712,6 @@ def toon_parameters():
                 profiel["gebruik_eigen_pantheon"] = False
                 profiel["gebruik_random_pantheon"] = False
 
-            # Als hervatten: laad de geschiedenis en de incheck
             if hervat:
                 st.session_state.geschiedenis = laad_laatste_berichten(
                     st.session_state.gebruiker_id
@@ -709,7 +719,6 @@ def toon_parameters():
                 st.session_state.incheck = profiel.get("laatste_incheck", {})
                 naar_gesprek()
             elif archief_keuze:
-                # Doorgaan met een gearchiveerd gesprek
                 st.session_state.vervolg_sessie_id = archief_keuze
                 st.session_state.profiel["vervolg_sessie_id"] = archief_keuze
                 st.session_state.geschiedenis = []
