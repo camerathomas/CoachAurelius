@@ -659,15 +659,7 @@ def toon_parameters():
                 )
                 gekozen.append(keuze)
 
-            st.markdown("---")
-            if st.button("💾 Pantheon opslaan", type="primary", use_container_width=True):
-                profiel["eigen_pantheon"] = [voorzitter] + gekozen
-                profiel["favoriete_filosoof"] = voorzitter
-                bewaar_profiel(profiel)
-                st.success("Pantheon opgeslagen.")
-                st.rerun()
 
-    st.markdown("---")
 
     # ============================================================
     # Knoppen
