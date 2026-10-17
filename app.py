@@ -141,7 +141,7 @@ def initialiseer_state():
 
     # Model
     if "model_naam" not in st.session_state:
-        st.session_state.model_naam = "gemini-3.7-flash"
+        st.session_state.model_naam = "gemini-3.8-flash"
     if "provider_key" not in st.session_state:
         st.session_state.provider_key = "gemini"
 
@@ -964,7 +964,7 @@ def toon_gesprek():
 
         with st.spinner(f"{filosoof['naam']} denkt na..."):
             antwoord = chat(
-                model=st.session_state.get("model_naam", "gemini-3.7-flash"),
+                model=st.session_state.get("model_naam", "gemini-3.8-flash"),
                 messages=[{"role": "user", "content": eerste_vraag_prompt}],
                 system_prompt=system_prompt,
                 provider=st.session_state.get("provider_key", "gemini"),
@@ -1098,7 +1098,7 @@ def toon_gesprek():
 
         with st.spinner(f"{filosoof['naam']} denkt na..."):
             antwoord = chat(
-                model=st.session_state.get("model_naam", "gemini-3.7-flash"),
+                model=st.session_state.get("model_naam", "gemini-3.8-flash"),
                 messages=messages,
                 system_prompt=system_prompt,
                 provider=st.session_state.get("provider_key", "gemini"),
@@ -1178,7 +1178,7 @@ def toon_afsluiting():
 
         with st.spinner(f"{filosoof['naam']} rondt af..."):
             antwoord = chat(
-                model=st.session_state.get("model_naam", "gemini-3.7-flash"),
+                model=st.session_state.get("model_naam", "gemini-3.8-flash"),
                 messages=[{"role": "user", "content": afsluit_prompt}],
                 system_prompt=system_prompt,
                 provider=st.session_state.get("provider_key", "gemini"),
