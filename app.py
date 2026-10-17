@@ -606,6 +606,18 @@ def toon_parameters():
     # ============================================================
     # Eigen pantheon: voorzitter + 4 filosofen
     # ============================================================
+    if pantheon_keuze == "eigen":
+        opties = beschikbare_filosofen(tier, level)
+
+        if not opties:
+            st.warning("Je hebt nog geen filosofen vrijgespeeld.")
+            voorzitter = None
+            gekozen = []
+        else:
+            vorige_pantheon = profiel.get("eigen_pantheon", [])
+            vorige_voorzitter = vorige_pantheon[0] if vorige_pantheon else None
+            vorige_filosofen = vorige_pantheon[1:5] if len(vorige_pantheon) > 1 else []
+
             with st.form("pantheon_form"):
                 st.markdown("**Kies een voorzitter:**")
 
@@ -653,8 +665,6 @@ def toon_parameters():
                     gekozen.append(keuze)
 
                 st.form_submit_button("Pantheon bevestigen", use_container_width=True)
-
-
 
     # ============================================================
     # Knoppen
