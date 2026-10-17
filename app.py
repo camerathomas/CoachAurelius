@@ -606,62 +606,53 @@ def toon_parameters():
     # ============================================================
     # Eigen pantheon: voorzitter + 4 filosofen
     # ============================================================
-    if pantheon_keuze == "eigen":
-        opties = beschikbare_filosofen(tier, level)
+            with st.form("pantheon_form"):
+                st.markdown("**Kies een voorzitter:**")
 
-        if not opties:
-            st.warning("Je hebt nog geen filosofen vrijgespeeld.")
-            voorzitter = None
-            gekozen = []
-        else:
-            vorige_pantheon = profiel.get("eigen_pantheon", [])
-            vorige_voorzitter = vorige_pantheon[0] if vorige_pantheon else None
-            vorige_filosofen = vorige_pantheon[1:5] if len(vorige_pantheon) > 1 else []
-
-            st.markdown("**Kies een voorzitter:**")
-
-            if vorige_voorzitter and vorige_voorzitter in opties:
-                index_voorzitter = opties.index(vorige_voorzitter)
-            else:
-                index_voorzitter = 0
-
-            voorzitter = st.selectbox(
-                "Voorzitter",
-                opties,
-                index=index_voorzitter,
-                format_func=lambda x: (
-                    f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}"
-                    if x in FILOSOFEN else x
-                ),
-                label_visibility="collapsed",
-                key="voorzitter_keuze",
-            )
-
-            st.markdown("**Kies 4 filosofen:**")
-            gekozen = []
-            for i in range(4):
-                opties_zonder_voorzitter = [
-                    f for f in opties if f != voorzitter
-                ]
-
-                vorige_keuze = vorige_filosofen[i] if i < len(vorige_filosofen) else None
-                if vorige_keuze and vorige_keuze in opties_zonder_voorzitter:
-                    index_filosoof = opties_zonder_voorzitter.index(vorige_keuze)
+                if vorige_voorzitter and vorige_voorzitter in opties:
+                    index_voorzitter = opties.index(vorige_voorzitter)
                 else:
-                    index_filosoof = 0
+                    index_voorzitter = 0
 
-                keuze = st.selectbox(
-                    f"Filosoof {i + 1}",
-                    opties_zonder_voorzitter,
-                    index=index_filosoof,
+                voorzitter = st.selectbox(
+                    "Voorzitter",
+                    opties,
+                    index=index_voorzitter,
                     format_func=lambda x: (
                         f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}"
                         if x in FILOSOFEN else x
                     ),
                     label_visibility="collapsed",
-                    key=f"eigen_filosoof_{i}",
+                    key="voorzitter_keuze",
                 )
-                gekozen.append(keuze)
+
+                st.markdown("**Kies 4 filosofen:**")
+                gekozen = []
+                for i in range(4):
+                    opties_zonder_voorzitter = [
+                        f for f in opties if f != voorzitter
+                    ]
+
+                    vorige_keuze = vorige_filosofen[i] if i < len(vorige_filosofen) else None
+                    if vorige_keuze and vorige_keuze in opties_zonder_voorzitter:
+                        index_filosoof = opties_zonder_voorzitter.index(vorige_keuze)
+                    else:
+                        index_filosoof = 0
+
+                    keuze = st.selectbox(
+                        f"Filosoof {i + 1}",
+                        opties_zonder_voorzitter,
+                        index=index_filosoof,
+                        format_func=lambda x: (
+                            f"{FILOSOFEN[x]['emoji']} {FILOSOFEN[x]['naam']}"
+                            if x in FILOSOFEN else x
+                        ),
+                        label_visibility="collapsed",
+                        key=f"eigen_filosoof_{i}",
+                    )
+                    gekozen.append(keuze)
+
+                st.form_submit_button("Pantheon bevestigen", use_container_width=True)
 
 
 
