@@ -156,6 +156,7 @@ def kies_filosoof(profiel, pantheon, gebruikers_input):
 
     return pantheon[0] if pantheon else "aurelius"
 
+
 def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter, teller):
     """
     Kiest een filosoof voor een gewone beurt.
@@ -188,13 +189,14 @@ def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter,
     minst = min(deelnemers, key=lambda f: teller.get(f, 0))
     teller[minst] = teller.get(minst, 0) + 1
     return minst
-    
+
+
+def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None, is_voorzitter=False, stijl=3):
     """Bouwt de system prompt voor de coach."""
-    def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None, is_voorzitter=False, stijl=3):    
     naam = filosoof.get("naam", "de filosoof")
     stem = filosoof.get("prompt", f"Je bent {naam}.")
     stroming = filosoof.get("stroming", "")
-    stijl = filosoof.get("stijl", [])
+    filosoof_stijl = filosoof.get("stijl", [])
     themas = filosoof.get("themas", [])
 
     # --- Stem ---
@@ -211,8 +213,8 @@ def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter,
 
     # --- Stijl ---
     stijl_blok = ""
-    if stijl:
-        regels = "\n".join(f"- {w.capitalize()}: {u}" for w, u in stijl)
+    if filosoof_stijl:
+        regels = "\n".join(f"- {w.capitalize()}: {u}" for w, u in filosoof_stijl)
         stijl_blok = (
             f"[STIJL — DIT IS BELANGRIJK]\n"
             f"{regels}\n\n"
@@ -287,7 +289,7 @@ def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter,
         )
     else:
         coach_stijl_blok = ""
-    
+
     # --- Incheck ---
     incheck_blok = ""
     if incheck:
@@ -329,6 +331,7 @@ def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter,
     tekst += wending_blok
 
     return tekst
+
 
 def bouw_eerste_vraag_prompt(incheck):
     """Bouwt de prompt voor de eerste vraag."""
