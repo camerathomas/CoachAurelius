@@ -1704,7 +1704,6 @@ PANTHEON_PER_LEVEL = {
     8: ["heidegger", "wittgenstein", "sartre", "foucault", "derrida"],
     9: ["meister_eckhart", "teresa_van_avila", "johannes_van_het_kruis", "jakob_bohme", "hildegard_van_bingen"],
     10: ["ibn_khaldun", "avicenna", "al_ghazali", "zhu_xi", "wang_yangming"],
-    10: ["ibn_khaldun", "avicenna", "al_ghazali", "zhu_xi", "wang_yangming"],
     11: ["francis_bacon", "david_hume", "voltaire", "rousseau", "christina_van_zweden"],
     12: ["kant", "hegel", "popper", "feyerabend", "russell"],
     13: ["thomas_kuhn", "einstein", "de_bono", "mill", "tumarkin"],
