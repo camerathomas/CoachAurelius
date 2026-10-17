@@ -1087,6 +1087,7 @@ def toon_gesprek():
             incheck=st.session_state.incheck,
             wending=wending,
             is_voorzitter=is_voorzitter,
+            stijl=st.session_state.get("stijl", 3),            
         )
 
         # Bouw de context
