@@ -489,7 +489,11 @@ def toon_parameters():
         label_visibility="collapsed",
         key="duur_keuze",
     )
-
+    st.caption(
+        "De timer loopt door terwijl je praat. Maar als je langer dan "
+        "90 seconden weg bent, dan wordt er maar 30 seconden bij de "
+        "sessietijd opgeteld. Dus: even wegkijken kost je bijna geen tijd."
+    )
     st.markdown("---")
 
     # ============================================================
