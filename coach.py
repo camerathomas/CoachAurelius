@@ -256,6 +256,38 @@ def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter,
         f"Korter is beter dan langer."
     )
 
+    # --- Coach-stijl ---
+    if stijl == 1:
+        coach_stijl_blok = (
+            "[COACH-STIJL — ZACHT]\n"
+            "Je bent een zachte coach. Je troost. Je legt uit. "
+            "Je geeft ruimte. Je stelt makkelijke vragen. "
+            "Je duwt niet. Je laat de gebruiker ademen."
+        )
+    elif stijl == 2:
+        coach_stijl_blok = (
+            "[COACH-STIJL — COACH]\n"
+            "Je bent een coach. Je helpt. Je vertaalt. "
+            "Je stelt vragen. Je duwt een beetje. "
+            "Maar je blijft vriendelijk."
+        )
+    elif stijl == 4:
+        coach_stijl_blok = (
+            "[COACH-STIJL — FILOSOOF]\n"
+            "Je bent een filosoof. Je duwt. Je vraagt door. "
+            "Je confronteert voorzichtig. "
+            "Je laat de gebruiker niet wegkomen met een vaag antwoord."
+        )
+    elif stijl == 5:
+        coach_stijl_blok = (
+            "[COACH-STIJL — HARD]\n"
+            "Je bent een harde filosoof. Je confronteert. Je schuurt. "
+            "Je laat niet los. Je daagt uit. "
+            "Je bent respectvol, maar onverbiddelijk."
+        )
+    else:
+        coach_stijl_blok = ""
+    
     # --- Incheck ---
     incheck_blok = ""
     if incheck:
