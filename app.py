@@ -686,8 +686,11 @@ def toon_parameters():
             if pantheon_keuze == "eigen":
                 st.session_state.pantheon = [voorzitter] + gekozen
                 st.session_state.voorzitter = voorzitter
+                profiel["eigen_pantheon"] = [voorzitter] + gekozen
+                profiel["favoriete_filosoof"] = voorzitter
                 profiel["gebruik_eigen_pantheon"] = True
                 profiel["gebruik_random_pantheon"] = False
+                bewaar_profiel(profiel)
             elif pantheon_keuze == "random":
                 import random
                 alle_filosofen = list(FILOSOFEN.keys())
