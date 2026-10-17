@@ -189,8 +189,8 @@ def kies_filosoof_met_verdeling(profiel, pantheon, gebruikers_input, voorzitter,
     teller[minst] = teller.get(minst, 0) + 1
     return minst
     
-def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None, is_voorzitter=False):
     """Bouwt de system prompt voor de coach."""
+    def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None, is_voorzitter=False, stijl=3):    
     naam = filosoof.get("naam", "de filosoof")
     stem = filosoof.get("prompt", f"Je bent {naam}.")
     stroming = filosoof.get("stroming", "")
