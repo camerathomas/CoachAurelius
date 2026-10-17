@@ -165,6 +165,9 @@ def initialiseer_state():
 
     if "filosoof_teller" not in st.session_state:
         st.session_state.filosoof_teller = {}
+
+    if "stijl" not in st.session_state:
+        st.session_state.stijl = 3
 # ============================================================
 # De overgangen
 # ============================================================
