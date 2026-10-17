@@ -961,6 +961,7 @@ def toon_gesprek():
             fase="opening",
             incheck=st.session_state.incheck,
             is_voorzitter=is_voorzitter,
+            stijl=st.session_state.get("stijl", 3),            
         )
 
         with st.spinner(f"{filosoof['naam']} denkt na..."):
