@@ -77,7 +77,6 @@ STATEN = [
     "gesprek",
     "afsluiting",
     "eindevaluatie",
-    "archief",
     "betalen",
 ]
 
