@@ -1335,7 +1335,7 @@ def toon_eindevaluatie():
                         context_afsluiter += f"{r['naam']}: {r['tekst']}\n\n"
 
                 data_afsluiter = haal_reacties_op(
-                    st.session_state.get("model_naam", "gemini-2.5-flash-lite"),
+                    st.session_state.get("model_naam", "gemini-3.8-flash"),
                     st.session_state.get("provider_key", "gemini"),
                     EVALUATIE_AFSLUITER,
                     context_afsluiter,
