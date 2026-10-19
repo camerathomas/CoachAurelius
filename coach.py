@@ -333,13 +333,24 @@ def bouw_coach_prompt(filosoof, profiel, fase=None, incheck=None, wending=None, 
     return tekst
 
 
-def bouw_eerste_vraag_prompt(incheck):
+def bouw_eerste_vraag_prompt(incheck, filosoof=None):
     """Bouwt de prompt voor de eerste vraag."""
     regels = "\n".join(f"- {k}: {v}" for k, v in incheck.items())
+
+    naam = filosoof.get("naam", "de filosoof") if filosoof else "de filosof"
+
     return (
         f"De gebruiker heeft net de incheck ingevuld:\n{regels}\n\n"
-        f"Jouw taak: stel nu ÉÉN openingsvraag aan de gebruiker. "
-        f"Geen herhaling van de incheck, geen samenvatting. "
-        f"Gewoon één vraag die voortkomt uit wat de gebruiker heeft gezegd. "
-        f"Kort, direct, uitnodigend."
+        f"Jouw taak: open het gesprek als {naam}. "
+        f"Gebruik de incheck als achtergrond, niet als script. "
+        f"Herhaal de incheck niet. Vat hem niet samen. "
+        f"Open met een uitnodiging, niet met een vraag die de incheck "
+        f"herhaalt. Zeg bijvoorbeeld: 'Wil je het hebben over [iets uit "
+        f"de incheck], of heb je iets anders dat je aandacht vraagt?' "
+        f"Of: 'Is er iets dat je bezighoudt?' "
+        f"Open in jouw eigen stijl: als je Socrates bent, open je met "
+        f"een vraag over een woord. Als je Nietzsche bent, open je met "
+        f"een uitdaging. Als je de Boeddha bent, open je met een beeld. "
+        f"Kort, direct, uitnodigend. Maximaal 60 woorden. "
+        f"Geen opsomming, geen herhaling, geen samenvatting."
     )
