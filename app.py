@@ -1511,8 +1511,6 @@ def toon_juiste_scherm():
         toon_afsluiting()
     elif staat == "eindevaluatie":
         toon_eindevaluatie()
-    elif staat == "archief":
-        toon_archief()
     elif staat == "betalen":
         toon_betalen()
     else:
