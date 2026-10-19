@@ -3318,7 +3318,7 @@ PANTHEON_PER_LEVEL = {
     12: ["kant", "hegel", "popper", "feyerabend", "russell"],
     13: ["thomas_kuhn", "einstein", "de_bono", "mill", "tumarkin"],
     14: ["hermes_trismegistos", "valentinus", "ficino", "bruno", "luther"],
-    15: ["roodkapje", "pinocchio", "sneeuwwitje", "doornroosje", "zeven_dwergen"],
+    29: ["roodkapje", "pinocchio", "sneeuwwitje", "doornroosje", "repelsteeltje"],
     16: ["socrates", "plato", "aristoteles", "hypatia", "marcus_aurelius"],
     17: ["boeddha", "confucius", "lao_tze", "zhuangzi", "nagarjuna"],
     18: ["hadewijch", "hildegard_van_bingen", "meister_eckhart", "teresa_van_avila", "johannes_van_het_kruis"],
