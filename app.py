@@ -1287,7 +1287,7 @@ def toon_eindevaluatie():
 
                 # Ronde 1
                 data1 = haal_reacties_op(
-                    st.session_state.get("model_naam", "gemini-2.5-flash-lite"),
+                    st.session_state.get("model_naam", "gemini-3.8-flash"),
                     st.session_state.get("provider_key", "gemini"),
                     EVALUATIE_RONDE_1,
                     context,
@@ -1300,7 +1300,7 @@ def toon_eindevaluatie():
                     context2 += f"{r['naam']}: {r['tekst']}\n\n"
 
                 data2 = haal_reacties_op(
-                    st.session_state.get("model_naam", "gemini-2.5-flash-lite"),
+                    st.session_state.get("model_naam", "gemini-3.8-flash"),
                     st.session_state.get("provider_key", "gemini"),
                     EVALUATIE_RONDE_2,
                     context2,
