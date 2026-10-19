@@ -1384,34 +1384,23 @@ def toon_eindevaluatie():
             st.session_state.evaluatie_afgerond = True
 
     # ============================================================
-    # Stap 4: naar het archief
+    # Stap 4: opslaan of niet
     # ============================================================
     if st.session_state.get("evaluatie_afgerond"):
         st.markdown("---")
-        if st.button("Naar het archief", type="primary"):
-            naar_archief()
-            st.rerun()
 
+        col1, col2 = st.columns(2)
 
-def toon_archief():
-    st.title("🏛️ De sessie is afgerond")
-    st.markdown("Wil je deze sessie bewaren in je archief?")
+        with col1:
+            if st.button("📁 Opslaan in archief", type="primary", use_container_width=True):
+                _archiveer_sessie()
+                eindig_sessie()
+                st.rerun()
 
-    st.markdown("---")
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("📁 Ja, archiveer", type="primary", use_container_width=True):
-            _archiveer_sessie()
-            eindig_sessie()
-            st.rerun()
-
-    with col2:
-        if st.button("Nee, bewaar niet", use_container_width=True):
-            eindig_sessie()
-            st.rerun()
-
+        with col2:
+            if st.button("Niet opslaan", use_container_width=True):
+                eindig_sessie()
+                st.rerun()
 
 def _archiveer_sessie():
     """Slaat de sessie op in de database, inclusief de inzichten."""
