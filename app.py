@@ -202,10 +202,6 @@ def naar_eindevaluatie():
     st.session_state.staat = "eindevaluatie"
 
 
-def naar_archief():
-    st.session_state.staat = "archief"
-
-
 def naar_betalen():
     st.session_state.staat = "betalen"
 
