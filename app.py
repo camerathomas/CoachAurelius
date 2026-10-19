@@ -949,7 +949,10 @@ def toon_gesprek():
                 f"Kort, direct, uitnodigend. Geen opsomming, geen kopjes."
             )
         else:
-            eerste_vraag_prompt = bouw_eerste_vraag_prompt(st.session_state.incheck)
+            eerste_vraag_prompt = bouw_eerste_vraag_prompt(
+                st.session_state.incheck,
+                filosoof=filosoof,
+            )
 
         is_voorzitter = (filosoof_naam == voorzitter)
 
