@@ -227,10 +227,6 @@ def kies_filosofen(vorm_naam, pantheon, voorzitter=None):
     if not vorm:
         return pantheon
 
-    if vorm["filosofen"] == "alles":
-        from filosofen import FILOSOFEN
-        return list(FILOSOFEN.keys())
-
     if vorm["filosofen"] == "één":
         if voorzitter and voorzitter in pantheon:
             return [voorzitter]
