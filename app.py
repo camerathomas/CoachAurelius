@@ -1563,53 +1563,7 @@ def toon_sidebar():
 # De hoofdroute
 # ============================================================
 def main():
-    # Zwarte achtergrond + video zonder controls
-    video_html = """
-    <style>
-        /* Zorg dat de hele pagina zwart is */
-        .stApp {
-            background-color: black;
-        }
-        /* Verberg de video-controls (WebKit/Chrome/Safari) */
-        video::-webkit-media-controls {
-            display: none !important;
-        }
-        video::-webkit-media-controls-panel {
-            display: none !important;
-        }
-        video::-webkit-media-controls-play-button {
-            display: none !important;
-        }
-        /* Zorg dat de video netjes in het midden staat, zonder controls */
-        video {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-        }
-    </style>
-    <video autoplay muted playsinline id="intro-video">
-        <source src="intro.mp4" type="video/mp4">
-    </video>
-    <script>
-        // Na 3 seconden: video verbergen en pagina weer normaal laten zien
-        const video = document.getElementById('intro-video');
-        if (video) {
-            video.addEventListener('ended', function() {
-                video.style.display = 'none';
-                document.querySelector('.stApp').style.backgroundColor = '';
-            });
-            // Fallback: ook na 3 seconden verbergen (voor het geval 'ended' niet afgaat)
-            setTimeout(function() {
-                video.style.display = 'none';
-                document.querySelector('.stApp').style.backgroundColor = '';
-            }, 3000);
-        }
-    </script>
-    """
-    st.markdown(video_html, unsafe_allow_html=True)
-
     initialiseer_state()
-    # ... rest van je main()
 
     # Sidebar (alleen als er een gebruiker is)
     if st.session_state.profiel:
