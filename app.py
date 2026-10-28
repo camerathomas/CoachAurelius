@@ -140,7 +140,7 @@ def initialiseer_state():
 
     # Model
     if "model_naam" not in st.session_state:
-        st.session_state.model_naam = "gemini-3.6-flash"
+        st.session_state.model_naam = "gemini-3.1-flash"
     if "provider_key" not in st.session_state:
         st.session_state.provider_key = "gemini"
 
@@ -962,7 +962,7 @@ def toon_gesprek():
 
         with st.spinner(f"{filosoof['naam']} denkt na..."):
             antwoord = chat(
-                model=st.session_state.get("model_naam", "gemini-3.6-flash"),
+                model=st.session_state.get("model_naam", "gemini-3.1-flash"),
                 messages=[{"role": "user", "content": eerste_vraag_prompt}],
                 system_prompt=system_prompt,
                 provider=st.session_state.get("provider_key", "gemini"),
@@ -1176,7 +1176,7 @@ def toon_afsluiting():
 
         with st.spinner(f"{filosoof['naam']} rondt af..."):
             antwoord = chat(
-                model=st.session_state.get("model_naam", "gemini-3.6-flash"),
+                model=st.session_state.get("model_naam", "gemini-3.1-flash"),
                 messages=[{"role": "user", "content": afsluit_prompt}],
                 system_prompt=system_prompt,
                 provider=st.session_state.get("provider_key", "gemini"),
@@ -1287,7 +1287,7 @@ def toon_eindevaluatie():
 
                 # Ronde 1
                 data1 = haal_reacties_op(
-                    st.session_state.get("model_naam", "gemini-3.6-flash"),
+                    st.session_state.get("model_naam", "gemini-3.1-flash"),
                     st.session_state.get("provider_key", "gemini"),
                     EVALUATIE_RONDE_1,
                     context,
@@ -1300,7 +1300,7 @@ def toon_eindevaluatie():
                     context2 += f"{r['naam']}: {r['tekst']}\n\n"
 
                 data2 = haal_reacties_op(
-                    st.session_state.get("model_naam", "gemini-3.8-flash"),
+                    st.session_state.get("model_naam", "gemini-3.1-flash"),
                     st.session_state.get("provider_key", "gemini"),
                     EVALUATIE_RONDE_2,
                     context2,
@@ -1335,7 +1335,7 @@ def toon_eindevaluatie():
                         context_afsluiter += f"{r['naam']}: {r['tekst']}\n\n"
 
                 data_afsluiter = haal_reacties_op(
-                    st.session_state.get("model_naam", "gemini-3.6-flash"),
+                    st.session_state.get("model_naam", "gemini-3.1-flash"),
                     st.session_state.get("provider_key", "gemini"),
                     EVALUATIE_AFSLUITER,
                     context_afsluiter,
