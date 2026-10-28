@@ -2278,31 +2278,6 @@ BIOGRAFIEEN = {
 }
 
 # ============================================================
-# PANTHEON-VERDELING
-# ============================================================
-# Elk level heeft een pantheon van 5 filosofen.
-# Hieronder staat per pantheon een korte uitleg van de logica
-# achter de samenstelling.
-
-PANTHEON_PER_LEVEL = {
-    1: ["socrates", "plato", "marcus_aurelius", "boeddha", "maria_montessori"],
-    2: ["aristoteles", "spinoza", "confucius", "lao_tze", "camus"],
-    3: ["nietzsche", "marx", "hannah_arendt", "gandhi", "kierkegaard"],
-    4: ["schopenhauer", "descartes", "leibniz", "willem_van_ockham", "thomas_aquinas"],
-    5: ["erasmus", "pascal", "mary_wollstonecraft", "belle_van_zuylen", "hadewijch"],
-    6: ["nagarjuna", "zhuangzi", "dogen", "rumi", "ibn_arabi"],
-    7: ["hypatia", "christine_de_pizan", "simone_de_beauvoir", "simone_weil", "iris_murdoch"],
-    8: ["heidegger", "wittgenstein", "sartre", "foucault", "derrida"],
-    9: ["meister_eckhart", "teresa_van_avila", "johannes_van_het_kruis", "jakob_bohme", "hildegard_van_bingen"],
-    10: ["ibn_khaldun", "avicenna", "al_ghazali", "zhu_xi", "wang_yangming"],
-    11: ["francis_bacon", "david_hume", "voltaire", "rousseau", "christina_van_zweden"],
-    12: ["kant", "hegel", "popper", "feyerabend", "russell"],
-    13: ["thomas_kuhn", "einstein", "de_bono", "mill", "tumarkin"],
-    14: ["hermes_trismegistos", "valentinus", "ficino", "bruno", "luther"],
-    15: ["roodkapje", "pinocchio", "sneeuwwitje", "doornroosje", "zeven_dwergen"],
-}
-
-# ============================================================
 # LOGICA VAN ELK PANTHEON
 # ============================================================
 
