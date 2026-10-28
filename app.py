@@ -1041,37 +1041,29 @@ def toon_gesprek():
                     ),
                 }
 
-        # Kies een filosoof
-        from gespreksvormen import GESPREKSVORMEN
-        vorm_info = GESPREKSVORMEN.get(gespreksvorm, {})
-        filosofen_type = vorm_info.get("filosofen", "pantheon")
+from gespreksvormen import kies_filosofen
 
-        if filosofen_type == "één":
-            # Alleen de voorzitter doet mee
-            filosoof_naam = voorzitter or "marcus_aurelius"
-        elif overgangsmoment:
-            # Het overgangsmoment gaat naar de filosoof die het minst aan de beurt was
-            deelnemers = [f for f in pantheon if f != voorzitter]
-            if deelnemers:
-                filosoof_naam = min(
-                    deelnemers,
-                    key=lambda f: st.session_state.filosoof_teller.get(f, 0),
-                )
-            else:
-                filosoof_naam = voorzitter or "marcus_aurelius"
-        elif wending is not None and voorzitter:
-            filosoof_naam = voorzitter
-        elif pantheon and voorzitter:
-            from coach import kies_filosoof_met_verdeling
-            filosoof_naam = kies_filosoof_met_verdeling(
-                profiel,
-                pantheon,
-                gebruiker_input,
-                voorzitter,
-                st.session_state.filosoof_teller,
-            )
-        else:
-            filosoof_naam = "marcus_aurelius"
+# Bepaal wie meedoen aan deze vorm
+deelnemers = kies_filosofen(gespreksvorm, pantheon, voorzitter)
+
+if overgangsmoment:
+    # Overgangsmoment: de filosoof die het minst aan de beurt was
+    kandidaten = [f for f in deelnemers if f != voorzitter] or deelnemers
+    filosoof_naam = min(
+        kandidaten,
+        key=lambda f: st.session_state.filosoof_teller.get(f, 0),
+    )
+elif wending is not None and voorzitter and voorzitter in deelnemers:
+    filosoof_naam = voorzitter
+else:
+    from coach import kies_filosoof_met_verdeling
+    filosoof_naam = kies_filosoof_met_verdeling(
+        profiel,
+        deelnemers,
+        gebruiker_input,
+        voorzitter,
+        st.session_state.filosoof_teller,
+    )
 
         filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
 
