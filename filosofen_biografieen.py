@@ -2372,7 +2372,7 @@ PANTHEON_LOGICA = {
     ),
     15: (
         "Level 15 is het pantheon van de sprookjes. Roodkapje, Pinocchio, Sneeuwwitje, "
-        "Doornroosje en de Zeven Dwergen brengen de wijsheid van het verhaal. "
+        "Doornroosje en Repelsteeltje brengen de wijsheid van het verhaal. "
         "De logica is: niet alle waarheid is filosofisch. Soms zit ze in een sprookje, "
         "en begrijpt een kind haar beter dan een professor."
     ),
