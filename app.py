@@ -959,7 +959,7 @@ def toon_gesprek():
             fase="opening",
             incheck=st.session_state.incheck,
             is_voorzitter=is_voorzitter,
-            stijl=st.session_state.get("stijl", 3),            
+            stijl=st.session_state.get("stijl", 3),
         )
 
         with st.spinner(f"{filosoof['naam']} denkt na..."):
@@ -1041,39 +1041,39 @@ def toon_gesprek():
                     ),
                 }
 
-# Kies een filosoof
-from gespreksvormen import GESPEKSVORMEN
-vorm_info = GESPEKSVORMEN.get(gespreksvorm, {})
-filosofen_type = vorm_info.get("filosofen", "pantheon")
+        # Kies een filosoof
+        from gespreksvormen import GESPREKSVORMEN
+        vorm_info = GESPREKSVORMEN.get(gespreksvorm, {})
+        filosofen_type = vorm_info.get("filosofen", "pantheon")
 
-if filosofen_type == "één":
-    # Alleen de voorzitter doet mee
-    filosoof_naam = voorzitter or "marcus_aurelius"
-elif overgangsmoment:
-    # Het overgangsmoment gaat naar de filosoof die het minst aan de beurt was
-    deelnemers = [f for f in pantheon if f != voorzitter]
-    if deelnemers:
-        filosoof_naam = min(
-            deelnemers,
-            key=lambda f: st.session_state.filosoof_teller.get(f, 0),
-        )
-    else:
-        filosoof_naam = voorzitter or "marcus_aurelius"
-elif wending is not None and voorzitter:
-    filosoof_naam = voorzitter
-elif pantheon and voorzitter:
-    from coach import kies_filosoof_met_verdeling
-    filosoof_naam = kies_filosoof_met_verdeling(
-        profiel,
-        pantheon,
-        gebruiker_input,
-        voorzitter,
-        st.session_state.filosoof_teller,
-    )
-else:
-    filosoof_naam = "marcus_aurelius"
+        if filosofen_type == "één":
+            # Alleen de voorzitter doet mee
+            filosoof_naam = voorzitter or "marcus_aurelius"
+        elif overgangsmoment:
+            # Het overgangsmoment gaat naar de filosoof die het minst aan de beurt was
+            deelnemers = [f for f in pantheon if f != voorzitter]
+            if deelnemers:
+                filosoof_naam = min(
+                    deelnemers,
+                    key=lambda f: st.session_state.filosoof_teller.get(f, 0),
+                )
+            else:
+                filosoof_naam = voorzitter or "marcus_aurelius"
+        elif wending is not None and voorzitter:
+            filosoof_naam = voorzitter
+        elif pantheon and voorzitter:
+            from coach import kies_filosoof_met_verdeling
+            filosoof_naam = kies_filosoof_met_verdeling(
+                profiel,
+                pantheon,
+                gebruiker_input,
+                voorzitter,
+                st.session_state.filosoof_teller,
+            )
+        else:
+            filosoof_naam = "marcus_aurelius"
 
-filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
+        filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
 
         # Bouw de prompt
         is_voorzitter = (filosoof_naam == voorzitter)
@@ -1085,7 +1085,7 @@ filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
             incheck=st.session_state.incheck,
             wending=wending,
             is_voorzitter=is_voorzitter,
-            stijl=st.session_state.get("stijl", 3),            
+            stijl=st.session_state.get("stijl", 3),
         )
 
         # Bouw de context
