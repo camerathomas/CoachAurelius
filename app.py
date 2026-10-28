@@ -1041,31 +1041,39 @@ def toon_gesprek():
                     ),
                 }
 
-from gespreksvormen import kies_filosofen
+# Kies een filosoof
+from gespreksvormen import GESPEKSVORMEN
+vorm_info = GESPEKSVORMEN.get(gespreksvorm, {})
+filosofen_type = vorm_info.get("filosofen", "pantheon")
 
-# Bepaal wie meedoen aan deze vorm
-deelnemers = kies_filosofen(gespreksvorm, pantheon, voorzitter)
-
-if overgangsmoment:
-    # Overgangsmoment: de filosoof die het minst aan de beurt was
-    kandidaten = [f for f in deelnemers if f != voorzitter] or deelnemers
-    filosoof_naam = min(
-        kandidaten,
-        key=lambda f: st.session_state.filosoof_teller.get(f, 0),
-    )
-elif wending is not None and voorzitter and voorzitter in deelnemers:
+if filosofen_type == "één":
+    # Alleen de voorzitter doet mee
+    filosoof_naam = voorzitter or "marcus_aurelius"
+elif overgangsmoment:
+    # Het overgangsmoment gaat naar de filosoof die het minst aan de beurt was
+    deelnemers = [f for f in pantheon if f != voorzitter]
+    if deelnemers:
+        filosoof_naam = min(
+            deelnemers,
+            key=lambda f: st.session_state.filosoof_teller.get(f, 0),
+        )
+    else:
+        filosoof_naam = voorzitter or "marcus_aurelius"
+elif wending is not None and voorzitter:
     filosoof_naam = voorzitter
-else:
+elif pantheon and voorzitter:
     from coach import kies_filosoof_met_verdeling
     filosoof_naam = kies_filosoof_met_verdeling(
         profiel,
-        deelnemers,
+        pantheon,
         gebruiker_input,
         voorzitter,
         st.session_state.filosoof_teller,
     )
+else:
+    filosoof_naam = "marcus_aurelius"
 
-        filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
+filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
 
         # Bouw de prompt
         is_voorzitter = (filosoof_naam == voorzitter)
