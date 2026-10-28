@@ -60,21 +60,6 @@ GESPREKSVORMEN = {
             "en ga daarna weer met de andere filosofen in gesprek."
         ),
     },
-    "groot_pantheon": {
-        "naam": "Groot Pantheon",
-        "beschrijving": "Alle filosofen. Wie het beste past, krijgt de beurt.",
-        "icoon": "🌌",
-        "level": 18,
-        "filosofen": "alles",
-        "gebruiker_rol": "deelnemer",
-        "prompt_toevoeging": (
-            "Dit is het Groot Pantheon. Alle filosofen doen mee. "
-            "Reageer alleen als je iets hebt toe te voegen dat werkelijk "
-            "nieuw is. Als een andere filosoof beter past bij wat de "
-            "gebruiker zegt, laat hem dan het woord nemen. "
-            "Je hoeft niet te reageren als je niets toe te voegen hebt."
-        ),
-    },
     "doorgaan_archief": {
         "naam": "Doorgaan met een gearchiveerd gesprek",
         "beschrijving": "Bouwt voort op een eerdere sessie.",
