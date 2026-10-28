@@ -1096,7 +1096,7 @@ def toon_gesprek():
 
         with st.spinner(f"{filosoof['naam']} denkt na..."):
             antwoord = chat(
-                model=st.session_state.get("model_naam", "gemini-3.6-flash"),
+                model=st.session_state.get("model_naam", "gemini-3.1-flash"),
                 messages=messages,
                 system_prompt=system_prompt,
                 provider=st.session_state.get("provider_key", "gemini"),
