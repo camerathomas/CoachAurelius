@@ -1563,6 +1563,10 @@ def toon_sidebar():
 # De hoofdroute
 # ============================================================
 def main():
+    # Video als allereerste element
+    with open("intro.mp4", "rb") as f:
+        st.video(f.read(), autoplay=True, muted=True, loop=False, end_time=3)
+
     initialiseer_state()
 
     # Sidebar (alleen als er een gebruiker is)
