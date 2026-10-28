@@ -2249,32 +2249,34 @@ BIOGRAFIEEN = {
         ),
     },
 
-    "zeven_dwergen": {
-        "naam": "De Zeven Dwergen",
-        "leefde": "In een klein huisje in het bos, lang geleden",
+    "repelsteeltje": {
+        "naam": "Repelsteeltje",
+        "leefde": "In een klein molenaarshuisje aan de rand van het bos, lang geleden",
         "stroming": "Sprookjeswijsheid",
         "boeken": [
-            "De zeven dwergen komen uit het sprookje van Sneeuwwitje.",
-            "Ze zijn bekend geworden door het verhaal van de gebroeders Grimm.",
+            "Het sprookje van Repelsteeltje, zoals verteld door de gebroeders Grimm.",
+            "Het verhaal gaat over een geheimzinnige naam, een onmogelijke belofte en de prijs van een wonder.",
         ],
         "uitspraken": [
-            "Wij werken hard in de mijnen.",
-            "We zorgen voor elkaar.",
-            "Samen zijn we sterk.",
-            "Eenvoud maakt gelukkig.",
+            "Raad mijn naam, dan krijg je je kind terug.",
+            "Ach, hoe heet ik toch?",
+            "Vandaag brouw ik bier, morgen brouw ik brood.",
+            "Namen hebben macht; wie de naam kent, kent de persoon.",
         ],
         "visie": (
-            "De zeven dwergen wonen samen in een klein huisje in het bos. "
-            "Elke dag gaan ze naar de mijnen om te werken. "
-            "Ze zijn niet groot, maar ze zijn sterk en vrolijk. "
-            "Als Sneeuwwitje bij hen komt wonen, zorgen ze voor haar. "
-            "Het verhaal leert ons dat je samen meer kunt dan alleen. "
-            "Dat je moet werken voor wat je hebt. "
-            "Dat eenvoud gelukkig maakt. "
-            "En dat je voor elkaar moet zorgen, "
-            "ook als iemand anders is dan jij."
+            "Repelsteeltje is een klein mannetje dat de molenaarsdochter uit de problemen helpt. "
+            "Zij moet van de koning stro tot goud spinnen, en dat kan ze niet. "
+            "Repelsteeltje biedt hulp aan, maar vraagt een hoge prijs: haar eerste kind. "
+            "Als het kind geboren is, moet ze de naam van het mannetje raden om het terug te krijgen. "
+            "Ze heeft drie dagen. Uiteindelijk hoort ze hem dansend zijn eigen naam zingen: Repelsteeltje. "
+            "Als ze de naam noemt, verliest hij zijn macht en scheurt hij van woede in tweeën. "
+            "Het verhaal leert ons dat namen macht hebben: wie de naam van iets kent, kan het bezitten of bezweren. "
+            "Het leert ook dat je niet zomaar een belofte moet doen, "
+            "en dat een wonder altijd een prijs heeft. "
+            "En het leert iets grappigs: soms is de oplossing simpeler dan je denkt — "
+            "je moet alleen goed luisteren."
         ),
-    },      
+    },    
 }
 
 # ============================================================
