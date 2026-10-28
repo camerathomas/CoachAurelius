@@ -2399,6 +2399,119 @@ PANTHEON_LOGICA = {
         "De logica is: niet alle waarheid is filosofisch. Soms zit ze in een sprookje, "
         "en begrijpt een kind haar beter dan een professor."
     ),
+    16: (
+        "Level 16 is het pantheon van de antieke bron. Socrates, Plato, Aristoteles, "
+        "Hypatia en Marcus Aurelius zijn de denkers waar de westerse filosofie begon. "
+        "De logica is: terug naar het begin. Hier leert de speler dat alle latere "
+        "filosofie put uit deze vijf stemmen: de vragende (Socrates), de idealistische "
+        "(Plato), de systemische (Aristoteles), de wiskundige (Hypatia) en de "
+        "praktische (Marcus Aurelius). Een pantheon van fundamenten."
+    ),
+    17: (
+        "Level 17 is het pantheon van de oosterse wijsheid. Boeddha, Confucius, "
+        "Lao Tze, Zhuangzi en Nāgārjuna brengen samen loslaten, harmonie, zachtheid, "
+        "spel en leegte. De logica is: het westerse denken is niet het enige denken. "
+        "Waar het antieke pantheon vraagt 'wat is waar?', vraagt dit pantheon "
+        "'hoe leef je?' — en het antwoord ligt niet in een systeem, maar in een weg."
+    ),
+    18: (
+        "Level 18 is het pantheon van de Europese mystiek. Hadewijch, Hildegard van "
+        "Bingen, Meister Eckhart, Teresa van Ávila en Johannes van het Kruis zoeken "
+        "allemaal het goddelijke in het innerlijk. De logica is: sommige waarheden "
+        "zijn niet met de rede te vangen, maar alleen met de ziel. Waar de "
+        "middeleeuwse scholastiek systemen bouwt, bouwen deze vijf een weg naar binnen."
+    ),
+    19: (
+        "Level 19 is het pantheon van de islamitische filosofie. Avicenna, "
+        "Al-Ghazali, Ibn Arabi, Ibn Khaldun en Rumi brengen geneeskunde, theologie, "
+        "mystiek, geschiedfilosofie en poëzie samen. De logica is: de islamitische "
+        "wereld heeft een rijke filosofische traditie die het Westen heeft gevoed — "
+        "en die nog steeds springlevend is. Van de zwevende mens tot de dansende "
+        "derwisj: rede en extase in één pantheon."
+    ),
+    20: (
+        "Level 20 is het pantheon van de Chinese en renaissance-verdieping. Dōgen, "
+        "Zhu Xi, Wang Yangming, Erasmus en Ficino brengen aandacht, rede, geweten, "
+        "humanisme en kosmische liefde. De logica is: wijsheid is niet één ding. "
+        "Soms is ze discipline (Zhu Xi), soms geweten (Wang Yangming), soms stilte "
+        "(Dōgen), soms ironie (Erasmus), soms liefde (Ficino). Vijf manieren om "
+        "de wereld tegemoet te treden."
+    ),
+    21: (
+        "Level 21 is het pantheon van het rationalisme. Descartes, Spinoza, Leibniz, "
+        "Pascal en Christina van Zweden staan voor twijfel, eenheid, monaden, het hart "
+        "en vrijdenken. De logica is: de zeventiende eeuw is de eeuw van de rede — "
+        "maar ook van de hartstocht. Elk van deze vijf zoekt zekerheid, en elk vindt "
+        "haar op een andere plek: in het denken, in de natuur, in de harmonie, in het "
+        "hart, of in de vrijheid van de geest."
+    ),
+    22: (
+        "Level 22 is het pantheon van het Duitse idealisme en zijn criticus. Kant, "
+        "Hegel, Schopenhauer, Nietzsche en Luther bouwen systemen, breken ze af, of "
+        "zetten ze op hun kop. De logica is: de moderne tijd is de eeuw van de grote "
+        "worpen — en van de grote twijfels. Van de categorische imperatief tot de "
+        "dood van God: hier leert de speler dat filosofie ook een strijd is over hoe "
+        "de wereld zou moeten zijn."
+    ),
+    23: (
+        "Level 23 is het pantheon van het existentialisme. Kierkegaard, Sartre, "
+        "Camus, Simone de Beauvoir en Simone Weil stellen de vraag naar het bestaan "
+        "zelf: wat betekent het om hier te zijn, en wat moeten we doen? De logica is: "
+        "eerst de angst, dan de keuze, dan de verantwoordelijkheid. Vijf denkers die "
+        "weigeren de mens in een systeem te vangen."
+    ),
+    24: (
+        "Level 24 is het pantheon van de analytische en wetenschapsfilosofische "
+        "traditie. Wittgenstein, Russell, Popper, Feyerabend en Bruno onderzoeken de "
+        "grenzen van taal, logica, wetenschap en oneindigheid. De logica is: denk "
+        "kritisch, ook over je eigen denken. Van 'waarover men niet kan spreken' tot "
+        "'anything goes': hier leert de speler dat ook de rede haar dogma's heeft."
+    ),
+    25: (
+        "Level 25 is het pantheon van de wetenschap en haar kritiek. Francis Bacon, "
+        "Thomas Kuhn, Einstein, De Bono en Foucault verbinden methode, paradigma, "
+        "relativiteit, creativiteit en macht. De logica is: wetenschap is mensenwerk. "
+        "Ze is geen neutrale spiegel van de werkelijkheid, maar een praktijk met "
+        "aannames, machtsverhoudingen en creatieve sprongen."
+    ),
+    26: (
+        "Level 26 is het pantheon van de politieke filosofie. Marx, Hannah Arendt, "
+        "Gandhi, John Stuart Mill en Derrida stellen de vraag naar macht, "
+        "verantwoordelijkheid, geweldloosheid, vrijheid en deconstructie. De logica "
+        "is: hoe leven we samen? Elk van deze vijf antwoordt anders — met klassenstrijd, "
+        "met publiek handelen, met satyagraha, met het harm principle, of met het "
+        "openleggen van wat een tekst verbergt."
+    ),
+    27: (
+        "Level 27 is het pantheon van de verborgen wijsheid. Hermes Trismegistos, "
+        "Valentinus, Jakob Böhme, Heidegger en Thomas Aquinas zoeken het goddelijke, "
+        "het zijn, of de oergrond achter de zichtbare wereld. De logica is: achter "
+        "de dingen ligt een diepere laag, en wie durft te zoeken, vindt. Van gnosis "
+        "tot zijnsleer: dit pantheon grenst aan het geheimzinnige en het heilige."
+    ),
+    28: (
+        "Level 28 is het pantheon van de vrouwen die de filosofie veranderden. "
+        "Christine de Pizan, Mary Wollstonecraft, Belle van Zuylen, Iris Murdoch en "
+        "Anna Tumarkin schreven, dachten en leefden tegen de stroom in. De logica is: "
+        "filosofie is niet alleen voor mannen, en niet alleen voor wie zich aanpast. "
+        "Vrijheid is geen vanzelfsprekendheid, maar iets waar je voor moet vechten."
+    ),
+    29: (
+        "Level 29 is het pantheon van de sprookjes. Roodkapje, Pinocchio, "
+        "Sneeuwwitje, Doornroosje en Repelsteeltje brengen de wijsheid van het "
+        "verhaal. De logica is: niet alle waarheid is filosofisch. Soms zit ze in "
+        "een sprookje, en begrijpt een kind haar beter dan een professor. Over "
+        "gevaar, leugens, jaloezie, geduld en het geheim van je naam — dit pantheon "
+        "sluit de reis af met een knipoog."
+    ),
+    30: (
+        "Level 30 is het pantheon van de veelzijdigen. Maria Montessori, Willem van "
+        "Ockham, David Hume, Voltaire en Rousseau verbinden opvoeding, logica, "
+        "scepsis, satire en natuur. De logica is: wijsheid laat zich niet in één "
+        "vak persen. Elk van deze vijf durfde een gevestigde orde ter discussie te "
+        "stellen — in de klas, in de logica, in de wetenschap, in de kerk, of in de "
+        "samenleving. Een passend slotstuk."
+    ),
 }
 
 # ============================================================
