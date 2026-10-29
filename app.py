@@ -922,8 +922,11 @@ def toon_gesprek():
 
         from coach import bouw_eerste_vraag_prompt
 
-        # Als het een vervolggesprek is: laad de context
+        # Bepaal de openingsprompt
+        eerste_vraag_vorm = vorm_info.get("eerste_vraag")
+
         if st.session_state.get("vervolg_sessie_id"):
+            # Vervolggesprek: context van de eerdere sessie
             from gespreksvormen import bouw_vervolg_context
             from opslag import laad_sessie
 
@@ -945,7 +948,14 @@ def toon_gesprek():
                 f"die voortbouwt op wat er eerder gezegd is. "
                 f"Kort, direct, uitnodigend. Geen opsomming, geen kopjes."
             )
+        elif eerste_vraag_vorm:
+            # De gespreksvorm heeft een eigen openingsvraag
+            eerste_vraag_prompt = (
+                f"Open het gesprek met precies deze vraag, zonder inleiding "
+                f"of toelichting: '{eerste_vraag_vorm}'"
+            )
         else:
+            # Coach-sessie: gebruik de generieke opening
             eerste_vraag_prompt = bouw_eerste_vraag_prompt(
                 st.session_state.incheck,
                 filosoof=filosoof,
