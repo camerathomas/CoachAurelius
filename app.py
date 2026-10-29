@@ -1224,7 +1224,7 @@ def toon_afsluiting():
         st.markdown(f"**{vraag['vraag']}**")
         antwoord = st.text_area(
             "Antwoord",
-            placeholder=vraag.get("placeholder", ""),
+            placeholder=vraag.get("placeholder", "") or "",
             label_visibility="collapsed",
             key=f"inzicht_{vraag['sleutel']}",
         )
