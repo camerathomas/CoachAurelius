@@ -1178,7 +1178,7 @@ def toon_afsluiting():
 
         with st.spinner(f"{filosoof['naam']} rondt af..."):
             antwoord = chat(
-                model=st.session_state.get("model_naam", "gemini-3.1-flash-lite"),
+                model=st.session_state.get("model_naam", "gemini-3.1-flash"),
                 messages=[{"role": "user", "content": afsluit_prompt}],
                 system_prompt=system_prompt,
                 provider=st.session_state.get("provider_key", "gemini"),
@@ -1210,12 +1210,21 @@ def toon_afsluiting():
     st.markdown("---")
 
     # ============================================================
-    # Stap 2: de inzichtvraag
+    # Stap 2: de inzichtvraag — met fallback
     # ============================================================
     if not st.session_state.get("inzicht_vraag"):
         st.session_state.inzicht_vraag = kies_inzicht_vraag()
 
     vraag = st.session_state.inzicht_vraag
+
+    # Fallback: als de vraag leeg of ongeldig is, gebruik een standaardvraag
+    if not isinstance(vraag, dict) or "vraag" not in vraag:
+        vraag = {
+            "sleutel": "algemeen",
+            "vraag": "Wat neem je mee uit dit gesprek?",
+            "placeholder": "Typ hier je antwoord...",
+        }
+        st.session_state.inzicht_vraag = vraag
 
     st.markdown("### 💡 Inzicht")
     st.caption("Even stilstaan. Wat neem je mee?")
@@ -1224,7 +1233,7 @@ def toon_afsluiting():
         st.markdown(f"**{vraag['vraag']}**")
         antwoord = st.text_area(
             "Antwoord",
-            placeholder=vraag.get("placeholder", "") or "",
+            placeholder=vraag.get("placeholder") or "",
             label_visibility="collapsed",
             key=f"inzicht_{vraag['sleutel']}",
         )
@@ -1243,7 +1252,6 @@ def toon_afsluiting():
         st.session_state.inzicht = {vraag["sleutel"]: antwoord.strip()}
         naar_eindevaluatie()
         st.rerun()
-
 
 def toon_eindevaluatie():
     from evaluatie import (
