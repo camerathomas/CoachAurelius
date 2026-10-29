@@ -920,12 +920,37 @@ def toon_gesprek():
         filosoof_naam = voorzitter or "marcus_aurelius"
         filosoof = FILOSOFEN.get(filosoof_naam, FILOSOFEN["marcus_aurelius"])
 
-        from coach import bouw_eerste_vraag_prompt
-
-        # Bepaal de openingsprompt
+        # Heeft de gespreksvorm een eigen openingsvraag?
         eerste_vraag_vorm = vorm_info.get("eerste_vraag")
 
-        if st.session_state.get("vervolg_sessie_id"):
+        # Bij een vervolggesprek: gebruik de AI om de context samen te vatten
+        is_vervolg = bool(st.session_state.get("vervolg_sessie_id"))
+
+        if eerste_vraag_vorm and not is_vervolg:
+            # Toon de openingsvraag direct, zonder AI
+            st.session_state.geschiedenis.append({
+                "naam": filosoof["naam"],
+                "tekst": eerste_vraag_vorm,
+                "icoon": filosoof["emoji"],
+                "tijd": datetime.now().strftime("%H:%M"),
+            })
+
+            try:
+                bewaar_bericht(
+                    st.session_state.gebruiker_id,
+                    filosoof["naam"],
+                    "assistant",
+                    eerste_vraag_vorm,
+                )
+            except Exception:
+                pass
+
+            st.rerun()
+
+        # Anders: gebruik de bestaande AI-opening
+        from coach import bouw_eerste_vraag_prompt
+
+        if is_vervolg:
             # Vervolggesprek: context van de eerdere sessie
             from gespreksvormen import bouw_vervolg_context
             from opslag import laad_sessie
@@ -948,14 +973,8 @@ def toon_gesprek():
                 f"die voortbouwt op wat er eerder gezegd is. "
                 f"Kort, direct, uitnodigend. Geen opsomming, geen kopjes."
             )
-        elif eerste_vraag_vorm:
-            # De gespreksvorm heeft een eigen openingsvraag
-            eerste_vraag_prompt = (
-                f"Open het gesprek met precies deze vraag, zonder inleiding "
-                f"of toelichting: '{eerste_vraag_vorm}'"
-            )
         else:
-            # Coach-sessie: gebruik de generieke opening
+            # Coach-sessie: generieke opening
             eerste_vraag_prompt = bouw_eerste_vraag_prompt(
                 st.session_state.incheck,
                 filosoof=filosoof,
@@ -1188,7 +1207,7 @@ def toon_afsluiting():
 
         with st.spinner(f"{filosoof['naam']} rondt af..."):
             antwoord = chat(
-                model=st.session_state.get("model_naam", "gemini-3.1-flash"),
+                model=st.session_state.get("model_naam", "gemini-3.1-flash-lite"),
                 messages=[{"role": "user", "content": afsluit_prompt}],
                 system_prompt=system_prompt,
                 provider=st.session_state.get("provider_key", "gemini"),
