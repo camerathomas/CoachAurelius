@@ -407,14 +407,27 @@ def kies_inzicht_vraag():
     return random.choice(INZICHT_VRAGEN)
 
 
-def kies_inzicht_vragen():
-    """Kiest 3 random inzichtvragen: 1 terugblik, 1 verdieping, 1 actie."""
-    terugblik = [v for v in INZICHT_VRAGEN if v["categorie"] == "terugblik"]
-    verdieping = [v for v in INZICHT_VRAGEN if v["categorie"] == "verdieping"]
-    actie = [v for v in INZICHT_VRAGEN if v["categorie"] == "actie"]
-
-    return [
-        random.choice(terugblik),
-        random.choice(verdieping),
-        random.choice(actie),
-    ]
+# ============================================================
+# TODO: kies_inzicht_vragen() (meervoud)
+# ============================================================
+# Deze functie is tijdelijk verwijderd. Hij koos 3 inzichtvragen
+# (1 terugblik, 1 verdieping, 1 actie), maar INZICHT_VRAGEN heeft
+# nog geen "categorie"-veld. Voor de eerste launch gebruiken we
+# alleen kies_inzicht_vraag() (enkelvoud).
+#
+# Als je hem later wilt terugzetten:
+# 1. Voeg "categorie" toe aan elke vraag in INZICHT_VRAGEN
+#    (terugblik / verdieping / actie).
+# 2. Haal het commentaar hieronder weg.
+#
+# def kies_inzicht_vragen():
+#     """Kiest 3 random inzichtvragen: 1 terugblik, 1 verdieping, 1 actie."""
+#     terugblik = [v for v in INZICHT_VRAGEN if v["categorie"] == "terugblik"]
+#     verdieping = [v for v in INZICHT_VRAGEN if v["categorie"] == "verdieping"]
+#     actie = [v for v in INZICHT_VRAGEN if v["categorie"] == "actie"]
+#
+#     return [
+#         random.choice(terugblik),
+#         random.choice(verdieping),
+#         random.choice(actie),
+#     ]
