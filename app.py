@@ -232,6 +232,7 @@ def eindig_sessie():
     st.session_state.overgangsmoment_geweest = False
     st.session_state.vervolg_sessie_id = None
     st.session_state.profiel["vervolg_sessie_id"] = None    
+    st.session_state.afsluiting_gedaan = False
     naar_geen_sessie()
 
 
