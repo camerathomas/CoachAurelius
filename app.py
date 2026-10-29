@@ -1032,7 +1032,7 @@ def toon_gesprek():
     )
 
     gebruiker_input = None
-    if laatste_is_filosoof:
+    if laatste_is_filosoof and minuten < sessie_duur:
         gebruiker_input = st.chat_input("Waar wil je het over hebben?")
 
     if gebruiker_input:
