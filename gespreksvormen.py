@@ -24,6 +24,7 @@ GESPREKSVORMEN = {
         "level": 1,
         "filosofen": "pantheon",
         "gebruiker_rol": "deelnemer",
+        "eerste_vraag": None,  # gebruikt de generieke opening
         "prompt_toevoeging": (
             "Dit is een coach-sessie. De gebruiker is het middelpunt. "
             "Reageer op wat de gebruiker zegt, ga dieper, onderzoek. "
@@ -37,6 +38,10 @@ GESPREKSVORMEN = {
         "level": 16,
         "filosofen": "één",
         "gebruiker_rol": "deelnemer",
+        "eerste_vraag": (
+            "Je hebt gekozen voor een tweegesprek. Jij en ik, één op één. "
+            "Waar wil je het over hebben?"
+        ),
         "prompt_toevoeging": (
             "Dit is een tweegesprek. Jij en de gebruiker, één op één. "
             "Er zijn geen andere filosofen. Ga diep, neem de tijd, "
@@ -51,6 +56,11 @@ GESPREKSVORMEN = {
         "level": 17,
         "filosofen": "pantheon",
         "gebruiker_rol": "gastheer",
+        "eerste_vraag": (
+            "Welkom bij de grote dialoog. De filosofen zijn klaar om met "
+            "elkaar in gesprek te gaan. Wat is het thema dat je vandaag "
+            "wilt inbrengen?"
+        ),
         "prompt_toevoeging": (
             "Dit is een grote dialoog. De filosofen praten met elkaar, "
             "reageren op elkaars standpunten, en dagen elkaar uit. "
@@ -67,6 +77,7 @@ GESPREKSVORMEN = {
         "level": 19,
         "filosofen": "pantheon",
         "gebruiker_rol": "deelnemer",
+        "eerste_vraag": None,  # de vervolgcontext bepaalt de opening
         "prompt_toevoeging": (
             "Dit is een vervolggesprek. De gebruiker bouwt voort op een "
             "eerdere sessie. Je hebt de context van die sessie gekregen. "
@@ -81,6 +92,7 @@ GESPREKSVORMEN = {
         "level": 20,
         "filosofen": "pantheon",
         "gebruiker_rol": "deelnemer",
+        "eerste_vraag": "Wat ontwijk je?",
         "prompt_toevoeging": (
             "Dit is een strenge coach-sessie. De gebruiker wil tot het bot "
             "gaan. Jouw taak is om niet te troosten, niet te verzachten, en "
@@ -98,6 +110,10 @@ GESPREKSVORMEN = {
         "level": 21,
         "filosofen": "één",
         "gebruiker_rol": "deelnemer",
+        "eerste_vraag": (
+            "Ik ga je snel een paar vragen stellen. Denk niet te lang na. "
+            "Eerste vraag: wat houdt je op dit moment het meest bezig?"
+        ),
         "prompt_toevoeging": (
             "Dit is een vragenvuur. Je stelt de gebruiker meerdere vragen "
             "achter elkaar, snel, zonder ruimte om te lang na te denken. "
@@ -115,6 +131,10 @@ GESPREKSVORMEN = {
         "level": 22,
         "filosofen": "pantheon",
         "gebruiker_rol": "deelnemer",
+        "eerste_vraag": (
+            "Ik ga je alleen vragen stellen, geen antwoorden geven. "
+            "Mijn eerste vraag: wat weet je zeker?"
+        ),
         "prompt_toevoeging": (
             "Dit is een socratisch gesprek. Je stelt ALLEEN vragen. "
             "Je geeft geen antwoorden, geen advies, geen mening. "
@@ -131,15 +151,14 @@ GESPREKSVORMEN = {
         "level": 23,
         "filosofen": "pantheon",
         "gebruiker_rol": "biechteling",
+        "eerste_vraag": "Wat wil je opbiechten?",
         "prompt_toevoeging": (
             "Dit is een biecht. De gebruiker vertelt iets persoonlijks, "
             "iets waar hij zich misschien voor schaamt of dat hij moeilijk "
             "vindt om te delen. Jouw taak: luister zonder oordeel. "
             "Vraag door, maar wees zacht. Geef geen absoluties en geen "
             "advies. Help de gebruiker om het zelf onder ogen te zien. "
-            "Aan het einde geef je een korte, milde overweging mee.\n\n"
-            "OPEN HET GESPREK met de vraag: 'Wat wil je opbiechten?' "
-            "Kort, direct, zonder inleiding."
+            "Aan het einde geef je een korte, milde overweging mee."
         ),
     },
     "het_dilemma": {
@@ -149,6 +168,10 @@ GESPREKSVORMEN = {
         "level": 24,
         "filosofen": "pantheon",
         "gebruiker_rol": "deelnemer",
+        "eerste_vraag": (
+            "Ik leg je een dilemma voor. Je moet kiezen tussen twee kwaden. "
+            "Ben je er klaar voor?"
+        ),
         "prompt_toevoeging": (
             "Dit is een dilemma. Je presenteert de gebruiker een moreel "
             "dilemma: een keuze tussen twee kwaden, waarbij geen van beide "
@@ -165,6 +188,7 @@ GESPREKSVORMEN = {
         "level": 25,
         "filosofen": "pantheon",
         "gebruiker_rol": "dromer",
+        "eerste_vraag": "Vertel me over je droom. Wat heb je gedroomd?",
         "prompt_toevoeging": (
             "Dit is een droomgesprek. De gebruiker vertelt een droom. "
             "Jouw taak: vraag naar de details, de beelden, de gevoelens. "
@@ -223,7 +247,6 @@ def kies_filosofen(vorm_naam, pantheon, voorzitter=None):
     Bepaalt welke filosofen meedoen aan deze gespreksvorm.
     - 'pantheon': het hele pantheon
     - 'één': alleen de voorzitter (of de eerste filosoof)
-    - 'alles': alle filosofen uit alle pantheons
     """
     vorm = GESPREKSVORMEN.get(vorm_naam)
     if not vorm:
