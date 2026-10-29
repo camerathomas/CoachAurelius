@@ -923,11 +923,9 @@ def toon_gesprek():
         # Heeft de gespreksvorm een eigen openingsvraag?
         eerste_vraag_vorm = vorm_info.get("eerste_vraag")
 
-        # Bij een vervolggesprek: gebruik de AI om de context samen te vatten
-        is_vervolg = bool(st.session_state.get("vervolg_sessie_id"))
-
-        if eerste_vraag_vorm and not is_vervolg:
-            # Toon de openingsvraag direct, zonder AI
+        if eerste_vraag_vorm:
+            # Toon de openingsvraag direct, zonder AI.
+            # Dit gaat altijd voor, ook bij een vervolggesprek.
             st.session_state.geschiedenis.append({
                 "naam": filosoof["naam"],
                 "tekst": eerste_vraag_vorm,
@@ -947,8 +945,10 @@ def toon_gesprek():
 
             st.rerun()
 
-        # Anders: gebruik de bestaande AI-opening
+        # Geen eigen openingsvraag: gebruik de bestaande AI-opening
         from coach import bouw_eerste_vraag_prompt
+
+        is_vervolg = bool(st.session_state.get("vervolg_sessie_id"))
 
         if is_vervolg:
             # Vervolggesprek: context van de eerdere sessie
