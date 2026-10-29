@@ -892,8 +892,15 @@ def toon_gesprek():
         f"**Voorzitter:** {voorzitter_naam} · "
         f"**{pantheon_naam}:** {pantheon_namen}"
     )
-    from filosofen_biografieen import pantheon_uitleg
-    st.caption(pantheon_uitleg(level))
+
+    # Toon de level-uitleg alleen bij het standaard pantheon
+    is_standaard_pantheon = not (
+        profiel.get("gebruik_eigen_pantheon", False)
+        or profiel.get("gebruik_random_pantheon", False)
+    )
+    if is_standaard_pantheon:
+        from filosofen_biografieen import pantheon_uitleg
+        st.caption(pantheon_uitleg(level))
     col1, col2, col3 = st.columns([2, 2, 1])
     with col1:
         st.markdown(f"**🕐 {minuten:.1f}** van **{sessie_duur}** min")
