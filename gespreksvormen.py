@@ -137,7 +137,9 @@ GESPREKSVORMEN = {
             "vindt om te delen. Jouw taak: luister zonder oordeel. "
             "Vraag door, maar wees zacht. Geef geen absoluties en geen "
             "advies. Help de gebruiker om het zelf onder ogen te zien. "
-            "Aan het einde geef je een korte, milde overweging mee."
+            "Aan het einde geef je een korte, milde overweging mee.\n\n"
+            "OPEN HET GESPREK met de vraag: 'Wat wil je opbiechten?' "
+            "Kort, direct, zonder inleiding."
         ),
     },
     "het_dilemma": {
