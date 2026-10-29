@@ -1273,7 +1273,7 @@ def toon_eindevaluatie():
     voorzitter = st.session_state.voorzitter
 
     st.title("🕊️ Eindgesprek")
-    st.caption("De filosofen kijken terug op wat er is gezegd.")
+    st.caption("De filosofen zoomen uit en bestuderen hoe jouw gedachten zich verhouden tot het grotere geheel van visies.")
 
     st.markdown("---")
 
