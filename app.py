@@ -129,7 +129,9 @@ def initialiseer_state():
         st.session_state.overgangsmoment_geweest = False
     if "afsluiting_gedaan" not in st.session_state:
         st.session_state.afsluiting_gedaan = False        
-        
+    if "laatste_woord_gehad" not in st.session_state:
+        st.session_state.laatste_woord_gehad = False
+    
     # UI-state
     if "toon_dashboard" not in st.session_state:
         st.session_state.toon_dashboard = False
@@ -233,7 +235,8 @@ def eindig_sessie():
     st.session_state.filosoof_teller = {}
     st.session_state.overgangsmoment_geweest = False
     st.session_state.vervolg_sessie_id = None
-    st.session_state.profiel["vervolg_sessie_id"] = None    
+    st.session_state.profiel["vervolg_sessie_id"] = None   
+    st.session_state.laatste_woord_gehad = False
     st.session_state.afsluiting_gedaan = False
     naar_geen_sessie()
 
