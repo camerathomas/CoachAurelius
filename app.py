@@ -1171,11 +1171,15 @@ def toon_gesprek():
 
         st.rerun()
 
-    # Check of de sessie voorbij is: direct naar het eindgesprek
+    # Check of de sessie voorbij is
     if minuten >= sessie_duur:
-        st.session_state.afsluiting_gedaan = True  # sla de tussenstap over
-        naar_eindevaluatie()
-        st.rerun()
+        st.markdown("---")
+        st.markdown("### De tijd is om")
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("🕊️ Afronden", use_container_width=True, type="primary"):
+                naar_afsluiting()
+                st.rerun()
 
 def toon_afsluiting():
     from coach import bouw_coach_prompt, chat
