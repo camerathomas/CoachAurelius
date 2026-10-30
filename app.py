@@ -1201,11 +1201,6 @@ def toon_gesprek():
                 naar_afsluiting()
                 st.rerun()
 
-        # Als de gebruiker al een laatste woord heeft gestuurd: automatisch naar de afsluiting
-        if laatste_woord_gehad:
-            naar_afsluiting()
-            st.rerun()
-
 def toon_afsluiting():
     from coach import bouw_coach_prompt, chat
     from filosofen import FILOSOFEN
