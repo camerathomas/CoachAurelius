@@ -907,7 +907,6 @@ def toon_gesprek():
     if is_standaard_pantheon:
         from filosofen_biografieen import pantheon_uitleg
         st.caption(pantheon_uitleg(level))
-
     col1, col2, col3 = st.columns([2, 2, 1])
     with col1:
         st.markdown(f"**🕐 {minuten:.1f}** van **{sessie_duur}** min")
@@ -1038,21 +1037,9 @@ def toon_gesprek():
         and laatste_bericht.get("naam") != "Jij"
     )
 
-    # Bepaal of de gebruiker nog mag invoeren
-    tijd_om = minuten >= sessie_duur
-    laatste_woord_gehad = st.session_state.get("laatste_woord_gehad", False)
-
-    mag_invoeren = laatste_is_filosoof and (
-        not tijd_om or not laatste_woord_gehad
-    )
-
     gebruiker_input = None
-    if mag_invoeren:
-        placeholder = (
-            "Je laatste woord..." if tijd_om
-            else "Waar wil je het over hebben?"
-        )
-        gebruiker_input = st.chat_input(placeholder)
+    if laatste_is_filosoof and minuten < sessie_duur:
+        gebruiker_input = st.chat_input("Waar wil je het over hebben?")
 
     if gebruiker_input:
         tijd = datetime.now().strftime("%H:%M")
@@ -1066,10 +1053,6 @@ def toon_gesprek():
             bewaar_bericht(st.session_state.gebruiker_id, "Jij", "user", gebruiker_input)
         except Exception:
             pass
-
-        # Als de tijd om is: dit was het laatste woord
-        if tijd_om:
-            st.session_state.laatste_woord_gehad = True
 
         # Wending?
         wending = None
@@ -1192,7 +1175,7 @@ def toon_gesprek():
         st.rerun()
 
     # Check of de sessie voorbij is
-    if tijd_om:
+    if minuten >= sessie_duur:
         st.markdown("---")
         st.markdown("### De tijd is om")
         col1, col2 = st.columns(2)
